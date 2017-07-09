@@ -1,0 +1,85 @@
+<DOCTYPE! html>
+<html lang="fr-CA">
+<head>
+</head>
+<body id="#top">
+<h1>vt102</h1><div><a href="#index">index</a></div>
+<div><a href="index.html">index principal</a></div>
+<h2 id="description">Description</h2><div style="margin-left:5%;"> 
+</div>
+<div style="margin-left:5%;"> Périphérique pour la comminication avec un terminal ou émulateur
+</div>
+<div style="margin-left:5%;"> VT102, implémentation partielle. 
+</div>
+<div style="margin-left:5%;"> Le contrôle de flux est logiciel, i.e. XON, XOFF
+</div>
+<div style="margin-left:5%;"> La vitesse de transmission par défaut est 115200 bauds.
+</div>
+<div style="margin-left:5%;"> Configuration:  8 bits, 1 stop, pas de parité.    
+</div>
+<div style="margin-left:5%;"> Lorsque le terminal reçois un ASCII 13 (CR) il ne doit pas ajouté un ASCII 10 (LF).
+</div>
+<div><a href="index.html">index principal</a></div>
+<hr style="border-width:4px;"><p id="XON">
+<b>XON</b>  ( -- ) 
+<div style="margin-left:5%;">   Envoie le caractère de contrôle XON (ASCII 17) au terminal VT102
+</div>
+</p>
+<div style="margin-left:5%;"><b> arguments:
+</b></div>
+<div style="margin-left:5%;"><i>aucun
+</i>&nbsp;&nbsp;</div>
+<div style="margin-left:5%;"><b> retourne:
+</b></div>
+<div style="margin-left:5%;"><i>c</i>&nbsp;&nbsp;   Caractère ASCII DC1 valeur 17   
+</div>
+<div><a href="#index">index</a></div>
+<div><a href="#top">haut</a></div>
+<div><a href="index.html">index principal</a></div>
+<hr style="border-width:1px;"><p id="XOFF">
+<b>XOFF</b>  ( -- c ) 
+<div style="margin-left:5%;">   Envoie le caractère de contrôle XOFF (ASCII 19) au terminal VT102.
+</div>
+</p>
+<div style="margin-left:5%;"><b> arguments:
+</b></div>
+<div style="margin-left:5%;"><i>aucun
+</i>&nbsp;&nbsp;</div>
+<div style="margin-left:5%;"><b> retourne:
+</b></div>
+<div style="margin-left:5%;"><i>rien
+</i>&nbsp;&nbsp;</div>
+<div><a href="#index">index</a></div>
+<div><a href="#top">haut</a></div>
+<div><a href="index.html">index principal</a></div>
+<hr style="border-width:1px;"><p id="VT-PRTINV">
+<b>VT-PRTINV</b>  ( c-addr u n -- )
+<div style="margin-left:5%;">   Imprime sur la REMOTE console la ligne de texte 'c-addr' sur la ligne 'n'.
+</div>
+<div style="margin-left:5%;">   Si 'f' est vrai imprime noir/blanc, sinon imprime blanc/noir.
+</div>
+</p>
+<div style="margin-left:5%;"><b> arguments:
+</b></div>
+<div style="margin-left:5%;"><i>c-addr</i>&nbsp;&nbsp; Adresse du premier caractère à imprimer.
+</div>
+<div style="margin-left:5%;"><i>u</i>&nbsp;&nbsp; Nombre de caractères
+</div>
+<div style="margin-left:5%;"><i>n</i>&nbsp;&nbsp; Numéro de la ligne {1..24}
+</div>
+<div><a href="#index">index</a></div>
+<div><a href="#top">haut</a></div>
+<div><a href="index.html">index principal</a></div>
+<hr style="border-width:1px;"><h4 id="index">Index</h4>
+<p>
+<ul>
+<li><a href="#VT-PRTINV">VT-PRTINV</a></li>
+<li><a href="#XOFF">XOFF</a></li>
+<li><a href="#XON">XON</a></li>
+</ul>
+</p>
+<hr style="border-width:1px;"><div><a href="#top">haut</a></div>
+<div><a href="index.html">index principal</a></div>
+
+</body>
+</html>

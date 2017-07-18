@@ -34,7 +34,29 @@
 "> http://forthfiles.net/ting/sysguidefig.pdf    
 </a></div>
 <div><a href="index.html#MasterIndex">index principal</a></div>
-<hr style="border-width:4px;"><h2 id="description">Description</h2><div>
+<hr style="border-width:4px;"><p id="EXIT">
+<b>EXIT</b> ( R: a-addr -- )    
+<br><div>   A n'utiliser qu'à l'intérieur d'une définition.
+</div>
+<div>   Retourne l'exécution à la routine appelante. Lors de l'invocation de EXIT
+</div>
+<div>   La pile des retours doit avoir à son sommet l'adresse du point de retour
+</div>
+<div>   sinon c'est un plantage assuré.    
+</div>
+</p>
+<div><b> arguments:
+</b></div>
+<div><i>a-addr</i>&nbsp;&nbsp;  Adresse de retour dans la routine appellante au sommet de R:
+</div>
+<div><b> retourne:
+</b></div>
+<div><i>rien</i>&nbsp;&nbsp;    
+</div>
+<div><a href="#index">index</a></div>
+<div><a href="#top">haut</a></div>
+<div><a href="index.html#MasterIndex">index principal</a></div>
+<hr style="border-width:1px;"><h2 id="description">Description</h2><div>
 </div>
 <div> Cette section décris les différentes constantes utilisées par le système ForthEx.
 </div>
@@ -1216,13 +1238,13 @@
 <div><a href="#index">index</a></div>
 <div><a href="#top">haut</a></div>
 <div><a href="index.html#MasterIndex">index principal</a></div>
-<hr style="border-width:1px;"><p id="@XT">
-<b>@XT</b>  ( i*x a-addr -- j*x )
+<hr style="border-width:1px;"><p id="@EXEC">
+<b>@EXEC</b>  ( i*x a-addr -- j*x )
 <br><div>   Exécution vectorisée. 
 </div>
 <div>   Lit le contenu d'une adresse qui contient le CFA d'un mot et exécute ce mot.
 </div>
-<div>   : @XT @ EXECUTE ;    
+<div>   : @EXEC @ EXECUTE ;    
 </div>
 </p>
 <div><b> arguments:
@@ -1312,7 +1334,7 @@
 <li><a href="#2SWAP">2SWAP</a></li>
 <li><a href="#?DUP">?DUP</a></li>
 <li><a href="#@">@</a></li>
-<li><a href="#@XT">@XT</a></li>
+<li><a href="#@EXEC">@EXEC</a></li>
 <li><a href="#BASE">BASE</a></li>
 <li><a href="#BID@">BID@</a></li>
 <li><a href="#C!">C!</a></li>
@@ -1328,6 +1350,7 @@
 <li><a href="#DROP">DROP</a></li>
 <li><a href="#DUP">DUP</a></li>
 <li><a href="#EXECUTE">EXECUTE</a></li>
+<li><a href="#EXIT">EXIT</a></li>
 <li><a href="#FALSE">FALSE</a></li>
 <li><a href="#I">I</a></li>
 <li><a href="#IP@">IP@</a></li>

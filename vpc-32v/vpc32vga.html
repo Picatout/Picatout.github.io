@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<header>
+<title>ordinateur VPC-32V</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="Author" content="Jacques Deschênes">
+<meta name="Created on" content="2018-05-25">
+<meta name="version" content="1.0">
+<meta name="licence" content="CC-NC-SA-BY V3.0">
+<link rel="stylesheet" type="text/css" href="style.css">
+</header>
+<body>
+<h2>Ordindateur VPC-32V</h2>
+<h4>Licence</h4>
+<p>  
+  Ce document fait partie du projet <a href="https://github.com/picatout/vpc-32vga">VPC-32V</a> et est fourni sous licence <a href="https://creativecommons.org/">CC-NC-SA-BY V3.0</a><br><br>
+  <b>auteur:</b> Jacques Deschênes<br>
+  <b>révision</b> 1.0</br>
+  <b>Copyright:</b> 2013-2018 Jacques Deschênes<br>	
+</p>
+<h3>Présentation</h3>
+<p>
+	Grâce à la technologie moderne il est possible avec un minimum de composants de fabriquer chez soi un ordinateur dont les capacités dépassent celle
+	d'un d'un ordinateur datant de 1980. Le VPC-32V ne compte que 7 circuits intégrés incluant les 2 régulateurs de tensions. Il a été assemblé sur une
+	carte de prototypage à pastille double faces en quelques heures seulement.
+</p>
+<div>
+	<img src="./img/prototype/prototype.png" width="80%">
+</div>
+<h3>spécification</h3>
+<p>
+	<ul>
+		<li><b>Processeur principal</b> PIC32MX170F25B fonctionnant à 40Mhz. 64Ko RAM et 256Ko de flash.</li>
+		<li><b>Interface clavier</b> PIC12F1572, communique avec le processeur principal via un UART.</li>
+		<li><b>Sortie video</b><ul>
+			<li><b>Moniteur</b> VGA</li>
+			<li><b>Texte</b> 30 lignes de 80 caractères</li>
+			<li><b>graphique</b> monochrome 480x240 pixels</li>
+			</ul></li>
+			<li><b>Clavier</b> PS2</li>
+			<li><b>Comminication</b> Port sériel RS-232 115200 BAUD.</li>
+			<li><b>RTCC</b> MCP7940N, Conserve la date et l'heure même lorsque l'ordinateur est hors tension. Une pile CR2032 supporte le RTCC.</li>
+			<li><b>Système de fichier</b> FAT32 sur carte SD.</li>
+			<li><b>Mémoire externe</b> 23LC512, 64Ko supplémentaire.</li>
+			<li><b>Audio</b> LM386, ampli audio incorporé.</li>
+			<li><b>Console</b> locale utilisant le clavier PS2 et le moniteur VGA ou remote via le port sériel et un émulateur de terminal VT-100 sur le PC.</li>
+	</ul>
+</p>
+<hr width="50%" align="center">
+<p>
+	<ul>
+		<li><a href="./index.html">Introduction</a></li>
+		<li><a href="./vpc32vga.html">spécifications du VPC-32V</a></li>
+		<li><a href="./shell.html">shell du VPC-32V</a></li>
+		<li><a href="./editor.html">Éditeur du VPC-32V</a></li>
+        <li><a href="./BASIC.html">BASIC du VPC-32V</a></li>
+        <li><a href="./stackvm.html">machine virtuelle du VPC-32V</a></li>
+	</ul>
+</p>
+</body>
+</html>

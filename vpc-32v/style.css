@@ -47,6 +47,16 @@ margin:auto;
 padding:5px;
 }
 
+.brief_div{
+	color: #d74
+}
+
+.item_div{
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
 li{
 padding:5px;
 }

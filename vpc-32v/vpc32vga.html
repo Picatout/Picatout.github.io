@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <header>
-<title>ordinateur VPC-32V</title>
+<title>Description du VPC-32V</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="Author" content="Jacques Deschênes">
 <meta name="Created on" content="2018-05-25">
@@ -10,10 +10,11 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 </header>
 <body>
-<h2>Ordindateur VPC-32V</h2>
+<h2>Ordinateur VPC-32V</h2>
 <h4>Licence</h4>
 <p>  
-  Ce document fait partie du projet <a href="https://github.com/picatout/vpc-32vga">VPC-32V</a> et est fourni sous licence <a href="https://creativecommons.org/">CC-NC-SA-BY V3.0</a><br><br>
+  Ce document fait partie du projet <a href="https://github.com/picatout/vpc-32vga">VPC-32V</a> et est fourni sous licence 
+  <a href="https://creativecommons.org/">CC-NC-SA-BY V3.0</a><br><br>
   <b>auteur:</b> Jacques Deschênes<br>
   <b>révision</b> 1.0</br>
   <b>Copyright:</b> 2013-2018 Jacques Deschênes<br>	
@@ -21,36 +22,208 @@
 <h3>Présentation</h3>
 <p>
 	Grâce à la technologie moderne il est possible avec un minimum de composants de fabriquer chez soi un ordinateur dont les capacités dépassent celle
-	d'un d'un ordinateur datant de 1980. Le VPC-32V ne compte que 7 circuits intégrés incluant les 2 régulateurs de tensions. Il a été assemblé sur une
+	d'un ordinateur personnel datant de 1980. Le VPC-32V ne compte que 7 circuits intégrés incluant les 2 régulateurs de tensions. Il a été assemblé sur une
 	carte de prototypage à pastille double faces en quelques heures seulement.
 </p>
 <div>
-	<img src="./img/prototype/prototype.png" width="80%">
+	<img src="./img/prototype/carte.png" width="80%">
+</div>
+<div>
+	<img src="./img/prototype/vpc-32v allumé.png" width="80%">
+</div>
+<div>
+	<img src="./img/prototype/boitier arrière.png" width="80%">
 </div>
 <h3>spécification</h3>
 <p>
 	<ul>
-		<li><b>Processeur principal</b> PIC32MX170F25B fonctionnant à 40Mhz. 64Ko RAM et 256Ko de flash.</li>
-		<li><b>Interface clavier</b> PIC12F1572, communique avec le processeur principal via un UART.</li>
+		<li><b>Processeur principal</b> PIC32MX170F256B fonctionnant à 40Mhz. 64Ko RAM et 256Ko de flash.</li>
+		<li><b>Interface clavier</b> PIC12F1572, communique avec le processeur principal via un USART.</li>
 		<li><b>Sortie video</b><ul>
 			<li><b>Moniteur</b> VGA</li>
 			<li><b>Texte</b> 30 lignes de 80 caractères</li>
 			<li><b>graphique</b> monochrome 480x240 pixels</li>
 			</ul></li>
-			<li><b>Clavier</b> PS2</li>
+			<li><b>Clavier</b> USB en mode PS2.</li>
 			<li><b>Comminication</b> Port sériel RS-232 115200 BAUD.</li>
-			<li><b>RTCC</b> MCP7940N, Conserve la date et l'heure même lorsque l'ordinateur est hors tension. Une pile CR2032 supporte le RTCC.</li>
-			<li><b>Système de fichier</b> FAT32 sur carte SD.</li>
-			<li><b>Mémoire externe</b> 23LC512, 64Ko supplémentaire.</li>
-			<li><b>Audio</b> LM386, ampli audio incorporé.</li>
-			<li><b>Console</b> locale utilisant le clavier PS2 et le moniteur VGA ou remote via le port sériel et un émulateur de terminal VT-100 sur le PC.</li>
+			<li><b>RTCC</b> <b>MCP7940N</b>, Conserve la date et l'heure même lorsque l'ordinateur est hors tension. Une pile CR2032 supporte le RTCC.</li>
+			<li><b>Système de fichier</b> FAT32 sur <b>carte SD</b>.</li>
+			<li><b>Mémoire externe</b> <b>23LC512</b>, 64Ko supplémentaire.</li>
+			<li><b>Audio</b> <b>LM386N</b>, ampli audio incorporé.</li>
+			<li><b>Console</b> <b>locale</b> utilisant le <b>clavier USB</b> et le <b>moniteur VGA</b> ou <b>remote</b> via le port sériel et un émulateur de terminal VT-100 sur le PC.</li>
+			<li><b>Shell de commande</b>, pour la gestion des fichiers sur la <b>carte SD</b> et autres fonctions.</li>
+			<li><b>vpcBASIC</b>, interpréteur <b>BASIC interactif</b> supportant l'arithmétique sur virgule flottante et entiers de 32bits.</li>
 	</ul>
 </p>
+<h3>Description du circuit</h3>
+<p>
+	<img src="./img/vpc-32vga_schematic.png" alt="schématique" width="80%">
+</p>
+<p>
+ Ce circuit est si simple qu'il tient sur une seule page KiCAD. Dans les paragraphes suivants je fais une description de chaque module du circuit.
+</p>
+<h4>Alimentation</h4>
+<p>
+	<img src="./img/alimentation.png" alt="circuit d'alimentation" widht="80%">
+</p>
+<p>
+	 À la prise <b>J1</b> se branche un adapteur secteur qui fournis un voltage DC entre 7-12 volt à 250mA. La diode <b>D2</b> protège contre les inversions
+	 de tension. La mise sous tension de l'ordinateur se fait par <b>SW1</b>. Le C.I. <b>U1</b> est un régulateur de tension donnant 5VDC à la sortie. Ce voltage est rendue
+	 nécessaire pour l'utilisation du clavier, sinon le reste du circuit fonctionne à 3,3VDC qui est fournis par le deuxième régulateur de tension <b>U3</b>.
+	 Lors de l'insertion d'une carte SD une pointe de courant se produit qui fait chuter la tension à la sortie de <b>U3</b>. Pour empêcher cette chute de tension
+	 qui, bien qu'elle soit brève, déclenchait une réinitisalistaion du MCU j'ai ajouté le filtre constitué des composants <b>C14</b>,<b>L2</b>,<b>C15</b> et
+	  <b>C20</b> qui empêche la chute de tension au point <b>Vsdc</b> de se progager au point <b>Vdd</b>.  
+</p>
+<p>
+	L'ordinateur consomme environ 75ma.  J'ai installé un fusible de 500ma à l'entrée de l'alimentation qui peut réponde facilement à la pointe de courant lors de
+	l'insertion d'une carte SD.
+</p>
+<p>
+	La DEL <b>D6</b> sert d'indicateur de mise sous tension. Notez que la cathode n'est pas branchée directement au 0 volt mais à la broche 25 du MCU.
+	La DEL n'allume que lorsque l'ordinateur a complété son initialisation. S'il se produit une exception système la DEL clignote et l'ordinateur entre 
+	dans une boucle infinie. On peut réinitialiser l'ordinateur en pressant simultanément les 3 touches <b>CTRL-ALT-DEL</b> sur le clavier local. 
+</p>
+<h4>Processeur principal</h4>
+<p>
+	<img src="./img/circuit_processeur_principal.png" alt="circuit processeur principal" width="80%">
+</p>
+<p>
+	Le processeur principal est un <b>PIC32MX170F256B</b> en format DIP-28. Bien que le cristal utilisé à l'entrée de l'oscillateur 1 est de 10Mhz,
+	grâce au PLL incorporé la fréquence du CPU est de 40Mhz. Les PIC32MX utilisent le coeur M4K de MIPS. Il s'agit d'une architecture Harvard où la mémoire
+	programme et la mémoire données sont sur de bus séparés. Les différents signaux sont notés sur les broches du MCU. Une barre au dessus d'un nom indique
+	qu'il s'agit d'un signal actif à 0. Ainsi le signal <b>~rst</b> doit-être mis à zéro pour réiniatilser le MCU. Le MCU demeure en <i>reset</i> tant que
+	ce signal demeure à zéro. Lorsqu'il revient à 3,3 volt, le MCU débute sa séquence d'initialisation.
+</p>
+<h4>Interface clavier</h4>
+<p> <img src="./img/interface_clavier.png" alt="interface clavier" width=80%>
+</p>
+<p>
+	L'Ordinateur utilise un clavier USB qui cependant fonctionne en mode PS2. Le clavier se branche à <b>J3</b>. <b>U2</b> qui est un MCU <b>PIC12F1572</b> 
+	interprète les <i>scancodes</i> reçus du clavier et les convertis en codes ASCII qu'il envoie au MCU principal via un périphérique USART. Le <b>PIC12F1572</b>
+	est aussi relié à la broche <b>1</b> du MCU principal et permet de le réinitialiser. En effet le <b>PIC12F1572</b> reconnais la combinaison de touches
+	<b>CTRL-ALT-DEL</b> comme une commande de réinitialisation et produit une impulsion négative de 100msec à sa broche <b>2</b> ce qui a pour effet de
+	réinitialiser le <b>PIC32MX170F256B</b>. 
+</p>
+<p> Le connecteur <b>J6</b> n'est utilisé que s'il faut reprogrammer le <i>firmware</i> dans le <B>PIC12F1572</B>.
+</p>
+<h4>Circuit vidéo</h4>
+<p>
+	<img src="./img/circuit_video.png" alt="circuit vidéo" width="80%">
+</p>
+<P>
+	Le circuit vidéo génère un signal pour moniteur VGA. Il y a 3 broches utilisées pour la sortie vidéo. 
+	<ul>
+		<li><b>vsync</b> sur la broche <b>11</b> pour la synchronisation verticale.</li>
+		<li><b>hsync</b> sur la broche <b>14</b> pour la synchronnisation horizontale.</li>
+		<li><b>video</b> sur la broche <b>15</b> pour la sortie vidéo.</li>
+	</ul>
+</P>
+<p>
+	 Il s'agit d'un signal monochrome d'une résolution de 480x240 pixels. Les broches <b>1,2 et 3</b> du connecteur <b>J5</b> sont branchées ensembles
+	 puisque les 3 composantes de couleur recoivent le même signal.
+</p>
+<h4>Circuit audio</h4>
+<p>
+	<img src="./img/circuit_audio.png" alt="circuit audio" width="80%">
+</p>
+<p>
+	La sortie audio est sur la broche <b>18</b> du MCU. Il s'agit d'une sortie simple tonalité en onde rectangulaire comme sur les premiers IBM PC. Cette sortie
+	est dirigée vers <b>U5</b> qui est un <b>LM386</b> classique. Un haut-parleur de 50mm est incorporé dans le boitier de l'ordinateur. Le potentiomètre <b>RV1</b>
+	permet d'ajuster le volume. Cependant il s'agit d'un <i>trimmer</i> et il n'est pas accessible de l'extérieur du boitier. Il serait évidemment possible 
+	de remplacer <b>RV1</b> par un contrôle de volume externe si désiré.
+</p>
+<h4>Carte SD</h4>
+<p>
+	<img src="./img/circuit_carte_sd.png" alt="circuit carte SD" width="80%">
+</p>
+<p>
+	La carte <b>Secure Digital</b> qui sert au stockage des fichiers est interfacée en mode SPI. Les signaux suivants sont utilisés pour cette usage.
+	<ol>
+		<li><b>~CS2</b> <b>broche 7</b>, sélectionne la carte lorsque ce signal passe à zéro.</li>
+		<li><b>cdet</b> <b>broche 23</b>, passe à 1 lorsqu'un carte est insérée dans la fente.</li>
+		<li><b>scl</b> <b>broche 25</b>, est le signal clock de l'interface SPI.</li>
+		<li><b>MISO</b> <b>broche 12</b>, est l'entrée MCU pour les données reçues de la carte SD.</li>
+		<li><b>MOSI</b> <b>broche 17</b>, est la sortie MCU pour l'envoie des données vers la carte SD.</li>
+	</ol>
+</p>
+<p>
+	Les cartes <b>SD</b> ou <b>SDHC</b> sont reconnues. Elles doivent-être formattées en <b>FAT32.</b>
+</p>
+<h4>RAM externe</h4>
+<p>
+	<img src="./img/circuit_ram_externe.png" alt="circuit RAM externe" width="80%">
+</p>
+<p>
+	Grâce à <b>U7</b> qui est une mémoire RAM à interface SPI <b>23LC512</b>. Une capacité supplémentaire de 64Ko est ajouté à l'ordinateur. Cette RAM
+	est accessible dans vpcBASIC via diverses fonctions. L'éditeur de texte l'utilise aussi comme mémoire tampon pour le texte en cours d'éditon.
+</p>
+<p>
+	Cette RAM utitilise la même interface SPI que la carte SD sauf qu'elle est sélectionnée par le signal <b>~CS1</b>.
+	<ol>
+		<li><b>~CS1</b> <b>broche 2</b>, sélectionne le <b>23LC512</b> lorsque ce signal passe à zéro.</li>
+		<li><b>scl</b> <b>broche 25</b>, est le signal clock de l'interface SPI.</li>
+		<li><b>MISO</b> <b>broche 12</b>, est l'entrée MCU pour les données reçues de la carte SD.</li>
+		<li><b>MOSI</b> <b>broche 17</b>, est la sortie MCU pour l'envoie des données vers la carte SD.</li>
+	</ol>
+</p>
+<p>
+	Notez que la carte SD et la RAM ne peuvent pas être actif en même temps puisqu'ils utilisent la même interface SPI.
+</p>
+<h4>Inverseur de tension</h4>
+<p>
+	<img src="./img/inverseur_tension.png" alt="inverseur de tension" width="80%">
+</p>
+<p>
+	Le port COM nécessite une tension négative pour générer le signal RS-232. Cet inverseur de tension utilise  <b>U8</b> un <b>TLC555</b>. Le circuit est
+	configuré en oscillateur pour générer un signal rectangulaire à la broche <b>3</b>. Les diodes schottkey <b>D7</b> et <b>D8</b> ainsi que les condensateurs
+	<b>C28</b> et <b>C29</b> permettent de produire une tension négative d'environ -4 volt sur <b>C29</b>. Ce voltage est connecté à la résistance 
+	<b>R28</b> associé à la transmission sur le port COM. Lorsque la tension à la broche <b>3</b> du 555 est à 5 volt <b>C28</b> se charge à travers <b>D7</b>.
+	Lorsque la broche <b>3</b> tombe à zéro volt, <b>C28</b> ce décharge à travers <b>D8</b> dans <b>C29</b>. Mais la tension formée sur <b>C29</b> est négative
+	puisque c'est l'électrode négative de <b>C28</b> qui est connectée à la cathode de <b>D8</b>.
+</p>
+<h4>Port COM</h4>
+<p>
+	<img src="./img/circuit_rs232.png" alt="circuit rs-232" width="80%">
+</p>
+<p>
+	L'adapteur de voltage pour l'interface RS-232 du port <b>COM</b> est est constitué de 2 transistors. <b>Q1</b> pour la réception et <b>Q2</b> pour la transmission.
+	Lorsque le VPC-32V transmet sur le port <b>COM</b> le voltage <b>TX</b> varie entre <b>Vdd</b> lorsque <b>U2TX</b> est à zéro et <b>-4Vdc</b> lorsque 
+	<b>U2TX</b> est à 1. Ce qui permet de se conformer à la spécification RS-232 qui requière des signaux qui varient de -3 à -12 volt pour le niveau 
+	logique 1 et de +3 à +12 volt pour le niveau logique 0.
+</p>
+<p>
+	Le transistor <b>Q1</b> lui joue deux rôles. Le premier est d'inverser la valeur du signal reçu en <b>RX</b>. L'autre est de limiter ce signal à l'intervalle
+	{0..Vdd}. Ce signal conditionné est envoyé à l'entrée <b>U2TX</b> du PIC32MX.
+	
+</p>
+<p>
+	Par défaut l'interface <b>COM</b> est configurée à 115200 BAUD, 8 bits, pas de parité et 1 stop bit.<br> Le VPC-32V communique avec le protocole <b>VT-100</b>.
+	Cependant ce n'est pas la totalité des commandes VT-100 qui sont reconnues et utilisées.
+</p>
+<p>
+	Il n'y a pas de contrôle de flux matériel. Le terminal doit-être configuré pour reconnaître le contrôle de flux logiciel <b>XOFF/XOFF</b>.
+	Le périphérique du MCU utilisé pour le port COM est USART 2.
+	<ul>
+		<li><b>U2RX</b> <b>broche 22</b>, réception de données du USART 2.</li>
+		<li><b>U2TX</b> <b>broche 21</b>, transmission de données du USART 2.</li>
+	</ul>
+</p>
+<h4>RTCC</h4>
+<p>
+	<img src="./img/circuit_rtcc.png" alt="circuit RTCC" width="80%">
+</p>
+<p>
+	Le C.I. <b>U6</b>, <b>MCP7940N</b> est un <i>RTCC</i>, C'est à dire un calendrier/horloge temps réel. La date et l'heure sont conservées même
+	lorsque l'ordinateur est éteint grâce à la pile au lithium <b>BT1</b> de type CR2032. Il n'est donc pas nécessaire de reprogrammer la date et l'heure chaque
+	fois qu'on allume l'ordinateur. De plus 2 alarmes peuvent-être programmées dans le RTCC. La commande <b>alarm</b> dans le shell permet de gérer
+	les alarmes. D'autres commandes permettent d'ajuster la date et l'heure et de calibrer l'oscillateur du RTCC s'il l'horloge retarde ou prend de l'avance.
+</p>
 <hr width="50%" align="center">
+<h2>INDEX</h2>
 <p>
 	<ul>
 		<li><a href="./index.html">Introduction</a></li>
-		<li><a href="./vpc32vga.html">spécifications du VPC-32V</a></li>
+		<li><a href="./vpc32vga.html">Description du VPC-32V</a></li>
 		<li><a href="./shell.html">shell du VPC-32V</a></li>
 		<li><a href="./editor.html">Éditeur du VPC-32V</a></li>
         <li><a href="./BASIC.html">BASIC du VPC-32V</a></li>

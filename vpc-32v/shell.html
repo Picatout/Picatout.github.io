@@ -1,34 +1,35 @@
 <!doctype html>
 <html>
 <header>
-<title>PV16SOG commands shell</title>
+<title>shell de commande du VPC-32V</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="Author" content="Jacques Deschênes">
-<meta name="Created on" content="2016-04-16">
+<meta name="Created on" content="2018-05-25">
 <meta name="version" content="1.0">
 <meta name="licence" content="CC-NC-SA-BY V3.0">
 <link rel="stylesheet" type="text/css" href="style.css">
 </header>
 <body>
-<h2>Interpréteur de commandes du PV16SOG</h2>
+<h2>Interpréteur de commandes du VPC-32V</h2>
 <h4>Licence</h4>
 <p>  
-  Ce document fait partie du projet <a href="https://github.com/picatout/pv16sog">PV16SOG</a> et est fourni sous licence <a href="https://creativecommons.org/">CC-NC-SA-BY V3.0</a><br><br>
+  Ce document fait partie du projet <a href="https://github.com/picatout/vpc-32vga">VPC-32V</a> et est fourni sous licence 
+  <a href="https://creativecommons.org/">CC-NC-SA-BY V3.0</a><br><br>
   <b>auteur:</b> Jacques Deschênes<br>
   <b>révision</b> 1.0</br>
-  <b>Copyright:</b> 2015,2016, Jacques Deschênes<br>	
+  <b>Copyright:</b> 2013-2018 Jacques Deschênes<br>	
 </p>
 <h3>Présentation</h3>
-<p>Au démarrage l'ordinateur entre dans l'interpréteur de commande. Au début de la ligne apparaît un <b>&gt;</b> suivit d'un curseur clignotant. Ceci 
-indique que l'ordinateur est prêt à recevoir des commandes. Les commandes sont insensible à la casse. voici de quoi a l'air la console au démarrage:
+<p>Au démarrage l'ordinateur entre dans l'interpréteur de commande. Au début de la ligne apparaît un <b>$</b> suivit d'un curseur clignotant. Ceci 
+indique que l'ordinateur est prêt à recevoir des commandes. Les commandes sont sensibles à la casse et doivent-être en minuscules. voici de quoi a 
+l'air la console au démarrage:
 </p>
 <div style="left-margin:200px;">
 <pre><code>
-PV16SOG shell
-vesion 1.0
-
-RAM libre: 20512
-&gt;<blink>|</blink>
+free RAM (bytes): 42480
+Last power down: Saturday 09/09 14:36
+VPC-32 shell version 1.0
+$<blink>_</blink>
 </code></pre></div>
 <p>
 	<b>L'ordinateur peut-être réinitialisé (redémarrage à froid) en tout temps, même pendant l'exécution d'un programme BASIC par la 
@@ -36,65 +37,164 @@ RAM libre: 20512
 	boucle infinie.
 </p>
 <p>
-Il faut distinguer les commandes du 
-<i>shell</i> et les commandes <i>BASIC</i>. L'interpréteur accepte les 2 types de commandes mais elles sont traitées différemment.</p>
+Il faut distinguer le <i>shell</i> de commandes du shell <i>BASIC</i>. Ce dernier est lancé par la commande <i>basic</i> du shell de commandes et
+le <i>prompt</i> qui s'affiche est différent il s'agit d'un signe <b>&gt;</b>.</p>
 <p>
 	Les commandes du <i>shell</i> sont interprétées directement et ne peuvent pas être utlisées dans un progamme BASIC. Une telle tentative
 	résulte en un messsage d'erreur du compilateur BASIC. Les commandes BASIC sont pré-compilées en bytecode et le dit bytecode est passé
-	à la machine virtuelelle BASIC pour exécution. L'interpréteur de comamnde du <i>shell</i> est en mesure de distinguer les 2 types de commandes
-	et de diriger les commandes BASIC au compilateur. 
-</p>
+	à la machine virtuelelle BASIC pour exécution.</p>
 <p>
-	Ce document décris seulement les commandes du <i>shell</i> pour les commandes BASIC il faut consulter le manuel 
-	<a href="./BASIC.html">BASIC du PV16SOG</a>.
+	Ce document décris seulement les commandes du <i>shell de commandes</i> pour les commandes BASIC il faut consulter le manuel 
+	<a href="./BASIC.html">vpcBASIC</a>.
 </p>
-<p>
+<p><div style="display:none;">
 	Le <i>shell</i> possède un éditeur de ligne avec un historique de comamndes de 10 lignes. La navigation sur la ligne de commande se fait
 	avec les touches suivantes:
 	<ul>
 		<li><b>FLÈCHE-GAUCHE</b> déplacement du curseur vers la gauche d'un caractère.</li>
 		<li><b>FLÈCHE-DROITE</b> déplacement du curseur vers la droite d'un caractère.</li>
-		<li><b>FLÈCHE-HAUT</b> déplacement dans l'historique de commande vers les plus anciennes.</li>
-		<li><b>FLÈCHE-BAS</b> déplacement dans l'historique de commande vers les plus récentes.</li>
+		<li><b>FLÈCHE-HAUT</b> réaffiche la dernière commande qui a été exécutée.</li>
 		<li><b>INSERT</b> basculement entre mode insertion/écrasement.</li>
 		<li><b>SUP</b> suppression du caractère à la position du curseur.</li>
 		<li><b>ARRIÈRE</b> suppression du caractère avant la position du curseur.</li>
 		<li><b>RETOUR</b> termine la saisie de cette ligne et passe la commande à l'interpréteur.</li>
 	</ul>
+	</div>
 </p>
 <h3>Référence des commandes du shell</h3>
 <p>
-  La majoritée des commandes du <i>shell</i> servent à la gestions des fichiers enregistrés sur la carte SD. PV16SOG ne supporte
-  pas les répertoires, tous les fichiers sont dans le répertoire racine. Certaines commandes de gestion de fichiers peuvent affecter
-  plus d'un fichier par l'utilisation du caractère <b>*</b>. Ce caractère peut-être placé au début, à la fin ou au 2 extrémités d'un 
-  paramètre <i>nom_de_fichier</i> d'une commande. Placé au début la commande accepte tous les fichiers se terminant pas la chaîne qui le suit.
-  Placé à la fin la commande accepte tous les fichiers commençant par la chaîne qui le précède. Lorsque placé au 2 extrémités la commande
+  La majoritée des commandes du <i>shell</i> servent à la gestions des fichiers enregistrés sur la carte SD. Certaines commandes de gestion de 
+  fichiers peuvent affecter plus d'un fichier par l'utilisation du caractère <b>*</b>. Ce caractère peut-être placé au début, à la fin ou au 2 extrémités d'un 
+  paramètre <i>nom_de_fichier</i> d'une commande. Placé au début du nom accepte tous les fichiers se terminant pas la chaîne qui le suit.
+  Placé à la fin du nom accepte tous les fichiers commençant par la chaîne qui le précède. Lorsque placé aux 2 extrémités du nom
   accepte tous les fichiers contenant la chaîne encadrée.
 </p>
 <p>
-	Dans ce qui suis ce qui est entre les caractères <b>[</b> et <b>]</b> est optionnel. Les commandes peuvent-être entrées en
-	minuscules ou majuscules. L'interpréteur les converties automatiquement en majuscules.
+	Dans ce qui suis ce qui est entre les caractères <b>[</b> et <b>]</b> est optionnel. Le caractère <b>|</b> sépare les alternatives. Les commandes 
+	doivent-être entrées en	minuscules.
 </p>
+<h3><a name="indexCmd"></a>Index des commandes</h3>
 <p>
 	<ul>
-		<li><b>CLEAR</b> efface le contenu de l'espace RAM réservé au programmes BASIC.</li>
-		<li><b>COPY <i>original nouveau</i></b> copie du fichier <i>original</i> vers <i>nouveau</i>.
+		<li><a href="#alarm">alarm</a></li>
+		<li><a href="#basic">basic</a></li>
+		<li><a href="#cd">cd</a></li>
+		<li><a href="#clktrim">clktrim</a></li>
+		<li><a href="#cls">cls</a></li>
+		<li><a href="#con">con</a></li>
+		<li><a href="#copy">copy</a></li>
+		<li><a href="#date">date</a></li>
+		<li><a href="#date">date</a></li>
+		<li><a href="#dir">dir</a></li>
+		<li><a href="#echo">echo</a></li>
+		<li><a href="#edit">edit</a></li>
+		<li><a href="#fc">fc</a></li>
+		<li><a href="#free">free</a></li>
+		<li><a href="#format">format</a></li>
+		<li><a href="#hdump">hdump</a></li>
+		<li><a href="#help">help</a></li>
+		<li><a href="#mkdir">mkdir</a></li>
+		<li><a href="#more">more</a></li>
+		<li><a href="#mount">mount</a></li>
+		<li><a href="#reboot">reboot</a></li>
+		<li><a href="#receive">receive</a></li>
+		<li><a href="#ren">ren</a></li>
+		<li><a href="#rmdir">rmdir</a></li>
+		<li><a href="#run">run</a></li>
+		<li><a href="#send">send</a></li>
+		<li><a href="#set">set</a></li>
+		<li><a href="#time">time</a></li>
+		<li><a href="#umount">umount</a></li>
+		<li><a href="#uptime">uptime</a></li>
+	</ul>
+</p><div class="item_div"></div>
+<p>
+	<ul>
+		<li><a name="alarm"></a><b>alarm</b> [-?]|[-c 0|1]|[-d ]|[-s date time "message"]<br>
+		<div class="brief_div">Gestion des alarmes.</div>
+		<ul>
+			<li><b>-?</b> ou Sans argument, affiche un texte d'aide.</li>
+			<li><b>-c 0|1</b>, sert à annuler une alarme active. Les alarmes sont identifées par <b>0</b> ou <b>1</b>.</li>
+			<li><b>-d</b>, sert à afficher l'état des alarmes.</li>
+			<li><b>-s date time "message"</b>, sert à créer une alarme en indiquant la date, l'heure et le message qui sera affiché.</li>
+			<li>Lorsqu'une alarme se déclenche un son est audible avec le texte de l'alarme qui apparait sur la première ligne de la console.</li>
+		</ul>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+		<div class="item_div"></div>
+		<li><a name="basic"></a><b>basic</b> [-?]|[-h size] [-c string | file_name]\r"
+		<div class="brief_div">Lance l'interpréteur BASIC.</div>
+		<ul>
+           <li><b>-?</b>  Affiche l'aide de la commande.</li>
+           <li><b>-h size</b>, Cette option détermine l'espace RAM réservé pour l'allocation dynamique. Par défaut est 4096 octets. En BASIC les 
+           chaînes sont allouées dynamiquement. Si un programme alloue beaucoup de chaînes il faudra peut-être augmenter cette valeur pour éviter 
+           une erreur d'allocation.</li>
+           <li><b>-c  "code basic"</b>, lance l'interpréteur BASIC et exécute le code entre guillemets puis reviens au shell de commande.</li>
+           <li><b>basic <i>fichier</i></b>, Lance l'interpréteur BASIC et éxécute le programme qui est dans <i>fichier</i>.</li>
+           <li>Sans arguments la commande invoque le shell vpcBASIC avec la valeur par défaut pour l'option <b>-h</b>.</li> 
+           <li>Notez qu'il est possible de lancer un programme BASIC simplement en invoquant le nom du fichier. Lorsqu'un programme BASIC est
+           lancé de cette façon on reviens automatiquement dans le shell de commande lorsque le programme se termine sans erreur.</li>
+         </ul>
+         </li>
+         <div><a href="#indexCmd">index des commandes</a></div>
+         </li>
+         <div class="item_div"></div>
+         <li><a name="cd"></a></a><b>cd [<i>nom du répertoire</i>]</b><br>
+         <div class="brief_div">Permet de changer de répertoire actif.</div>
+         Invoqué sans argument affiche le nom du répsertoir actif.
+         <div><a href="#indexCmd">index des commandes</a></div> 
+         </li>
+         <div class="item_div"></div>
+         <li><a name="clktrim"></a><b>clktrim [n]</b>
+         <div class="brief_div">Ajustement de la précision de l'horloge temps réel. i.e. RTCC</div>
+         Permet d'afficher ou d'ajuster la valeur <i>TRIM</i> du RTCC. Cette valeur sert à calibrer l'oscillateur du RTCC si l'heure prend de 
+         l'avance ou du retard. La valeur de <i>n</i> est dans l'intervalle {-127..127}. Il faut utitiliser une valeur négative
+         si l'horloge prend du retard et positive si elle prend de l'avance. La valeur de <i>n</i> est ajouter à la valeur actuelle de TRIM.
+         <div><a href="#indexCmd">index des commandes</a></div> 
+         </li>
+         <div class="item_div""></div>
+		<li><a name="cls"></a><b>cls</b> Efface l'écran et renvoie le curseur dans le coin supérieur gauche.
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+        <div class="item_div"></div>
+		<li><a name="con"></a><b>con <i>-n|local|remote</i></b>
+		<div class="brief_div">Permet de passer d'une console à l'autre.</div>
+		<ul>
+			<li><b>con <i>-n</i></b>, Affiche le nom de la console active.</li>
+			<li><b>con <i>local</i></b>, passe le contrôle à la console VGA.</li>
+			<li><b>con <i>remote</i></b>, passe le contrôle à la console à distance via le port COM.</li>
+		</ul>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+         <div class="item_div"></div>
+		<li><a name="copy"></a><b>copy <i>original nouveau</i></b> copie du fichier <i>original</i> vers <i>nouveau</i>.
 		<div><pre><code>example:
-		&gt;COPY fichier1 fichier2
+		$copy fichier1 fichier2
   	    Cré une copie de <i>fichier1</i> avec le nom <i>fichier2</i>. Les noms de fichiers sont capitalisés.
 		</code></pre>
 		</div>
+         <div><a href="#indexCmd">index des commandes</a></div>
 		</li>
-		<li><b>DEL [*]fichier[*]</b> supprime 1 ou plusieurs fichiers.
+         <div class="item_div"></div>
+		<li><a name="date"></a><b>date [<i>chaîne date</i>]</b>, affiche ou ajuste la date dans le RTCC.
+		<ul>
+			<li><b>date</b>, affiche la date sur la console.</li>
+			<li><b>date <i>2018/06/09</i></b>, Ajuste la date dans le RTCC à cette nouvelle valeur.</li>
+		</ul>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+         <div class="item_div"></div>
+		<li><a name="del"></a><b>del [*]fichier[*]</b> supprime 1 ou plusieurs fichiers.
 		<div><pre><code>example:
-		&gt;DEL *.tmp
+		$del *.tmp
 		Cette commande vas supprimer tous les fichiers dont le nom se termine par <b>.TMP</b>
 		Lorsque la commande affecte plusieurs fichiers une demande de confirmation est faite pour chacun d'eux.
 		</code></pre></div></li>
-		<li><b>DIR [[*]test[*]]</b> affiche à l'écran les fichiers contenus sur la carte SD. S'il y a plus de fichiers que le nombre 
+         <div class="item_div"></div>
+		<li><b>dir [[*]test[*]]</b> affiche à l'écran les fichiers contenus sur la carte SD. S'il y a plus de fichiers que le nombre 
 		pouvant apparaître dans un seul écran, un pause se fait à chaque écran. Cette commande peut utiliser le filtre <b>*</b>.
 		<div><pre><code>example:
-		&gt;DIR *BAS         
+		$dir *BAS         
 		SPRTEST.BAS          297
 		SELECT.BAS           527
 		TEST.BAS              87
@@ -104,35 +204,48 @@ Il faut distinguer les commandes du
 		.
 		.
 		</code></pre></div>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		<div class="item_div"></div>
 		</li>
-		<li><b>EDIT [nom_fichier]</b> démarre l'éditeur de texte.
+         <div class="item_div"></div>
+		<li><a name="edit"></a><b>edit [nom_fichier]</b> démarre l'éditeur de texte.
 		<div><pre><code>example:
-		&gt;EDIT carre.bas
+		&gt;edit carre.bas
 		démarre l'éditeur. Si le fichier <i>carre.bas</i> existe il sera chargé dans l'éditeur, sinon le nouveau fichier sera
 		sauvegardé sous ce nom.</code></pre></div>
+		Pour l'utilisation de l'éditeur consultez le document <href html="./edit.html" alt="edit">edit</href>.
+		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
-		<li><b>FREE</b> affiche la quantité de mémoire restante pour les programmes BASIC.
+         <div class="item_div"></div>
+		<li><a name="free"></a><b>free</b> affiche la quantité de mémoire restante pour les programmes BASIC.
 		<pre><code>example:
 		&gt;free
 		RAM free bytes: 20512</code></pre></li>
-		<li><b>HDUMP nom_fichier</b> affiche en hexadécimal le contenu d'un fichier. L'affichage fait une pause à chaque page.
+         <div class="item_div"></div>
+		<li><a name="hdump"></a><b>hdump nom_fichier</b> affiche en hexadécimal le contenu d'un fichier. L'affichage fait une pause à chaque page.
 		<div><pre><code>example:
-		&gt;HDUMP tones.bas
+		&gt;hdump tones.bas
 		
 		0000  69 6E 70 75 74 20 22 64 input "d
 		0008  75 72 65 65 22 2C 20 64 uree", d
 		.
 		.
 		.
-		</code></pre></div></li>
-		<li><b>HELP [commande]</b> sans arguments affiche la liste des commandes. Suivit d'un nom de commande affiche un court texte
+		</code></pre></div>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+        <div class="item_div"></div>
+		<li><a name="help"></a><b>help [commande]</b> sans arguments affiche la liste des commandes. Suivit d'un nom de commande affiche un court texte
 		d'aide relatif à cette commande.<pre><code>example:
-		&gt;HELP dir
-		DIR [filter]
+		&gt;help dir
+		dir [filter]
 		List file in root directory, may use '*'
 		filter
-		</code></pre></li>
-		<li><b>MORE nom_fichier</b> Affiche un fichier texte à l'écran. Fait une pause à chaque page.
+		</code></pre>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+         <div class="item_div"></div>
+		<li><a name="more"></a><b>more nom_fichier</b> Affiche un fichier texte à l'écran. Fait une pause à chaque page.
 		<pre><code>example:
 		&gt;more tone.bas
 		
@@ -143,32 +256,95 @@ Il faut distinguer les commandes du
 		 if key() then bye end if
 		 wend
 		</code></pre>
+		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
-		<li><b>RASTER</b> C'est un utilitaire pour centrer l'image sur l'écran du téléviseur. Affiche un rectangle qui représente
-		le périmètre de l'affichage. En utilisant les flèches on centre le rectangle sur l'écran. La touche <b>ESC</b> permet de
-		quitter l'utilitaire.</li>
-		<li><b>REBOOT</b> Cette commande effectue un redémarrage à froid de l'ordinateur. Cette commande a le même effet que la combinaison
-		de touches &lt;CTRL-ALT-SUP&gt;</li>
-		<li><b>REN nom_actuel nouveau_nom</b> Renomme un fichier existant.
+         <div class="item_div"></div>
+         <li><a name="mount"></a><b>mount</b>
+         <div class="brief_div">mounte le système de fichier de la carte SD</div>
+		<div>exemple:
+		<pre><code>
+			$mount
+			$dir *.txt
+			
+			reading directory: ('.')
+			----A 2018/06/16 12:13		37 HELLO.TXT
+			
+			file count 1
+			directory count 0
+			total size 37
+		</code></pre></div>
+		<div>Voir aussi <a href="#umount">umount</a>.</div>	
+		<div><a href="#indexCmd">index des commandes</a></div>
+         </li>
+        <div class="item_div"></div>
+		<li><a name="reboot"></a><b>reboot</b> Cette commande effectue un redémarrage à froid de l'ordinateur. Cette commande a le même effet que la combinaison
+		de touches &lt;CTRL-ALT-SUP&gt;
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+        <div class="item_div"></div>
+		<li><a name="ren"></a><b>ren nom_actuel nouveau_nom</b> Renomme un fichier existant.
 		<pre><code>example:
-		&gt;REN tones.bas beep.bas
-		Le fichier <i>tones.bas</i> sera renommé <i>beep.bas</i></code></pre></li>
-		<li><b>RUN [progam.bas]</b> Compile et exécute un fichier BASIC existant sur la carte SD.
+		&gt;ren tones.bas beep.bas
+		Le fichier <i>tones.bas</i> sera renommé <i>beep.bas</i></code></pre>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+        <div class="item_div"></div>
+		<li><a name="run"></a><b>run file_name</b> Compile et exécute un fichier BASIC existant sur la carte SD.
 		<pre><code>example:
-		&gt;RUN conway.bas
+		&gt;run conway.bas
 		Ouvre le fichier <i>conway.bas</i>, le compile et exécute le programme. Le programme compilé reste en mémoire et tant qu'il 
 		n'est pas remplacé par un autre on peu le réexécuter simple en tapant: <b>RUN</b> sur la ligne de commande.
-		</code></pre></li>
+		</code></pre>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+        <div class="item_div"></div>
+		<li><a name="send"><b>send [-b] [-v] file_name</b></a>
+		<div class="brief_div">Envoie d'un fichier en utilisant le protocole XMODEM.</div>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+        <div class="item_div"></div>
+        <li><a name="set"></a><b>set var=value</b>
+        <div class="brief_div">Définie ou supprime une variable d'environnement.</div>
+		<div><a href="#indexCmd">index des commandes</a></div>
+        </li>
+        <div class="item_div"></div>
+        <li><a name="time"></a><b>time [hh:mm:ss]</b>
+        <div class="brief_div">Affiche ou ajuste le temps de l'horloge RTCC.</div>
+		<div><a href="#indexCmd">index des commandes</a></div>
+        </li>
+        <div class="item_div"></div>
+        <li><a name="umount"></a><b>umount</b>
+        <div class="brief_div">démonte le système de fichier de la carte SD.</div>
+        <div>exemple:
+        <pre><code>
+			$umount
+			$echo La carte SD peu maintenant etre retiree sans dommage.
+        </code></pre></div>
+        <div>Voir aussi <a href="#mount">mount</a>.</div>
+		<div><a href="#indexCmd">index des commandes</a></div>
+        </li>
+        <div class="item_div"></div>
+        <li><a name="uptime"></a><b>uptime</b>
+        <div class="brief_div">Affiche depuis combien de temps l'ordinateur est allumée en jours, heures, minutes et secondes.</div>
+		<div>exemple:<pre><code>
+		$uptime
+		00d01h14m47s
+		</code></pre>
+		</div>
+		<div><a href="#indexCmd">index des commandes</a></div>
+        </li>
 	</ul>
 </p>
 <hr width="50%" align="center">
+<h2>INDEX</h2>
 <p>
 	<ul>
-		<li><a href="./pv16sog.html">spécifications du PV16SOG</a></li>
-		<li><a href="./shell.html">shell du PV16SOG</a></li>
-		<li><a href="./editor.html">Éditeur du PV16SOG</a></li>
-        <li><a href="./BASIC.html">BASIC du PV16SOG</a></li>
-        <li><a href="./stackvm.html">machine virtuelle du PV16SOG</a></li>
+		<li><a href="./index.html">Introduction</a></li>
+		<li><a href="./vpc32vga.html">Description du VPC-32V</a></li>
+		<li><a href="./shell.html">shell du VPC-32V</a></li>
+		<li><a href="./editor.html">Éditeur du VPC-32V</a></li>
+        <li><a href="./BASIC.html">BASIC du VPC-32V</a></li>
+        <li><a href="./stackvm.html">machine virtuelle du VPC-32V</a></li>
 	</ul>
 </p>
 </body>

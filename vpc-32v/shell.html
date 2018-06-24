@@ -84,13 +84,11 @@ le <i>prompt</i> qui s'affiche est différent il s'agit d'un signe <b>&gt;</b>.<
 		<li><a href="#con">con</a></li>
 		<li><a href="#copy">copy</a></li>
 		<li><a href="#date">date</a></li>
-		<li><a href="#date">date</a></li>
+		<li><a href="#del">del</a></li>
 		<li><a href="#dir">dir</a></li>
 		<li><a href="#echo">echo</a></li>
 		<li><a href="#edit">edit</a></li>
-		<li><a href="#fc">fc</a></li>
 		<li><a href="#free">free</a></li>
-		<li><a href="#format">format</a></li>
 		<li><a href="#hdump">hdump</a></li>
 		<li><a href="#help">help</a></li>
 		<li><a href="#mkdir">mkdir</a></li>
@@ -110,19 +108,20 @@ le <i>prompt</i> qui s'affiche est différent il s'agit d'un signe <b>&gt;</b>.<
 </p><div class="item_div"></div>
 <p>
 	<ul>
-		<li><a name="alarm"></a><b>alarm</b> [-?]|[-c 0|1]|[-d ]|[-s date time "message"]<br>
-		<div class="brief_div">Gestion des alarmes.</div>
+		<li><a name="alarm"></a><b>alarm</b> [-?] | -c 0|1 | -d | -s date time "message"<br>
+		<div class="brief_div">Gestion des alarmes. On peut créer 2 alarmes.</div>
 		<ul>
-			<li><b>-?</b> ou Sans argument, affiche un texte d'aide.</li>
-			<li><b>-c 0|1</b>, sert à annuler une alarme active. Les alarmes sont identifées par <b>0</b> ou <b>1</b>.</li>
+			<li><b>-?</b> ou Sans argument, affiche ce texte d'aide.</li>
+			<li><b>-c 0|1</b>, sert à annuler une alarme active. Les alarmes sont identifiées par les numéros <b>0</b> ou <b>1</b>.</li>
 			<li><b>-d</b>, sert à afficher l'état des alarmes.</li>
-			<li><b>-s date time "message"</b>, sert à créer une alarme en indiquant la date, l'heure et le message qui sera affiché.</li>
-			<li>Lorsqu'une alarme se déclenche un son est audible avec le texte de l'alarme qui apparait sur la première ligne de la console.</li>
+			<li><b>-s date time "message"</b>, sert à créer une alarme en indiquant la date, l'heure et le message qui sera affiché.
+			Le format pour la date est <b>AAAA/MM/JJ</b>. Le Format pour l'heure est <b>HH:MM:SS</b>.</li>
+			<li>Lorsqu'une alarme se déclenche un son est audible avec le texte de l'alarme qui apparait sur la première ligne de l'écran.</li>
 		</ul>
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
 		<div class="item_div"></div>
-		<li><a name="basic"></a><b>basic</b> [-?]|[-h size] [-c string | file_name]\r"
+		<li><a name="basic"></a><b>basic</b> -? | [-h size] [-c string | file_name]\r"
 		<div class="brief_div">Lance l'interpréteur BASIC.</div>
 		<ul>
            <li><b>-?</b>  Affiche l'aide de la commande.</li>
@@ -139,73 +138,172 @@ le <i>prompt</i> qui s'affiche est différent il s'agit d'un signe <b>&gt;</b>.<
          <div><a href="#indexCmd">index des commandes</a></div>
          </li>
          <div class="item_div"></div>
-         <li><a name="cd"></a></a><b>cd [<i>nom du répertoire</i>]</b><br>
+         <li><a name="cd"></a></a><b>cd [-?] | [<i>nom du répertoire</i>]</b><br>
          <div class="brief_div">Permet de changer de répertoire actif.</div>
-         Invoqué sans argument affiche le nom du répsertoir actif.
+         <ul>
+		 <li><b>-?</b>, Affiche l'aide de la commande.</li>
+		 <li><b>nom du répertoire</b>, Permet ce changer de répertoire actif.</li>	 
+         <li>Invoqué sans argument affiche le nom du répsertoir actif.</li>
+         </ul>
          <div><a href="#indexCmd">index des commandes</a></div> 
          </li>
          <div class="item_div"></div>
-         <li><a name="clktrim"></a><b>clktrim [n]</b>
-         <div class="brief_div">Ajustement de la précision de l'horloge temps réel. i.e. RTCC</div>
-         Permet d'afficher ou d'ajuster la valeur <i>TRIM</i> du RTCC. Cette valeur sert à calibrer l'oscillateur du RTCC si l'heure prend de 
-         l'avance ou du retard. La valeur de <i>n</i> est dans l'intervalle {-127..127}. Il faut utitiliser une valeur négative
-         si l'horloge prend du retard et positive si elle prend de l'avance. La valeur de <i>n</i> est ajouter à la valeur actuelle de TRIM.
+         <li><a name="clktrim"></a><b>clktrim [-?] | [n]</b>
+         <div class="brief_div">Ajustement de la précision de l'horloge temps réel (RTCC).</div>
+         <ul>
+			 <li><b>-?</b>, Affiche l'aide de la commande.</li>
+			 <li><b>n</b>, Entier dans l'intervalle {-127...127} qui est additonné à la valeur actuelle de <i>TRIM</i>.  
+			 Il faut utitiliser une valeur négative si l'horloge prend du retard et positive si elle prend de l'avance.</li>
+			 <li>Sans argument la commande affiche la valeur actuelle de <i>TRIM</i>.</li>
+         </ul>
+         <div>exemple:
+         <pre><code>
+			$clktrim
+			Actual RTCC oscillator trim value: 18
+			$clktrim -2
+			Actual RTCC oscillator trim value: 16
+			$_			 
+         </code></pre>
+         </div>
          <div><a href="#indexCmd">index des commandes</a></div> 
          </li>
          <div class="item_div""></div>
-		<li><a name="cls"></a><b>cls</b> Efface l'écran et renvoie le curseur dans le coin supérieur gauche.
+		<li><a name="cls"></a><b>cls [-?]</b>
+		<div class="brief_div">Efface l'écran et renvoie le curseur dans le coin supérieur gauche.</div>
+		<ul>
+			<li><b>-?</b>, Affiche l'aide de la commande sans effacer l'écran.</li>
+			<li>Sans argument efface l'écran.</li>
+		</ul> 
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
         <div class="item_div"></div>
-		<li><a name="con"></a><b>con <i>-n|local|remote</i></b>
+		<li><a name="con"></a><b>con -? | -n | local | remote</b>
 		<div class="brief_div">Permet de passer d'une console à l'autre.</div>
 		<ul>
-			<li><b>con <i>-n</i></b>, Affiche le nom de la console active.</li>
-			<li><b>con <i>local</i></b>, passe le contrôle à la console VGA.</li>
-			<li><b>con <i>remote</i></b>, passe le contrôle à la console à distance via le port COM.</li>
+			<li><b>-?</b>, Affiche l'aide de la commande.</li>
+			<li><b>-n</b>, Affiche le nom de la console active.</li>
+			<li><b>local</b>, passe le contrôle à la console VGA.</li>
+			<li><b>remote</b>, passe le contrôle à la console à distance via le port COM.</li>
 		</ul>
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
          <div class="item_div"></div>
-		<li><a name="copy"></a><b>copy <i>original nouveau</i></b> copie du fichier <i>original</i> vers <i>nouveau</i>.
+		<li><a name="copy"></a><b>copy -? | original nouveau</b>
+		<div class="brief_div">Copie du fichier <i>original</i> vers <i>nouveau</i>.</div>
+		<ul>
+		<li><b>-?</b>, Affiche l'aide de la commande.</li>
+		<li><b>original nouveau</b>, Cré une copie du fichier <i>original</i> avec le nom <i>nouveau</i>. <i>Original</i>
+		et <i>Nouveau</i> sont des noms de fichiers unique.</li>
+		</ul>
 		<div><pre><code>example:
-		$copy fichier1 fichier2
-  	    Cré une copie de <i>fichier1</i> avec le nom <i>fichier2</i>. Les noms de fichiers sont capitalisés.
+		$copy prog1.bas prog2.bas
+		$_
 		</code></pre>
+  	    Cré une copie de <i>prog1.bas</i> avec le nom <i>prog2.bas</i>. Les noms de fichiers sont capitalisés.
 		</div>
          <div><a href="#indexCmd">index des commandes</a></div>
 		</li>
          <div class="item_div"></div>
-		<li><a name="date"></a><b>date [<i>chaîne date</i>]</b>, affiche ou ajuste la date dans le RTCC.
+		<li><a name="date"></a><b>date -? | [chaîne date]</b>
+		<div class="brief_div">affiche ou ajuste la date du RTCC.</div>
 		<ul>
-			<li><b>date</b>, affiche la date sur la console.</li>
-			<li><b>date <i>2018/06/09</i></b>, Ajuste la date dans le RTCC à cette nouvelle valeur.</li>
+			<li><b>-?</b>, Affiche l'aide de la commande.</li>
+			<li><b>chaîne date</b>, Ajuste la date. <i>chaîne date</i> est de la forme <b>YYYY/MM/JJ</b>.</li>
+			<li>Sans argument affiche la date actuelle.</li>
 		</ul>
+		<div>exemple:
+		<pre><code>
+			$date
+			2018/06/23
+			$date 2018/06/24
+			$date
+			2018/06/24
+			$_
+		</code></pre>
+		</div>
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
          <div class="item_div"></div>
-		<li><a name="del"></a><b>del [*]fichier[*]</b> supprime 1 ou plusieurs fichiers.
-		<div><pre><code>example:
+		<li><a name="del"></a><b>del -? | [-y] spec_fichier</b>
+		<div class="brief_div">Supprime 1 ou plusieurs fichiers.</div>
+		<ul>
+		<li><b>-?</b>, Affiche l'aide de la commande.</li>
+		<li><b>-y</b>, Cette option permet d'éviter la demande de confirmation à chaque fichier.</li>
+		<li><b>spec_fichier</b>, Les fichiers qui correspondent à la spécification seront effacés. Une spécification
+		de fichier peut contenir le caractère <b>*</b>, au début, à la fin ou aux 2 extrémités.</li>
+		</ul>
+		<div>example:
+		<pre><code>
+		$echo "Supression des fichiers temporaires."
+		Supression des fichiers temporaires.
 		$del *.tmp
+		</code></pre>
 		Cette commande vas supprimer tous les fichiers dont le nom se termine par <b>.TMP</b>
-		Lorsque la commande affecte plusieurs fichiers une demande de confirmation est faite pour chacun d'eux.
-		</code></pre></div></li>
+		Une demande confirmation sera demandee pour chaque fichier.
+		</div>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
          <div class="item_div"></div>
-		<li><b>dir [[*]test[*]]</b> affiche à l'écran les fichiers contenus sur la carte SD. S'il y a plus de fichiers que le nombre 
-		pouvant apparaître dans un seul écran, un pause se fait à chaque écran. Cette commande peut utiliser le filtre <b>*</b>.
+		<li><a name="dir"></a><b>dir -? | [spec_fichier]</b>
+		<div class="brief_div"> affiche à l'écran l'information sur les fichiers correspondants à la spécification.</div>
+		<ul>
+			<li><b>-?</b>, Affiche l'aide de cette commande.</li>
+			<li><b>spec_fichier</b>, spécification des fichiers à afficher. S'il n'y a pas de spécification tous les fichiers
+			du répertoire actif sont affichés.</li>
+		</ul>
 		<div><pre><code>example:
-		$dir *BAS         
-		SPRTEST.BAS          297
-		SELECT.BAS           527
-		TEST.BAS              87
-		TONES.BAS            151
-		RECT.BAS             156
-		.
-		.
-		.
+		$dir *.bas
+
+		reading dirctory: ('.')
+		----A 2018/05/21 21:06        862  SPRTEST.BAS  
+		----A 2018/05/20 11:31        175  ODE_JOIE.BAS 
+		----A 2018/06/16 22:25         77  CLOCK.BAS    
+		----A 2018/05/02 10:45        109  TONES.BAS    
+		----A 2018/04/06 20:41        126  RECT.BAS     
+		----A 2018/05/02 10:47        175  LINE.BAS     
+		----A 2018/04/17 15:26        176  BOX.BAS      
+		----A 2018/05/14 21:17        180  FACT.BAS     
+		----A 2018/05/02 10:48        127  KTONE.BAS    
+		----A 2018/04/15 12:02        537  CARRE.BAS    
+		----A 2018/05/21 21:02        117  CLAIRF.BAS   
+		----A 2018/04/14 10:39        196  SRAM.BAS     
+		----A 2018/05/09 21:40       1935  CONWAY.BAS   
+		----A 2018/05/07 10:59        344  GRAPHIC.BAS  
+		----A 2018/05/21 22:53       2885  SPRED.BAS    
+		----- 1980/00/00 00:00        167  SRTEST.BAS   
+		----A 2018/06/16 12:13        298  FILE.BAS     
+		----A 2018/05/21 21:46       1328  MOONLNDR.BAS 
+		----A 2018/06/16 12:05       2703  SNAKE.BAS    
+		----A 2018/05/03 15:05        289  BRAIN.BAS    
+		----A 2018/05/02 12:07        587  PIANO.BAS    
+		----A 2018/05/07 11:35        271  ELLIPSE.BAS  
+		----A 2018/05/17 10:59        148  SAV_LOAD.BAS 
+		----A 2018/05/14 12:37        262  SINE.BAS     
+
+		file count 24                                                                   
+		directory count 0                                                               
+		total size 14074                                                                
+																				
+		$_
 		</code></pre></div>
 		<div><a href="#indexCmd">index des commandes</a></div>
 		<div class="item_div"></div>
+		<li><a name="echo"></a><b> echo texte</b>
+		<div class="brief_div">Affiche à l'écran le mesage texte.</div>
+		<ul>
+			<li><b>texte</b>, tout ce qui suis la commande <b>echo</b> jusqu'à la fin de la ligne est affiché. <b>Texte</b> peut-être entre guillements doubles.
+			S'il n'y a pas de guillemets les variables d'environnements sont substituées s'il y en a dans le texte.</li>
+		</ul>
+		<div>
+		exemple:
+		<pre><code>
+		$echo la version du shell de commande est $shell_version
+		la version du shell de commande est 1.0 
+		$_
+		</code></pre>
+		Dans cet exemple la variable d'environnement <b>SHELL_VERSION</b> a été substituée par sa valeur.
+		</div>
+		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
          <div class="item_div"></div>
 		<li><a name="edit"></a><b>edit [nom_fichier]</b> démarre l'éditeur de texte.
@@ -214,7 +312,6 @@ le <i>prompt</i> qui s'affiche est différent il s'agit d'un signe <b>&gt;</b>.<
 		démarre l'éditeur. Si le fichier <i>carre.bas</i> existe il sera chargé dans l'éditeur, sinon le nouveau fichier sera
 		sauvegardé sous ce nom.</code></pre></div>
 		Pour l'utilisation de l'éditeur consultez le document <href html="./edit.html" alt="edit">edit</href>.
-		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
          <div class="item_div"></div>
 		<li><a name="free"></a><b>free</b> affiche la quantité de mémoire restante pour les programmes BASIC.

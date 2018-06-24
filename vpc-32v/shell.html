@@ -306,53 +306,187 @@ le <i>prompt</i> qui s'affiche est différent il s'agit d'un signe <b>&gt;</b>.<
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
          <div class="item_div"></div>
-		<li><a name="edit"></a><b>edit [nom_fichier]</b> démarre l'éditeur de texte.
+		<li><a name="edit"></a><b>edit -? | [nom_fichier]</b>
+		<div class="brief_div">Démarre l'éditeur de texte.</div>
+		<ul>
+		<li><b>-?</b>, Affiche l'aide de la commande.</li>
+		<li><b>nom_fichier</b>, Est le nom du fichier à éditer. S'il n'existe pas il sera créé.</li>
+		</ul>
 		<div><pre><code>example:
-		&gt;edit carre.bas
-		démarre l'éditeur. Si le fichier <i>carre.bas</i> existe il sera chargé dans l'éditeur, sinon le nouveau fichier sera
-		sauvegardé sous ce nom.</code></pre></div>
+		$edit carre.bas
+		</code></pre></div>
 		Pour l'utilisation de l'éditeur consultez le document <href html="./edit.html" alt="edit">edit</href>.
+		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
          <div class="item_div"></div>
-		<li><a name="free"></a><b>free</b> affiche la quantité de mémoire restante pour les programmes BASIC.
+		<li><a name="free"></a><b>free [-?]</b>
+		<div class="brief_div">Affiche la quantité de mémoire RAM disponible en allocation dynamique.</div>
+		<ul>
+			<li><b>-?</b>, Affiche l'aide de cette commande.</li>
+			<li> Les variables d'environnents sont allouées dans cet espace. L'interpréteur BASIC utilise aussi cette mémoire pour son utilisation.</li>
+		</ul> 
 		<pre><code>example:
-		&gt;free
-		RAM free bytes: 20512</code></pre></li>
+		$free
+		free RAM 42440/42480 BYTES
+
+		$set hello=hello world!
+
+		$set
+		HELLO=hello world! 
+		NIL=
+		FALSE=F
+		TRUE=T
+		SHELL_VERSION=1.0
+
+		$echo $hello
+		hello world!  
+		$free
+		free RAM 42360/42480 BYTES
+
+		$set hello=
+
+		$set
+		NIL=
+		FALSE=F
+		TRUE=T
+		SHELL_VERSION=1.0
+
+		$free
+		free RAM 42440/42480 BYTES
+
+		$_
+		</code></pre>
+		Le nombre au numérateur est la quantité disponible après la dernière allocation. Le nombre au dénominateur est la quantité qui était 
+		disponible au démarrage du shell de commande.
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
          <div class="item_div"></div>
-		<li><a name="hdump"></a><b>hdump nom_fichier</b> affiche en hexadécimal le contenu d'un fichier. L'affichage fait une pause à chaque page.
-		<div><pre><code>example:
-		&gt;hdump tones.bas
-		
-		0000  69 6E 70 75 74 20 22 64 input "d
-		0008  75 72 65 65 22 2C 20 64 uree", d
-		.
-		.
-		.
+		<li><a name="hdump"></a><b>hdump -? | nom_fichier</b>
+		<div class="brief_div">Affiche en hexadécimal le contenu d'un fichier. L'affichage fait une pause à chaque page.</div> 
+		<ul>
+			<li><b>-?</b>, Affiche l'aide  de la commande.</li>
+			<li><b>nom_fichier</b>, Est le nom du fichier dont le contenu doit-être affiché.</li>
+		</ul>
+		<div>example:
+	    <pre><code>
+		$hdump file.bas                                                                 
+		00000000  72 65 6D 20 66 69 6C 65 20 73 79 73 74 65 6D 20 rem file system       
+		00000010  74 65 73 74 0D 6F 70 65 6E 20 22 68 65 6C 6C 6F test open "hello      
+		00000020  2E 74 78 74 22 20 66 6F 72 20 6F 75 74 70 75 74 .txt" for output      
+		00000030  20 61 73 20 23 31 0D 70 72 69 6E 74 20 23 31 2C  as #1 print #1,      
+		00000040  22 68 65 6C 6C 6F 20 77 6F 72 6C 64 5C 72 22 0D "hello world\r"       
+		00000050  70 75 74 63 20 23 31 2C 20 33 33 20 20 3A 20 70 putc #1, 33  : p      
+		00000060  75 74 63 20 23 31 2C 20 31 30 0D 76 24 3D 22 62 utc #1, 10 v$="b      
+		00000070  6F 6E 6A 6F 75 72 5C 72 22 3A 20 6E 3D 33 2A 35 onjour\r": n=3*5      
+		00000080  0D 3F 20 23 31 2C 20 76 24 2C 20 6E 2C 20 34 2A  ? #1, v$, n, 4*      
+		00000090  35 2B 32 30 2C 20 33 32 2E 35 65 2D 33 0D 63 6C 5+20, 32.5e-3 cl      
+		000000A0  6F 73 65 28 23 31 29 0D 64 69 6D 20 68 65 6C 6C ose(#1) dim hell      
+		000000B0  6F 24 0D 6F 70 65 6E 20 22 68 65 6C 6C 6F 2E 74 o$ open "hello.t      
+		000000C0  78 74 22 20 66 6F 72 20 69 6E 70 75 74 20 61 73 xt" for input as      
+		000000D0  20 23 31 0D 69 6E 70 75 74 20 23 31 2C 20 68 65  #1 input #1, he      
+		000000E0  6C 6C 6F 24 0D 63 3D 66 67 65 74 63 28 23 31 29 llo$ c=fgetc(#1)      
+		000000F0  0D 69 6E 70 75 74 20 23 31 2C 78 24 2C 6E 31 2C  input #1,x$,n1,      
+		00000100  6E 32 2C 6E 33 21 0D 63 6C 6F 73 65 28 23 31 29 n2,n3! close(#1)      
+		00000110  0D 3F 20 68 65 6C 6C 6F 24 2C 63 2C 78 24 2C 6E  ? hello$,c,x$,n      
+		00000120  31 2C 6E 32 2C 6E 33 21 0D 0D                   1,n2,n3!              
+																						
+		$_
 		</code></pre></div>
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
         <div class="item_div"></div>
-		<li><a name="help"></a><b>help [commande]</b> sans arguments affiche la liste des commandes. Suivit d'un nom de commande affiche un court texte
-		d'aide relatif à cette commande.<pre><code>example:
-		&gt;help dir
-		dir [filter]
-		List file in root directory, may use '*'
-		filter
-		</code></pre>
+		<li><a name="help"></a><b>help [commande]</b>
+		<div class="brief_div">Système d'aide des commandes du shell.</div>
+		<ul>
+			<li><b>commande</b>, Affiche l'aide pour cette commande. A le même effet que <b>commande -?</b>.</li>
+			<li>Sans argument affiche la liste des commandes disponibles.</li>
+		</ul>
+        <div>exemple:
+        <pre><code>
+		$help
+		alarm basic cd clktrim cls con copy date del dir echo edit free hdump help 
+		mkdir more mount reboot receive ren rmdir run send set time umount uptime
+
+		$help clktrim
+		USAGE: clktrim  [-?]|n
+		RTCC oscillator calibration
+		n is added to actual value
+		n is in range {-127..127}
+		If n is missing display actual trim value.
+
+		$clktrim -?
+		USAGE: clktrim  [-?]|n
+		RTCC oscillator calibration
+		n is added to actual value
+		n is in range {-127..127}
+		If n is missing display actual trim value.
+
+		$_
+		</code></pre></div>
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
          <div class="item_div"></div>
-		<li><a name="more"></a><b>more nom_fichier</b> Affiche un fichier texte à l'écran. Fait une pause à chaque page.
-		<pre><code>example:
-		&gt;more tone.bas
-		
-		input "duree", d
-		while 1
-		 n=abs(rnd())%48
-		 tone(n,d,1)
-		 if key() then bye end if
-		 wend
+         <li><a name="mkdir"></a><b>mkdir -? | nom_repertoire</b>
+         <div class="brief_div">Création d'un nouveau répertoire.</div>
+         <ul>
+			<li><b>-?</b>, Affiche l'aide de la comamnde.</li>
+			<li><b>nom_repertoire</b>, est le nom du répertoire qui doit-être créé. Si le nom débute par le caractère <b>/</b>, le
+			nouveau répertoire sera créé à la racine du système de fichier. Autrement il sera créé sous le répertoire actif.</li>
+         </ul>
+         <div>
+			 exemple:
+			 <pre><code>
+				$cd
+				/
+
+				$mkdir test_dir
+				directory test_dir created
+
+				$dir *dir
+
+				reading dirctory: ('/')
+				D---- 2018/06/24 11:59          0  TEST_DIR     
+
+				file count 0
+				directory count 1
+				total size 0
+
+				$
+			 </code></pre>
+         </div>
+		<div><a href="#indexCmd">index des commandes</a></div>
+         </li>
+         <div class="item_div"></div>
+		<li><a name="more"></a><b>more -? | nom_fichier</b>
+		<div class="bried_div">Affiche un fichier texte à l'écran. Fait une pause à chaque page.</div>
+		<ul>
+			<li><b>-?</b>, Affiche l'aide de la commande.</li>
+			<li><b>nom_fichier</b>, est le nom du fichier dont le contenu sera affiché.</li>
+		</ul>
+		<div>
+		exemple:
+		<pre><code>
+		$more file.bas                                                                  
+
+		rem file system test
+		open "hello.txt" for output as #1
+		print #1,"hello world\r"
+		putc #1, 33  : putc #1, 10
+		v$="bonjour\r": n=3*5
+		? #1, v$, n, 4*5+20, 32.5e-3
+		close(#1)
+		dim hello$
+		open "hello.txt" for input as #1
+		input #1, hello$
+		c=fgetc(#1)
+		input #1,x$,n1,n2,n3!
+		close(#1)
+		? hello$,c,x$,n1,n2,n3!
+
+
+		$_
 		</code></pre>
+		</div>
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
          <div class="item_div"></div>
@@ -370,12 +504,17 @@ le <i>prompt</i> qui s'affiche est différent il s'agit d'un signe <b>&gt;</b>.<
 			directory count 0
 			total size 37
 		</code></pre></div>
+		Utiliser cette commande après avoir inséré une nouvelle carte SD dans la fente.
 		<div>Voir aussi <a href="#umount">umount</a>.</div>	
 		<div><a href="#indexCmd">index des commandes</a></div>
          </li>
         <div class="item_div"></div>
-		<li><a name="reboot"></a><b>reboot</b> Cette commande effectue un redémarrage à froid de l'ordinateur. Cette commande a le même effet que la combinaison
-		de touches &lt;CTRL-ALT-SUP&gt;
+		<li><a name="reboot"></a><b>reboot [-?]</b>
+		<div class="brief_div">Cette commande effectue un redémarrage à froid de l'ordinateur.</div>
+		<ul>
+			<li><b>-?</b>, Affiche l'aide de la commande.</li>
+			<li> Cette commande a le même effet que la combinaison de touches &lt;CTRL-ALT-SUP&gt;</li>
+		</ul>
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
         <div class="item_div"></div>
@@ -386,27 +525,103 @@ le <i>prompt</i> qui s'affiche est différent il s'agit d'un signe <b>&gt;</b>.<
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
         <div class="item_div"></div>
-		<li><a name="run"></a><b>run file_name</b> Compile et exécute un fichier BASIC existant sur la carte SD.
-		<pre><code>example:
-		&gt;run conway.bas
-		Ouvre le fichier <i>conway.bas</i>, le compile et exécute le programme. Le programme compilé reste en mémoire et tant qu'il 
-		n'est pas remplacé par un autre on peu le réexécuter simple en tapant: <b>RUN</b> sur la ligne de commande.
+		<li><a name="rmdir"></a><b>rmdir -? | nom_répertoire</b>
+		<div class="brief_div">Supprime le répertoire demandé.</div>
+		<ul>
+			<li><b>-?</b>, afffiche l'aide de la commande.</li>
+			<li><b>nom_répertoire</b>, est le nom du répertoire à supprimer. Le répertoire ne doit pas contenir de fichiers.</li>
+		</ul>
+		<div><a href="#indexCmd">index des commandes</a></div>
+		</li>
+        <div class="item_div"></div>
+		<li><a name="run"></a><b>run -? | nom_fichier</b>
+		<div class="brief_div">Compile et exécute un fichier BASIC existant sur la carte SD.</div>
+		<ul>
+			<li><b>-?</b>, affiche l'aide de la commande.</li>
+			<li><b>nom_fichier</b>, est le nom du fichier source vpcBASIC à exécuter. Il n'est pas nécessaire de donner l'extension <b>.BAS</b>.</li>
+		</ul>
+		<div>exemple:
+		<pre><code>
+		$run conway
 		</code></pre>
+		Lance l'interpréteur <b>vpcBASIC</b> en lui passant le nom du fichier <i>conway.bas</i>.<br>
+		Le programme est compilé et exécuté. Si le programme quitte sans erreur la sortie vers le shell de commande se fait automatiquement.
+		</div>
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
         <div class="item_div"></div>
-		<li><a name="send"><b>send [-b] [-v] file_name</b></a>
-		<div class="brief_div">Envoie d'un fichier en utilisant le protocole XMODEM.</div>
+		<li><a name="send"><b>send -? | [-b] [-v] nom_fichier</b></a>
+		<div class="brief_div">Transmet un fichier  via le port COM en utilisant le protocole XMODEM.</div>
+		<ul>
+			<li><b>-?</b>, affiche l'aide de la commande.</li>
+			<li><b>-b</b>, cette option doit-être utilisée s'il s'agit d'un fichier binaire.</li>
+			<li><b>-v</b>, cette option permet d'afficher à l'écran les détails de l'opération. Elle est utile pour le déboguage.</li>
+			<li><b>nom_fichier</b>, est le nom du fichier à transmettre. </li>
+		</ul>
+		<div>exemple:
+		<pre><code>
+			$send conway.bas
+			Transmitting conway.bas ..
+			
+			Transmission completed.
+			
+			$_
+		</code></pre>
+		</div>
+		En reliant l'ordaniteur VPC-32V à un PC avec un cable <i>null modem</i> et en utilisant sur le PC un logiciel qui permet la réception 
+		de fichiers avec le protocole XMODEM on peut transférer des fichiers entre les 2 ordinateurs. Dans l'exemple ci-haut le fichier source
+		vpcBASIC <i>conway.bas</i> est transmis du VPC-32V vers le PC.
 		<div><a href="#indexCmd">index des commandes</a></div>
 		</li>
         <div class="item_div"></div>
-        <li><a name="set"></a><b>set var=value</b>
+        <li><a name="set"></a><b>set [-?] | [var=[value]]</b>
         <div class="brief_div">Définie ou supprime une variable d'environnement.</div>
+        <ul>
+			<li><b>-?</b>, affiche l'aide de la commande.</li>
+			<li><b>var</b>, est le nom de la variable. Ce nom est convertie en majuscules.</li>
+			<li><b>value</b>, est une chaîne de caractères représentant la valeur de la variable. Tous les caractères qui suivent le
+			caractère <b>=</b> jusqu'à la fin de la ligne est considéré comme la valeur de la variable. Si une variable d'environnement
+			existante est donnée après le caractère <b>=</b> son nom est substitué par sa valeur.</li>
+			<li>Si il n'y a aucun caractère après <b>=</b>, la variable d'environnement si elle existe est supprimée.</li>
+			<li>Les variables d'environnement prédéfinies dans le système ne peuvent-être modifiées ou supprimées.</li>
+			<li>La commande <b>set</b> sans arguments affiche toutes les variables d'environnement.</li>
+        </ul>
+        <div>exemple:
+        <pre><code>
+		$set hello=hello world!
+
+		$set
+		HELLO=hello world!
+		NIL=
+		FALSE=F
+		TRUE=T
+		SHELL_VERSION=1.0
+		
+		$echo $hello
+		hello world!
+		$_
+        </code></pre>
+        </div>
 		<div><a href="#indexCmd">index des commandes</a></div>
         </li>
         <div class="item_div"></div>
-        <li><a name="time"></a><b>time [hh:mm:ss]</b>
+        <li><a name="time"></a><b>time [-?] | [hh:mm:ss]</b>
         <div class="brief_div">Affiche ou ajuste le temps de l'horloge RTCC.</div>
+        <ul>
+			<li><b>-?</b>, affiche l'aide de la commande.</li>
+			<li><b>hh:mm:ss</b>, détermine la nouvelle valeur de l'heure dans le RTCC.</li>
+			<li>Sans arguments la commande <b>time</b>  affiche l'heure actuelle.</li>
+        </ul>
+        <div>exemple:
+        <pre><code>
+		$time
+		16:58:41 
+		$time 15:40:00
+
+		$time
+		15:40:01 
+        </code></pre>
+        </div>
 		<div><a href="#indexCmd">index des commandes</a></div>
         </li>
         <div class="item_div"></div>
@@ -415,14 +630,16 @@ le <i>prompt</i> qui s'affiche est différent il s'agit d'un signe <b>&gt;</b>.<
         <div>exemple:
         <pre><code>
 			$umount
-			$echo La carte SD peu maintenant etre retiree sans dommage.
+			$_
         </code></pre></div>
+        Il faut utiliser <b>umount</b> avant de retirer la carte SD de la fente pour s'assurer que le système de fichier
+        ne sera pas endommagé.
         <div>Voir aussi <a href="#mount">mount</a>.</div>
 		<div><a href="#indexCmd">index des commandes</a></div>
         </li>
         <div class="item_div"></div>
         <li><a name="uptime"></a><b>uptime</b>
-        <div class="brief_div">Affiche depuis combien de temps l'ordinateur est allumée en jours, heures, minutes et secondes.</div>
+        <div class="brief_div">Affiche depuis combien de temps l'ordinateur est allumé en jours, heures, minutes et secondes.</div>
 		<div>exemple:<pre><code>
 		$uptime
 		00d01h14m47s

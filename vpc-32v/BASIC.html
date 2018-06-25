@@ -23,7 +23,7 @@
 <h3></a>Présentation</h3>
 <p>
 	L'ordinateur VPC-32V possède un interpréteur BASIC inspiré de QBASIC mais n'est pas indentique. Le code source BASIC est 
-	d'abord compilé en bytecode pour être exécuté sur une machine virtuelle à piles. Ce document décris ce langage BASIC et son utilisation. 
+	d'abord compilé en bytecode pour être exécuté sur une machine virtuelle à piles. Ce document décris le langage BASIC et son utilisation. 
 </p>
 <p>
 <ul>
@@ -37,18 +37,19 @@
 <ul>
 <li>Types de données<br>
   <ul>
-	  <li>Entier 16 bits signé, {-32768-32767}</li>
+	  <li>Entier 32 bits signé, {-2147483648...2147483647}</li>
 	  <li>Entier 8 bits (octet) non signé, {0-255}</li>
 	  <li>Chaîne de caractères ASCII, {0-127}</li>
-	  <li>Tableau unidimensionnel de ces 3 types de données</li>
+	  <li>Nombres en virgules flottante 32 bits</li>
+	  <li>Tableau unidimensionnel de ces 4 types de données</li>
   </ul>
 </li>
 <li>Programmation structurée<br>
-  Contrairement au BASIC des années 70-80 <b>PV16SOG BASIC</b> est un language de programmation structuré de type procédural basé sur
+  Contrairement au BASIC des années 70-80 <b>vpcBASIC</b> est un language de programmation structuré de type procédural basé sur
   des fonctions déclarées avec le mot réservé <b>FUNC</b> ainsi que des sous-routines déclarées avec
   le mot résservé <b>SUB</b>. Il n'y a pas de numéros de lignes ni de <b>GOTO</b> ou <b>GOSUB</b> comme dans les versions plus ancienne de BASIC.
   Pour l'essentiel je me suis inspiré de <a href="https://fr.wikipedia.org/wiki/QBasic">QBASIC</a> qui venait avec MS-DOS à partir de 1991.<br>
-  La compilation se fait en 1 seule passe, il n'est donc pas possible d'appeller des fonctions ou sous-routines définies plus loin dans le texte.
+  La compilation se fait en 1 seule passe, cependant les appels en références avant sont possible grâce à l'utilisation du mot clé <b>DECLARE</b>.
   Il en va de même avec les variables tableaux qui doivent-être définies avec la commande <b>DIM</b> avant d'être référencées. Par contre une variable
   scalaire globale est créée automatiquement lors de la première référence si elle n'existe pas. Cette auto-création des variables
   scalaire n'est valide qu'à l'extérieur des fonctions et sous-routines.
@@ -57,9 +58,9 @@
 </li>
 </ul>	
 </p>
-<h3><a name="reference">Référence des commandes BASIC</a></h3>
+<h3><a name="reference">Référence du vpcBASIC</a></h3>
 <p>
-	PV16SOG BASIC est insensible à casse tous les mots réservés et indentificateurs de variables sont convertis en majuscules par le compilateur.
+	vpcBASIC est insensible à casse tous les mots réservés et indentificateurs de variables sont convertis en majuscules par le compilateur.
 </p>
 <h4>conventions typographiques
 </h4>
@@ -69,18 +70,19 @@
 </p>
 <p>le caractère <b>'|'</b> sépare les alternatives</p>
 <p>
-  Dans les examples le <b>&gt;</b> au début d'une ligne représente l'invite de la ligne de commande.
+  Dans les exemples le <b>&gt;</b> au début d'une ligne représente l'invite de la ligne de commande.
 </p>
 
 <p>
-	<i>expr</i>  signifit une expression arithmétique.<br>
+	<i>expr</i>  signifie une expression arithmétique.<br>
 	<i>expr_list</i> liste d'expression numérique. Les éléments sont séparés par la virgule <b>','</b>.<br>
-	<i>cond</i>  signifit une condition logique résultant de la comparaison de 2 <i>expr</i>.<br>
-	<i>log_expr</i> signigit un ensemble de <i>cond</i> reliées par les opérateurs logiques <b>AND</b> et <b>OR</b>.<br>
+	<i>cond</i>  signifie une condition logique résultant de la comparaison de 2 <i>expr</i>.<br>
+	<i>log_expr</i> signifie un ensemble de <i>cond</i> reliées par les opérateurs logiques <b>AND</b> et <b>OR</b>.<br>
 	<i>arg_list</i> est la liste des arguments passés à une sous-routine ou fonction. La virgule <b>','</b> est le séparateur de liste.<br>
 	<i>val_list</i> est une liste de valeur numérique ou chaîne servant à initialiser un tableau lors de sa déclaration.<br>
 	<i>var</i> représente un nom de variable.<br>
 	<i>num</i> représente un nombre entier.<br>
+	<i>float</i> représente un nombre en virgule flottante<br>
 	<i>const</i> représente une constante numérique.<br>
 	<i>block</i> groupe d'instructions BASIC.<br>
 </p>
@@ -88,7 +90,7 @@
 <p>Cette table montre les opérateurs par ordre de précédence. À précédence égale les opérateurs sont traités de gauche à droite.</p>
 <table border="single">
 <tr><th>opérateur</th><th>description</th></tr>
-<tr><td>()</td><td>Parenthèse de groupement d'expression. Le groupement entre parenthèses est réservé aux expression arithmétiques. 
+<tr><td>()</td><td>Parenthèses de groupement d'expression. Le groupement entre parenthèses est réservé aux expression arithmétiques. 
 Les <i>cond</i> et les <i>log_expr</i> ne peuvent pas être regroupées.</td></tr>
 <tr><td>func()</td><td>Les fonctions ont la plus haute priorité dans les expression arithmétiques.</td></tr>
 <tr><td>* / %</td><td>multiplication, division entière, modulo</td></tr>
@@ -102,21 +104,38 @@ Les <i>cond</i> et les <i>log_expr</i> ne peuvent pas être regroupées.</td></t
 <p>
 	Les noms de variables sont insensibles à la casse. Tous les noms sont convertis en majuscules par le compilateur. Un nom peut 
 	avoir un maximum de 31 caractères, doit commencer par une lettre mais peut contenir des chiffres et le caractère <b>'_'</b>.
-	Si le nom de la variable se termine par le caractère <b>'$'</b> il s'agit d'une variable chaîne. Si le nom se termine par le
-	caractère <b>'#'</b> il s'agit d'une variable octet {0-255}. Autrement il s'agit d'une variable de type entier 16 bits dans l'interval
-	de valeurs {-32768 - 32767}. Les tableaux peuvent-être de ces 3 types de données et ne peuvent avoir qu'une seule dimension.
-</p>
-<p>
-	Les variables chaîne sont en fait des constantes, une fois une valeur assignée à une telle variable celle-ci ne peut-être changée
-	sauf en utilisant un truc de programmation avancé.
+	Le type des variables peut-être déterminé de 2 façon.
+	<ol>
+	<li>Par utilisation d'un caractère spécial à la fin du nom.
+	<ul>
+		<li><b>$</b>, il s'agit d'une variable chaîne.</li>
+		<li><b>#</b>, il s'agit d'une variable octet.</li>
+		<li><b>!</b>, il s'agit d'une variable float32.</li>
+		<li>En l'absence d'un caractère spécial la variable est considérée comme entier 32 bits.</li>
+	</ul>
+	</li>
+	<li><b>AS INTEGER|STRING|BYTE|FLOAT</b>
+	<div>
+	exemple:
+	<pre><code>
+		dim var1 as integer
+		dim var2 as string
+		dim var3 as byte, var4 as float
+	</code></pre>
+	On a donc ici déclarer 4 variables, <b>VAR1</b> de type entier 32 bits. <b>VAR2</b> de type chaîne de caractères. <b>VAR3</b> de type octet et 
+	finalement <b>VAR4</b> de type float32.
+	</div>
+	</li>
+	</ol>
+	<div>
 </p>
 <h4>valeurs litérales</h4>
 <p>
 Les valeurs litérales numérique peuvent-être saisie sous 3 formes:
 <ol>
-	<li><b>décimal</b>  23, -267 , -32560, 255</li>
-	<li><b>hexadécimal</b> $23f2, $fff3</li>
-	<li><b>binaire</b> #101, #100011</li>
+	<li><b>entier en décimal</b>  23, -267 , -32560, 255</li>
+	<li><b>entier en hexadécimal</b> $23f2, $fff3</li>
+	<li><b>virgule flottante</b> 1.0, 3.23e-23</li>
 </ol>
 </p>
 <p>
@@ -140,29 +159,127 @@ a
     <pre><code>example:
     sprite(10,10,8,8,@lem#) ' lem# est le nom d'une variable taleau qui contient un sprite.
                             ' ce tableau doit-être passé par référence.</code></pre></div>
-</p><p>                            
-    La valeur de retour d'une fonction peut-être ignorée comme c'est le cas dans cet example puisque <b>sprite()</b> est
-    une fonction.
+</p>
+<p>
+	Le type de la valeur retournée par une fonctions peut-être déterminé en utilisant un caractère spécial à la fin du nom de la 
+	fonction comme pour les variables. Le mot clé <b>AS</b> n'est pas supporté pour les fonctions et non plus pour la liste des arguments de <B>FUNC</B>
+	et <b>SUB</b>. Le programmeur doit s'assurer qu'il passe des paramètres du bon type.
+</p>
+<p>                            
+    Si une fonction est appellée comme s'il s'agissait d'une sous-routine, la valeur retournée est simplement jetée comme c'est le cas dans le langage 
+    <b>C</b>.
 </p>
 <h4>commandes BASIC</h4>
+<h3><a name="index"></a>index</h3>
 <p>
 	<ul>
-	<li><b>ABS(expr)</b><br>
+		<li><a href="#abs">ABS</a></li>
+		<li><a href="#acos">ACOS</a></li>
+		<li><a href="#and">AND</a></li>
+		<li><a href="#append">APPEND$</a></li>
+		<li><a href="#asc">ASC</a></li>
+		<li><a href="#asine">ASINE</a></li>
+		<li><a href="#atn">ATN</a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+	</ul>
+</p>
+<p>
+	
+	<ul>
+	<li><a name="abs"></a><b>ABS(expr)</b><br>
 	Fonction qui retourne la valeur absolue de l'expresssion passée comme paramètre.
 	<pre><code>example:
 	&gt;b=-5
 	&gt;? abs(3*b)
-	-15
-	&gt;|
+	15
+	&gt;_
 	</code></pre>
+	<div><a href="#index">index</a></div>
 	</li>
-	<li><b>AND</b><br>
-	conjonction logique <b>ET</b> utilisé dans les <i>log_expr</i>.
-	<pre><code>example:
+	<div class="item_div"></div>
+	<li><a name="acos"></a><b>ACOS(expr)</b><br>
+	Fonction qui retourne l'arc-cosinus de l'expression passée comme paramètre.
+	<pre><code>
+	&gt;? acos(.5)
+	1.0472
+	&gt;_
+	</code></pre>
+	La valeur retournée est en radians.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="and"></a><b>AND</b><br>
+	Conjonction logique <b>ET</b> utilisé dans les <i>log_expr</i>.
+	<div>exemple:
+	<pre><code>
 	if hour>=12 and hour<=17 then print "afternoon" end if
 	REM si la varialbe <i>hour</i> a une valeur entre 12 et 17 imprime le mot <i>afternoon</i>.
 	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
 	</li>
+	<div class="item_div"></div>
+	<li><a name="append"></a><b>APPEND$(str_expr1, str_expr2)</b><br>
+	Fonction chaîne qui retourne la concaténation de str_expr2 à la fin de str_expr1.
+	<div>exemple:
+	<pre><code>
+		&gt;? append$("hello ","world!")
+		hello world!
+		&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="asc"></a><b>ASC(str_expr)</b><br>
+	Fonction qui retourne la valeur ASCII du premier caractère de la chaîne str_expr.
+	<div>exemple:
+	<pre><code>
+	&gt;? asc("bonjour")
+	98
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="asine"></a><b>ASINE(expr)</b><br>
+	Fonction qui retourne l'arc-sinus de expr.
+	<div>
+	exemple:
+	<pre><code>
+		&gt;? asine(0.5)
+		0.523599
+		&gt;_
+	</code></pre></div>
+	La valeur retournée est en radians.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="atn"></a><b>ATN(expr)</b><br>
+	Fonction qui retourne l'arctangeante de expr.
+	<div>exemple:
+	<pre><code>
+		&gt;? atn(1.0)
+		0.785398
+		&gt;_
+	</code></pre></div>
+	La valeur retournée est en radians.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
 	<li><b>BEEP(freq,msec,wait)</b><br> sous-routine qui génère une tonalité.
 	<ul>
 	<li><b>freq</b> fréquence en Hertz.</li>

@@ -184,6 +184,36 @@ a
 		<li><a href="#box">BOX</a></li>
 		<li><a href="#btest">BTEST</a></li>
 		<li><a href="#bye">BYE</a></li>
+		<li><a href="#case">CASE</a></li>
+		<li><a href="#ceil">CEIL</a></li>
+		<li><a href="#chr">CHR</a></li>
+		<li><a href="#circle">CIRCLE</a></li>
+		<li><a href="#close">CLOSE</a></li>
+		<li><a href="#cls">CLS</a></li>
+		<li><a href="#con">CON</a></li>
+		<li><a href="#const">CONST</a></li>
+		<li><a href="#cos">COS</a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
+		<li><a href="#"></a></li>
 		<li><a href="#"></a></li>
 		<li><a href="#"></a></li>
 		<li><a href="#"></a></li>
@@ -292,10 +322,11 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="box"></a><b>BOX(x0,y0,width,height)</b><br> Dessine un rectangle plein. 
-	<ul><li><b>{x0,y0}</b> représente la position du coin supérieur gauche.</li>
-	<li><b>width</b> représente la largeur de la boite.</li>
-	<li><b>height</b> représente la hauteur de la boite.</li>
+	<li><a name="box"></a><b>BOX(x0,y0,width,height)</b><br> Dessine un rectangle plein sur le moniteur VGA. 
+	<ul><li><b>x0</b>, représente la coordonnée x en pixels du coin supérieur gauche.</li>
+	<li><b>y0</b>, représente la coordonnée y en pixels du coin supérieur gauche.</li>
+	<li><b>width</b> représente la largeur de la boite en pixels.</li>
+	<li><b>height</b> représente la hauteur de la boite en pixels.</li>
 	</ul>
 	<div>
 	<pre><code>example:
@@ -303,6 +334,17 @@ a
 	
 	&gt;_
 	</code></pre>
+	<div>
+	<canvas id="BoxCanvas" width="480" height="240" sytle="background-color:black;">
+	Votre fureteur ne supporte pas les canvas HTML5.</canvas>
+	<script>
+	var c = document.getElementById("BoxCanvas");
+	var ctx = c.getContext("2d");
+	ctx.fillStyle="#000000";
+	ctx.fillRect(0,0,480,240);
+	ctx.fillStyle="#ffffff";
+	ctx.fillRect(10, 20, 100, 50);
+	</script></div> 
 	Dans cet exemple, le coin supérieur gauche du rectangle est à la position {10,20}, la largeur est de 100 pixels et la hauteur
 	de 50 pixels. Le fonctions graphiques sont limitées au moniteur VGA même si la commande est faite à partir de la console <B>REMOTE</B>.
 	</div>
@@ -358,27 +400,151 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><b>CASE</b><br> Voir <a href="#selectcase">SELECT CASE</a></li>
-	<li><b>CLS [color]</b><br> Efface l'écran. Si le paramètre <i>color</i> est présent assigne cette valeur
-	comme nouvelle couleur de fond avant d'effacer l'écran.
-	<pre><code>example:
-	CLS 7
-	REM la nouvelle couleur de fond sera <b>7</b> et tous les pixels auront cette couleur après cette commande.</code></pre></li>
-	<li><b>COLOR(police,fond)</b><br> Fixe la couleur de la police de caractère et du fond d'écran.
+	<li><a name="case"></a><b>CASE</b><br>
+	Voir <a href="#selectcase">SELECT CASE</a>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="ceil"></a><b>CEIL(expr)</b><br>
+	Fonction qui retourne l'entier arrondie au plus grand d'un nombre.
+	<div>exemple:
+	<pre><code>
+	&gt;? ceil(3.0001)
+	4 
+
+	&gt;? ceil(-3.0001)
+	-3 
+
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="chr"></a><b>CHR$(n)</b><br>
+	Fonction qui retourne une chaîne de caractère de longueur 1 correspondant au code ASCII de n.
+	<div>exemple:
+	<pre><code>
+	&gt;? chr$(65)
+	A 
+
+	&gt;? chr$(97)
+	a 
+
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="circle"></a><b>CIRCLE(cx,cy,r)</b><br>
+	Fonction graphique qui dessine un cercle sur le moniteur VGA.
 	<ul>
-	<li><b>police</b> expression arithmétique dont la valeur doit-être entre 0 et 15. Détermine la couleur des caractères.</li>
-	<li><b>fond</b> expression arithmétqiue dont la valeur doit-être entre 0 et 15. Détermine la couleur de fond d'écran.
-	<pre><code>example:
-	COLOR(15,0)
-	REM caractère blanc sur fond noir.</code></pre></li></ul>
+	<li><b>cx</b>, coordonnée x du centre du cercle exprimé en pixels.</li>
+	<li><b>cy</b>, coordonnée y du centre du cercle exprimé en pixels.</li>
+	<li><b>r</b>, rayon du cercle exprimé en pixels.</li>
+	</ul>
+	<div>exemple:
+	<pre><code>
+	&gt;for i=10 to 100 step 10: circle(240,120,i):next i
+
+	&gt;_
+	</code></pre>
+	<div>
+	<canvas id="CircleCanvas" width="480" height="240">
+	Votre fureteur ne supporte pas les canvas HTML5.
+	</canvas>
+	<script>
+	var c = document.getElementById("CircleCanvas");
+	var ctx = c.getContext("2d");
+	ctx.fillStyle="#000000";
+	ctx.fillRect(0,0,480,240);
+	ctx.strokeStyle="#ffffff";
+	for (i=10;i<110;i+=10){
+		ctx.beginPath();
+		ctx.arc(240,120,i,0,2*Math.PI);
+		ctx.stroke();
+	}
+	</script> 
+	</div>
+	Cette exemple dessine 9 cercles concentriques au centre de l'écran.
+	</div>
+	<div><a href="#index">index</a></div>
 	</li>
+	<div class="item_div"></div>
+	<li><a name="close"></a><b>CLOSE(#n)</b><br>
+	Ferme un fichier préalablement ouvert avec la commande <a href="#open">OPEN</a>. <b>n</b> est le numéro assigné au fichier
+	lors de son ouverture.
+	<div>exemple de programme utilisant un fichier.
+	<pre><code>
+	rem file system test
+	open "hello.txt" for output as #1
+	print #1,"hello world\r"
+	putc #1, 33  : putc #1, 10
+	v$="bonjour\r": n=3*5
+	? #1, v$, n, 4*5+20, 32.5e-3
+	close(#1)
+	dim hello$
+	open "hello.txt" for input as #1
+	input #1, hello$
+	c=fgetc(#1)
+	input #1,x$,n1,n2,n3!
+	close(#1)
+	? hello$,c,x$,n1,n2,n3!
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="cls"></a><b>CLS</b><br>
+	Efface l'écran et positionne le curseur texte dans le coin supérieur gauche.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="con"></a><b>CON REMOTE|LOCAL</b><br>
+	Cette commande fonctionne à l'identique de la même commande dans le shell de commande et permet de passer de la console
+	locale à la console à distance. Cependant le passage d'un console à l'autre en vpcBASIC n'affiche aucun message et n'efface
+	pas l'écran.
+	<div>exemple:
+	<pre><code>
+	&gt;REM impression d'un message sur la console remote 
+	&gt;REM a partir de la console locale.
+	&gt;con remote: ? "hello world!" : con local
+	&gt;_
+	</code></pre>
+	Dans cet exemple on transfert à la console <B>REMOTE</B> ensuite on imprime le message <b>"hello world!"</b> pour ensuite
+	revenir à la console <B>LOCAL</B>. Cette commande peut-être utilisée pour envoyer et recevoir de l'information via le port 
+	<B>COM</B> à partir d'un programme BASIC.
+	</div> 
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
 	<li><b>CONST nom=valeur [,nom=valeur]</b><br> Déclare une ou plusieurs constantes séparées par une virgule <b>','</b>.
-	<ul><li><b>nom</b> est le nom de la constante. Les constantes sont de types entier 16 bits ou chaîne ASCII.</li>
-	<li><b>valeur</b> selon le type de la constante il s'agit d'un entier ou d'une chaîne ASCII.</li></ul>
-	<pre><code>example:
-	CONST age=30, salaire=32000, nom$="Capitaine Bonhomme"
-	REM défini 3 constantes dans la même déclaration.</code></pre>
+	<ul><li><b>nom</b> est le nom de la constante. Le type de la constante est défini de la même manière que pour les variables.</li>
+	<li><b>valeur</b> selon le type de la constante il s'agit d'un entier, d'un float ou d'une chaîne ASCII.</li></ul>
+	<div>exemple:
+	<pre><code>
+	&gt;const pi as float=3.1415, e as float=2.718, nom$="Capitaine Bonhomme"
+
+	&gt;? pi,e,nom$
+	3.1415 2.718 Capitaine Bonhomme 
+
+	&gt;nom$="hello"
+
+	line: 5
+	token#: 1
+	Constant can't be redefined
+	tok_id: 3
+	tok_value: 
+	token_string: NOM$
+
+	&gt;_
+	</code></pre>
+	Lorsqu'on tente de redéfinir une constante le compilateur affiche une erreur.
+	</div>
+	<div><a href="#index">index</a></div>
 	</li>
+	<div class="item_div"></div>
 	<li><b>CURCOL()</b><br> Retourne la poisition colonne du curseur texte.
 	<pre><code>example:
 	if curcol()=38 then locate(curline()+1,0) end if

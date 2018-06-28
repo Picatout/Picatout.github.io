@@ -29,6 +29,7 @@
 <ul>
 <li><a href="#language">Caractéristiques du langage.</a></li>
 <li><a href="#reference">référence du langage</a></li>
+<li><a href="#index">index des mots réservés et commandes.</a></li>
 <li><a href="#examples">examples</a></li>
 </ul>
 </p>
@@ -177,6 +178,7 @@ a
 		<li><a href="#acos">ACOS</a></li>
 		<li><a href="#and">AND</a></li>
 		<li><a href="#append">APPEND$</a></li>
+		<li><a href="#as">AS</a></li>
 		<li><a href="#asc">ASC</a></li>
 		<li><a href="#asine">ASINE</a></li>
 		<li><a href="#atn">ATN</a></li>
@@ -186,24 +188,29 @@ a
 		<li><a href="#bye">BYE</a></li>
 		<li><a href="#case">CASE</a></li>
 		<li><a href="#ceil">CEIL</a></li>
-		<li><a href="#chr">CHR</a></li>
+		<li><a href="#chr">CHR$</a></li>
 		<li><a href="#circle">CIRCLE</a></li>
 		<li><a href="#close">CLOSE</a></li>
 		<li><a href="#cls">CLS</a></li>
 		<li><a href="#con">CON</a></li>
 		<li><a href="#const">CONST</a></li>
 		<li><a href="#cos">COS</a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
-		<li><a href="#"></a></li>
+		<li><a href="#curcol">CURCOL</a></li>
+		<li><a href="#curline">CURLINE</a></li>
+		<li><a href="#date">DATE$</a></li>
+		<li><a href="#declare">DECLARE</a></li>
+		<li><a href="#dim">DIM</a></li>
+		<li><a href="#do">DO</a></li>
+		<li><a href="#ellipse">ELLIPSE</a></li>
+		<li><a href="#else">ELSE</a></li>
+		<li><a href="#end">END</a></li>
+		<li><a href="#exit">EXIT</a></li>
+		<li><a href="#exp">EXP</a></li>
+		<li><a href="#fgetc">FGETC</a></li>
+		<li><a href="#fill">FILL</a></li>
+		<li><a href="#floor">FLOOR</a></li>
+		<li><a href="#free">FREE</a></li>
+		<li><a href="#for">FOR</a></li>
 		<li><a href="#"></a></li>
 		<li><a href="#"></a></li>
 		<li><a href="#"></a></li>
@@ -269,6 +276,18 @@ a
 		hello world!
 		&gt;_
 	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="as"></a><b>AS type_donne</b><br> 
+	Mot réservé pour spécififier le type de donné
+	d'une variable dans une déclaration. Voir <a href="#dim">DIM</a>.
+	<div>exemple:
+	<pre><code>
+		&gt;dim message as string
+	</code></pre>
+	Dans cet exemple message est une variable de type chaîne.
 	</div>
 	<div><a href="#index">index</a></div>
 	</li>
@@ -519,7 +538,7 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><b>CONST nom=valeur [,nom=valeur]</b><br> Déclare une ou plusieurs constantes séparées par une virgule <b>','</b>.
+	<li><a name="const"></a><b>CONST nom=valeur [,nom=valeur]</b><br> Déclare une ou plusieurs constantes séparées par une virgule <b>','</b>.
 	<ul><li><b>nom</b> est le nom de la constante. Le type de la constante est défini de la même manière que pour les variables.</li>
 	<li><b>valeur</b> selon le type de la constante il s'agit d'un entier, d'un float ou d'une chaîne ASCII.</li></ul>
 	<div>exemple:
@@ -545,24 +564,119 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><b>CURCOL()</b><br> Retourne la poisition colonne du curseur texte.
-	<pre><code>example:
-	if curcol()=38 then locate(curline()+1,0) end if
-	</code></pre></li>
-	<li><b>CURLINE()</b><br> Retourne la position ligne du curseur texte.
-	<pre><code>example:
-	if curline()=20 and curcol()=39 then scrlup(8): locate(curline(),0) end if</code></pre></li>
-	<li><b>DIM <i>var</i>[=<i>value</i>] [,<i>var</i>[=<i>value</i>]]</b><br>
-	 <b>DIM <i>var</i>(<i>number|constant</i>)[=(value_list)] [,<i>var</i>(<i>number|constant</i>)[=(value_list)]]</b><br>
-	 Cette commande sert à déclarer des variables. Les variables peuvent-être initialisées lors de leur déclaration.
-	 Les variables tableaux doivent-être initialisées avec le nombre exact d'éléments déclarés dans la dimension  du tableau.
-	 Les valeurs d'initialisation sont soit des entiers, des chaînes ou des constantes pré-définies.
-	 <pre><code>example:
-	 DIM v1=34, v2#=234 ' la variable entier 16 bits v1 prend la valeur 34
-	                    ' la variable octet v2 prend la valeur 234
-	 DIM t1(4)=(1,2,3,4) ' le tableau t1 contient 4 éléments qui sont initialisées.
-	 DIM msg$(3)=("nom","prenom","age") ' tableau de 3 chaînes initialisé.
-	 </code></pre></li>
+	<li><a name="cos"></a><b>COS(expr)</b><br>
+	Fonction trigonométrique cosinus. <i>expr</i> est exprimé en radians.
+	<div>exemple:
+	<pre><code>
+	&gt;? cos(3.1415) ' cosinus de PI i.e. 180&deg;
+	-1 
+
+	&gt;? cos(3.1415/4) ' cosinus de 45&deg;
+	0.707123 
+
+	>
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="curcol"></a><b>CURCOL()</b><br>Retourne la poisition colonne du curseur texte, {0..79}.
+	<div>exemple:
+	<pre><code>
+	if curcol()=78 then locate(curline()+1,0) end if
+	</code></pre>
+	Dans cet exemple on force un retour au début de la ligne suivante lorsque le curseur texte atteint la colonne 78.
+    </div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="curline"></a><b>CURLINE()</b><br>Retourne la position ligne du curseur texte, {0..29}.
+	<div>exemple:
+	<pre><code>
+	if curline()=29 and curcol()=79 then scrlup(): locate(curline(),0) end if
+	</code></pre>
+	</div>
+	Dans cet exemple on force un défilement vers le haut de l'écran lorsque le curseur atteint la dernière position de l'écran.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="date"></a><b>DATE$</b><br>
+	Fonction chaîne qui retourne la date.
+	<div>exemple:
+	<pre><code>
+	&gt;? date$
+	Thursday 2018/06/28  
+
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="declare"></a><b>DECLARE FUNC|SUB nom(arg_list)</b><br>Ce mot réservé sert à déclarer une fonction ou sous-routine sans la définir.
+	Ça permet de faire des appels à celle-ci avant qu'elle ne soit définie dans le texte source. Ce qui authorise les appels circulaire.
+	<div>exemple:
+	<pre><code>
+	&gt;declare sub test1(n)
+
+	&gt;sub test2(n)
+
+	&gt;&gt;test1(2*n)
+
+	&gt;&gt;end sub
+
+	&gt;sub test1(n)
+
+	&gt;&gt;? 1.0*n/3
+
+	&gt;&gt;end sub
+
+	&gt;test2(45)
+	30 
+
+	&gt;test2(4)
+	2.66667 
+
+	&gt;_
+	</code></pre>
+	Dans cet exemple la sous-routine <b>test1</b> est définie après la sous-routine <b>test2</b> cependant <b>test2</b> peut appeller <b>test1</b> car
+	elle a été prédéclarée. Si on supprimait la déclaration le compilateur afficherait une erreur lorsque <b>test2</b> appelle <b>test1</b>.
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="dim"></a><b>DIM</b><br>Mot réservé pour la déclaration des variables. Il y a plusieurs formes.
+	<ul>
+	<li><b>DIM var_name[$|#|!] [,var_name[$|#|!]]</b> pour déclarer des variables sans les initialiser. Le type de variable
+	est déterminé par le dernier caractère du nom de la variable.</li>
+	<li><b>DIM var_name as DATATYPE [,var_name as DATATYPE]</b>, pour déclarer des variables en spécifiant le type de donnée par
+	utilisation du mot réservé <b>AS</b> suivit d'un des spécificateur de type suivant: <b>BYTE,INTEGER,FLOAT,STRING</b>.</li>
+	<li><b>DIM table(10) as INTEGER=(1,2,3,4,5,6,7,8,9.10)</b>, pour déclarer un tableau à 1 dimension et l'initialiser.</li>
+	</ul>
+	<div>Chaque déclaration de variable peut-être suivie d'un caractère <b>=</b> et d'une valeur d'initialisation.</div>
+	 <div>exemple:
+	 <pre><code>
+		&gt;dim table(10)=(1,2,3,4,5,6,7,8,9,10)
+
+		&gt;? table(5)
+		5  
+
+		&gt;dim message(3) as string=("hello","hi","bonjour")
+
+		&gt;? message(2)
+		hi 
+
+		&gt;dim a#=245                                                                     
+																						
+		&gt;? a#                                                                           
+		245                                                                             
+																						
+		&gt;_
+	 </code></pre>
+	 </div>
+	<div><a href="#index">index</a></div>
+	 </li>
+	<div class="item_div"></div>
 	 <li><a name="do"></a><b>DO</b><br>
 	  <i>block</i><br>
 	  <b>LOOP WHILE <i>log_expr</i></b><br>
@@ -588,19 +702,72 @@ a
 	3
 	2
 	1
-	</code></pre></li>
-	<li><b>ELSE</b><br>
-	Est utilisé avec le <a href="#if">IF</a> et le <a href="#selectcase">SELECT CASE</a>.</li>
-	<li><b>END FUNC</b><br>
-	Voir <a href="#function">FUNC</a>.<br>
-	<b> END SUB</b><br>
-	Voir <a href="#sub">SUB</a>.<br>
-	<b>END IF</b><br>
-	Voir <a href="#if">IF</a><br>
-	<b>END SELECT</b><br>
-	Voir <a href="#selectcase">SELECT CASE</a>.
+	</code></pre>
+	<div><a href="#index">index</a></div>
 	</li>
-	<li><b>EXIT SUB</b><br> Voir <a href="#sub">SUB</a>.</li>
+	<div class="item_div"></div>
+	<li><a name="else"></a><b>ELSE</b><br>
+	Est utilisé avec le <a href="#if">IF</a> et le <a href="#selectcase">SELECT CASE</a>.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="end"></a><b>END FUNC</b><br>
+	Termine la définiction d'une fonction. Voir <a href="#function">FUNC</a>.<br>
+	<div class="item_div"></div>
+	<b> END SUB</b><br>
+	Termine la définiction d'une sous-routine. Voir <a href="#sub">SUB</a>.<br>
+	<div class="item_div"></div>
+	<b>END IF</b><br>
+	Termine une structure de contrôle <b>IF ... THEN ... ELSE ... END IF</b>. Voir <a href="#if">IF</a><br>
+	<div class="item_div"></div>
+	<b>END SELECT</b><br>
+	Termine une structure de contrôle <b>SELECT CASE</b>. Voir <a href="#selectcase">SELECT CASE</a>.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="exit"></a><b>EXIT SUB</b><br>
+	Permet la sortie prématurée d'une sous-routine. Voir <a href="#sub">SUB</a>.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="exp"></a><b>EXP(expr)</b><br>
+	Fonction qui retourne un float de valeur e^expr, ou <b>e</b> est la base naturelle.
+	<div>exemple:
+	<pre><code>
+	&gt;? exp(4)
+	54.5981 
+
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="fill"></a><b>FILL(x,y)</b><br>
+	Procédure graphique qui remplie une figure géométrique fermée.
+	<div>exemple:
+	<pre><code>
+	</code></pre>
+	<b>AVERTISSEMENT:</b> Il s'agit d'une procédure récursive qui fait déborder la pile lorsque la figure dépasse une certaine taille.
+	Il se peut donc que l'ordinateur génère une exception lorsqu'elle est utilisée.
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="floor"></a><b>FLOOR(expr)</b><br>
+	Fonction de type entier qui accepte une expression arithmétique qui résulte en un type float pour retourner la partie entière de 
+	cette expression.
+	<div>exemple:
+	<pre><code>
+	&gt;? floor(45.23)
+	45 
+
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
 	<li><a name="for"></a><b>FOR <i>var=expr</i> TO <i>expr</i> [STEP <i>expr</i>]</b><br>
 	  <i>block</i><br>
 	<b>NEXT <i>var</i></b><br>
@@ -608,13 +775,27 @@ a
 	la boucle lorsque la variable dépasse la valeur de la limite. l'incrément par défaut est <b>1</b>. Si <b>STEP</b> est présent l'incrément est
 	le résultat d'<i>expression</i> et peut-être un entier quelconque. La valeur de la variable de contrôle est vérifiée au début de la boucle
 	d'instructions. Si au départ elle dépasse la limite le bloc d'instruction n'est jamais exécuté.<br>
-	<pre><code>example:
-	FOR i=0 TO 10 STEP 2
-	  print i
-	next i
-	REM  affiche les nombres pairs de 0 à 10</code></pre>
+	<div>exemple:
+	</div>
+	<pre><code>
+	&gt;for i=0 to 10 step 2
+
+	&gt;&gt;? i
+
+	&gt;&gt;next i
+	0  
+	2  
+	4  
+	6  
+	8  
+	10  
+
+	&gt;_
+	</code></pre>
+	<div><a href="#index">index</a></div>
 	</li>
-	<li><b><a name="function"></a>FUNC name(<i>arg_list</i>)</b><br>
+	<div class="item_div"></div>
+	<li><b><a name="func"></a>FUNC name(<i>arg_list</i>)</b><br>
 	[<b>LOCAL var_list</b>]<br>
 	<i>block</i><br>
 	<b>RETURN <i>expr</i></b><br>

@@ -225,7 +225,6 @@ a
 		<li><a href="#len">LEN</a></li>
 		<li><a href="#let">LET</a></li>
 		<li><a href="#line">LINE</a></li>
-		<li><a href="#loadimg">LOADIMG</a></li>
 		<li><a href="#local">LOCAL</a></li>
 		<li><a href="#locate">LOCATE</a></li>
 		<li><a href="#log">LOG</a></li>
@@ -237,7 +236,9 @@ a
 		<li><a href="#min">MIN</a></li>
 		<li><a href="#mod">MOD</a></li>
 		<li><a href="#next">NEXT</a></li>
+		<li><a href="#not">NOT</a></li>
 		<li><a href="#open">OPEN</a></li>
+		<li><a href="#or">OR</a></li>
 		<li><a href="#peek">PEEK</a></li>
 		<li><a href="#pget">PGET</a></li>
 		<li><a href="#play">PLAY</a></li>
@@ -256,7 +257,6 @@ a
 		<li><a href="#right$">RIGHT$</a></li>
 		<li><a href="#rnd">RND</a></li>
 		<li><a href="#run">RUN</a></li>
-		<li><a href="#saveimg">SAVEIMG</a></li>
 		<li><a href="#savescr">SAVESCR</a></li>
 		<li><a href="#scrldn">SCRLDN</a></li>
 		<li><a href="#scrlup">SCRLUP</a></li>
@@ -1165,95 +1165,292 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-    <li><b>[LET] <i>var_name[#]</i>i>[(<i>epxr</i>)]=<i>expr</i></b><br>
-    <b>[LET] <i>var_name$</i>[(<i>expr</i>)]=<i>chaîne</i></b><br>
+    <li><a name="let"></a><b>[LET] <i>var_name</i>[(<i>epxr</i>)]=<i>expr</i></b><br>
     Assigne une valeur à une variable. Le mot réservé <b>LET</b> est entre crochets car il est optionnel.
-    <pre><code>example:
+    <br>exemple:
+	<div  style="background-color: black;color: white;">
+    <pre><code>
     LET a=34*5
     a=34*5  REM c'est la même chose
     REM ça peut aussi être une variable tableau
     DIM tab(4)
-    tab(1)=-1234  ' le premier élément du tableau vaut maintenenat <b>-1234</b>
+    LET tab(1)=-1234  ' le premier élément du tableau vaut maintenenat <b>-1234</b>
     </code></pre>
+    </div>
+	<div><a href="#index">index</a></div>
     </li>
-    <li><b>LINE(x0,y0,x1,y1,color)</b><br>
-    Dessine une ligne à l'écran.
+	<div class="item_div"></div>
+    <li><a name="line"></a><b>LINE(x0,y0,x1,y1)</b><br>
+    Dessine une ligne à l'écran. L'opérateur xor est utilisé sur chaque pixel donc en redessinant la même ligne
+    on la fait disparaître.
     <ul>
     <li><b>{x0,y0}</b> coordonnées première extrémité de la ligne.</li>
     <li><b>{x1,y1}</b> coordonnées de l'autre extrémité de la ligne.</li>
-    <li><b>color</b> couleur (ton de gris) de la ligne.</li>
     </ul>
-    <pre><code>example:
-    line(0,0,100,100,15)</code></pre>
+	exemple:
+	<div  style="background-color: black;color: white;">
+    <pre><code>
+	&gt;while not tkey 
+
+	&gt;&gt;line(10,10,100,100)
+
+	&gt;&gt;sleep(250)
+
+	&gt;&gt;wend
+	
+	&gt;_     
+   </code></pre>
+	</div>
+	Fait clignoter 2 fois/seconde une ligne sur le montieur VGA.
+	<div><a href="#index">index</a></div>
     </li>
-	<li><b>LOCAL <i>var_list</i></b><br>
-	Déclaration de la liste des variables utilisées dans une 
-	<a href="#function">fonction</a> ou une <a href="#sub">sous-routine.</a></li>
-	<li><b>LOCATE(ligne,colonne)</b><br>
+	<div class="item_div"></div>
+	<li><a name="local"></a><b>LOCAL <i>var_list</i></b><br>
+	Déclaration de la liste des variables locales utilisées dans une <a href="#function">FUNC</a> ou une <a href="#sub">SUB.</a>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="locate"></a><b>LOCATE(ligne,colonne)</b><br>
 	Positionne le curseur texte à l'endroit désigné.
 	<ul>
-		<li><i>ligne</i> numéro de la ligne, {0-20}</li>
-		<li><i>colonne</i> numéro de la colonne, {0-39}</li>
+		<li><i>ligne</i> numéro de la ligne, {0-29}</li>
+		<li><i>colonne</i> numéro de la colonne, {0-79}</li>
 	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>example:
-	LOCATE(10,0) ' le curseur texte est maintenant au début de la 11ième ligne.
+	&gt;LOCATE(10,0)
+	
+	&gt;_
 	</code></pre>
+	</div>
+	 Le curseur texte est maintenant au début de la 11ième ligne.
+	<div><a href="#index">index</a></div>
 	</li>
-	<li><b>LOOP</b><br>
-	voir <a href="#do">DO</a></li>
-	<li><b>MAX(<i>expr1</i>,<i>expr2</i>)</b><br>
-	Cette fonction retourne le plus grand des 2 entiers.
-	<pre><code>example:
-	&gt;? max(56,30)
-	56
-	&gt;|</code></pre></li>
-	<li><b>MDIV(<i>expr1</i>,<i>expr2</i>,<i>expr3</i>)</b><br>
-	Cette fonction retourne <i>expr1*expr2/expr3</i>. Le résultat de la 
-	multiplication est conservé sur 32 bits pour obtenir une valeur juste pour la division.
+	<div class="item_div"></div>
+	<li><a name="log"></a><b>LOG(expr)</b><br>
+	Fonction retournant un float qui est logarithme naturel de <i>expr</i>.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
-	&gt; ? 32540*8/33
-	-54 <i>'mauvaise réponse à cause du débordement de la multiplication.</i>	
-	&gt;? mdiv(3540,8,33)
-	7888 <i>'bonne réponse car le résultat de la multiplication est conservé sur 32 bits.</i>
-	&gt;REM multiplication d'un nombre par une approximation rationnelle de PI
-	&gt;? mdiv(5400,355,113)
-	16964 <i>'erreur &lt; 0,5 </i>
-	</code></pre></li>
-	<li><b>MIN(<i>expr1</i>,<i>expr2</i>)</b><br>
-	Cette fonction retourne le plus petit des 2 entiers.
-	<pre><code>example:
+	&gt;? log(2.718)                                                                   
+	0.999896                                                                        
+																					
+	&gt;? log(10)                                                                      
+	2.30258                                                                         
+																					
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="log10"></a><b>LOG10(expr)</b><br>
+	Fonction retournant un float qui est la logarithme en base 10 de <i>expr</i>.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? log10(10)                                                                    
+	1                                                                               
+																					
+	&gt;? log10(50)                                                                    
+	1.69897                                                                         
+																					
+	&gt;? log10(62.2)                                                                  
+	1.79379                                                                         
+																					
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="loop"></a><b>LOOP</b><br>
+	Termine une boucle <b>DO ... LOOP</b>. Voir <a href="#do">DO</a>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="max"></a><b>MAX(<i>expr1</i>,<i>expr2</i>)</b><br>
+	Cette fonction retourne un float qui est le plus grand des 2 nombres. Les expressions entières sont convertie en float
+	avant la comparaison.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? max(56.2,30)
+	56.2
+	&gt;_</code></pre>
+	</div>
+	</li>
+	<li><a name="mdiv"></a><b>MDIV(<i>expr1</i>,<i>expr2</i>,<i>expr3</i>)</b><br>
+	Cette fonction retourne un entier résultant de <i>expr1*expr2/expr3</i>. Le résultat de la 
+	multiplication est conservé sur 64 bits pour obtenir une valeur juste pour la division. Si une des expression passée en
+	argument est de type float elle est convertie en entier avant appel de la fonction.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? mdiv(45.67,34333,234)
+	6602  
+
+	&gt;? mdiv(456,34333,231)
+	67774  
+
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	<div class="item_div"></div>
+	</li>
+	<li><a name="mid$"></a><b>MID$(s1,star,len)</b><br>
+	Fonction chaîne qui retourne une sous-chaîne de <b>s1</b> à partir de la position <i>star</i> et de longueur <i>len</i>
+	<ul>
+		<li><b>s1</b>, est la chaîne de laquelle sera extraite la sous-chaîne.</li>
+		<li><b>star</b>, est la position du début de la sous-chaîne.</li>
+		<li><b>len</b>, est la longueur de la sous-chaîne.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? mid$("hello world",5,3)                                                      
+	o w                                                                             
+																					
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="min"></a><b>MIN(<i>expr1</i>,<i>expr2</i>)</b><br>
+	Cette fonction retourne un float qui est le plus petit des 2 paramètres. Si l'une des expression passé en paramètre
+	est de type entier, celui-ci est converti en float avant la comparaison.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
 	&gt;? min(34,-5)
 	-5
-	&gt;|</code></pre></li>
-	<li><b>NEXT <i>var_name</i></b><br>
-	Voir <a href="#for">FOR</a></li>
-	<li><b>NOISE(<i>expr</i>)</b><br>
-	Produit un bruit blanc pour une durée <i>expr</i> exprimée en millisecondes.
-	<pre><code>example:
-	&gt;noise(100) 'produit le bruit d'une chute d'eau durant 0,1 seconde.
-	</code></pre></li>
-	<li><b>NOT <i>log_expr</i></b><br>
-	Négation de la valeur d'une expression logique.
-	<pre><code>example:
-	if not 3&gt;4 then ? "3 n'est pas plus grand que 4" end if
+	&gt;_</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="mod"></a><b>MOD(<i>expr1</i>,<i>expr2</i>)</b><br>
+	Fonction qui retourne un entier qui représente le reste d'une division entière. Si un des arguments passé à la fonction est
+	de type float il est convertie en entier avant l'appel de la fonction.
+	<ul>
+	<li><b>expr1</b>, dénominateur de la division. Convertie en entier au besoin.</li>
+	<li><b>expr2</b>, diviseur. Convertie en entier au besoin.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? mod(45.7,4)
+	1  
+
+	&gt;? mod(45.7e3,4)
+	0  
+
+	&gt;? mod(45.7343e3,4)
+	2  
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="next"></a><b>NEXT <i>var_name</i></b><br>
+	Termine une boucle de <b>FOR ... NEXT</b>. Voir <a href="#for">FOR</a>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="not"></a><b>NOT <i>log_expr</i></b><br>
+	Négation de la valeur d'une expression logique. Ne peut-être utilisé que dans les test logique.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;if not 3&gt;4 then ? "3 n'est pas plus grand que 4" end if
 	3 n'est pas plus grand que 4
-	</code></pre></li>
-    <li><b><i>log_expr1</i> OR <i>log_expr2</i></b><br>
-    retourne vrai si l'une ou l'autre des 2 <i>log_expr</i> est vrai.
-    <pre><code>example:
+	
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="open"></a><b>OPEN file_name FOR INPUT|OUTPUT|APPEND as #n</b><br>
+	Ouvre un fichier.
+	<ul>
+		<li><b>file_name</b>, nom du fichier à ouvrir.</li>
+		<li><b>INPUT,OUTPUT,APPEND</b>, mode d'ouverture, <b>INPUT</b> pour la lecture.<b>OUTPUT</b>, pour l'écriture.<B>APPEND</B>
+		pour l'écriture en fin de fichier.</li>
+		<li><b>#n</b>, <i>n</i> est le numéro assigné à ce fichier. Jusqu'à 5 fichiers peuvent-être ouvert simultanément.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	rem file system test
+	open "hello.txt" for output as #1
+	print #1,"hello world\r"
+	putc #1, 33  : putc #1, 10
+	v$="bonjour\r": n=3*5
+	? #1, v$, n, 4*5+20, 32.5e-3
+	close(#1)
+	dim hello$
+	open "hello.txt" for input as #1
+	input #1, hello$
+	c=fgetc(#1)
+	input #1,x$,n1,n2,n3!
+	close(#1)
+	? hello$,c,x$,n1,n2,n3!
+	</code></pre>
+	</div>
+	Contenu du fichier <b>file.bas</b>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+    <li><a name="or"></a><b><i>log_expr1</i> OR <i>log_expr2</i></b><br>
+    retourne vrai si l'une ou l'autre des 2 <i>log_expr</i> est vrai. Ne peut-être utilisé que dans les test logique.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+    <pre><code>
     while 1
-    if key() or jstick()=1 then bye end if
+    k=tkey
+    if k=\q or k=\x then bye end if
     wend
-    REM sort de la boucle si une touche ou le bouton du joystik
-    REM est enfoncé.
-    </code></pre></li>
+    </code></pre>
+    </div>
+	Quitte le programme si une des touches <b>q</b> ou <b>x</b> est enfoncée.
+	<div><a href="#index">index</a></div>
+    </li>
+	<div class="item_div"></div>
+	<li><a name="peek"></a><b>PEEK(expr)</b><br>
+	Lit le contenu d'une adresse mémoire. Il s'agit de la lecture de 4 octets formant un entier 32 bits. L'adresse n'a pas
+	besoin d'être alignée.
+	<ul>
+		<li><b>expr</b>, adresse à lire. Convertie en entier au besoin. L'ordinateur peut planté si l'adresse est inacessible.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? peek($a0000001)
+	-1811939328  
+
+	&gt;? peek($9a000000)
+	Fatal error at address: 9d0107d4
+	Bus error exception (data reference: load or store)
+	&lt;CTRL&gt;-&lt;ALT&gt;-&lt;DEL&gt; to reboot.
+
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
 	<div class="item_div"></div>
 	<li><a name="pget"></a><b>PGET(x,y)</b><br>
 	Retourne l'état du pixel à la position {x,y}. 
 	<ul>
 		<li><b>{x,y}</b>, sont les coordonnées du pixel dont on veut obtenir l'état.</li>
 	</ul>
-	<div>exemple:
+	exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;vgacls ' efface l'ecran VGA
 
@@ -1267,31 +1464,37 @@ a
 
 	&gt;_
 	</code></pre>
+	</div>
 	On dessine une boite ensuite on vérifie l'état du pixel juste en dehors de la boite dans son coin supérieur gauche. Ensuite l'état du
 	pixel au centre de la boite.
-	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
     <li><b>PRINT|? [<i>expr</i>|<i>chaîne</i>|<i>var</i>] [,<i>expr</i>|<i>chaîne</i>|<i>var</i>]+ [;]</b><br>
     Imprime à l'écran la liste des expressions, chaîne ou variable. Un espace sépare chaque valeur. Si la commande est terminée
-    par une <b>';'</b> il n'y a pas de retour à la ligne.
-    <pre><code>example:
+    par une <b>';'</b> il n'y a pas de retour à la ligne.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+    <pre><code>
     &gt;DIM a=34, msg$="hello world"
     &gt;print a, msg$, "bonjour" 
     34 hello world bonjour
     
     &gt;|
-    </code></pre></li>
+    </code></pre>
+    </div>
+	<div><a href="#index">index</a></div>
+    </li>
 	<div class="item_div"></div>
     <li><a name="pset"></a><b>PSET(x,y,c)</b><br>
-    Procédure graphique définir la couleur d'un pixel sur l'écran VGA.
+    Procédure graphique pour définir la couleur d'un pixel sur l'écran VGA.
     <ul>
 		<li><b>{x,y}</b>, sont les coordonnées du pixel à modifier.</li>
 		<li><b>c</b>, est la nouvelle couleur du pixel. <b>c</b>est dans l'intervalle {0..15}. Puisqu'il s'agit d'un affichage
 		monochrome les valeurs {0..7} représente un pixel noir et les valeurs {8..15} un pixel blanc.</li>
     </ul>
-    <div>exemple:
+	exemple:
+	<div  style="background-color: black;color: white;">
     <pre><code>
 		&gt;pset(240,120,7) ' le pixel sera noir.
 		
@@ -1301,7 +1504,7 @@ a
 	<div><a href="#index">index</a></div>
     </li>
 	<div class="item_div"></div>
-    <li><b>PUTC expr</b><br>
+    <li><a name="putc"></a><b>PUTC expr</b><br>
     Imprime un caractère à l'écran sans ajout d'espace ou de retour à la ligne. Si <i>expr</i> est évaluée en dehors
     de l'intervalle {0-127} rien n'est imprimé. La majorité des codes entre 0 et 31 n'ont aucun effet. les codes reconnus sont les suivants:
     <ul>
@@ -1311,11 +1514,16 @@ a
 		<li><b>12</b> efface écran</li>
 		<li><b>13</b> retour à la ligne</li>
     </ul>
-    <pre><code>example:
+	exemple:
+	<div  style="background-color: black;color: white;">
+    <pre><code>
     &gt;putc \a : putc 98
     ab
     &gt;
-    </code></pre></li>
+    </code></pre>
+    </div>
+	<div><a href="#index">index</a></div>
+    </li>
 	<div class="item_div"></div>
     <li><a name="pxor"></a><b>PXOR(x,y)</b><br>
     Procédure graphique pour inverser l'état d'un pixel.

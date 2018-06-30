@@ -220,7 +220,7 @@ a
 		<li><a href="#instr">INSTR</a></li>
 		<li><a href="#invertvid">INVERTVID</a></li>
 		<li><a href="#key">KEY</a></li>
-		<li><a href="#lcase">LCASE</a></li>
+		<li><a href="#lcase$">LCASE$</a></li>
 		<li><a href="#left$">LEFT$</a></li>
 		<li><a href="#len">LEN</a></li>
 		<li><a href="#let">LET</a></li>
@@ -1053,31 +1053,118 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><b>KEY()</b><br>
-	Cette fonction retourne la touche tapée au clavier ou <b>0</b> si aucune touche n'est tapée.
-	<pre><code>example:
-	CASE SELECT key()
-	case \q 'quitte le programme
-	  bye
-	case \e ' efface l'écran
-	  cls
-	case \h ' salutation
-	  print "hello\n" ' \n à l'intérieur d'une chaîne pour imposer un retour à la ligne.
-	end SELECT
-	REM j'ai mélanger intentionnellement les mots réservés entre majuscules et minuscules
-	REM pour montrer que la casse n'a pas d'importance.
-	</code></pre></li>
-	<li><b>LEN(<i>var$</i>)</b><br>
-	<b>LEN ("chaîne")</b><br> 
-	Cette fonction retourne la longueur de la chaîne ASCII.
-	<pre><code>example:
+	<li><a name="insertln"></a><b>INSERTLN</b><br>
+	Insère une ligne texte vide au dessus de ligne où est le curseur texte et positionne le curseur au début de cette ligne.
+	Cette commande ne requière aucun argument.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="instr"></a><b>INSTR([start],s1,s2)</b><br>
+	Recherche d'une sous-chaîne dans une chaîne.
+	<ul>
+		<li><b>start</b>, Position de départ de la recherche dans la chaîne <b>s1</b>. Cet argument est facultatif. Si absent
+		la recherche se fait à partir du premier caractère de <b>s1</b>.</li>
+		<li><b>s1</b>, chaîne dans laquelle la recherche est effectuée.</li>
+		<li><b>s2</b>, chaîne recherchée dans <b>s1</b>.</li>
+	</ul>
+	<div>exemple:
+	<pre><code>
+	&gt;couleurs$="rouge,vert,bleu"                                                    
+																					
+	&gt;? instr(couleurs$,"vert")                                                     
+	7                                                                               
+																					
+	&gt;?instr(9,couleurs$,"e")                                                        
+	14                                                                              
+																					
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="invertvid"></a><b>INVERTVID(0|1)</b><br>
+	Inverse la sortie vidéo.
+	<ul>
+		<li><b>0|1</b>, détermine si la sortie video est inversée(<b>1</b>) ou non(<b>0</b>). Cette inversion n'affecte que le texte et non
+		les graphiques.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;invertvid(1):?"hello ";invertvid(0):?"world"                                   
+	</code><code style="background-color: white;color: black;">hello </code><code>world
+	
+	&gt;_                                                                    
+ 	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="key"></a><b>KEY</b><br>
+	Cette fonction attend qu'une touche soit tapée au clavier et retourne sa valeur ASCII.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? key()
+	97  
+
+	&gt;putc key
+	e
+	&gt;? chr$(key)
+	c 
+	
+	&gt;_
+	</code></pre>
+	</div>
+	<div><b>KEY</b> ne recevant aucun argument, les parenthèses sont facultatives.</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="lcase$"></a><b>LCASE$(<i>str_expr</i>)</b><br>
+	Fonction chaîne qui convertie <i>str_expr</i> en lettres minuscules.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? lcase$("aBcDeF")
+	abcdef 
+
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>	
+	<div class="item_div"></div>
+	<li><a name="left$"></a><b>LEFT$(<i>str_expr</i>,n)</b><br>
+	Fonction chaîne qui retourne les <i>n</i> premiers caractère de <i>str_expr</i><br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? left$("hello world!",5)
+	hello 
+
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="len"></a><b>LEN(<i>str_expr</i>)</b><br>
+	Fonction qui retourne la longueur de <i>str_expr</i>.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
 	&gt;nom$="Arthur Roy"
 	&gt;? len(nom$)
 	10
 	&gt;? len("hello world")
 	11
-	&gt;|</code></pre>
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
 	</li>
+	<div class="item_div"></div>
     <li><b>[LET] <i>var_name[#]</i>i>[(<i>epxr</i>)]=<i>expr</i></b><br>
     <b>[LET] <i>var_name$</i>[(<i>expr</i>)]=<i>chaîne</i></b><br>
     Assigne une valeur à une variable. Le mot réservé <b>LET</b> est entre crochets car il est optionnel.

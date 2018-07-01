@@ -76,6 +76,7 @@
 
 <p>
 	<i>expr</i>  signifie une expression arithmétique.<br>
+	<i>str_expr</i> signifie une expression chaîne. Le signe <b>+</b> peut-être utilisé pour concaténer des chaînes.<br>
 	<i>expr_list</i> liste d'expression numérique. Les éléments sont séparés par la virgule <b>','</b>.<br>
 	<i>cond</i>  signifie une condition logique résultant de la comparaison de 2 <i>expr</i>.<br>
 	<i>log_expr</i> signifie un ensemble de <i>cond</i> reliées par les opérateurs logiques <b>AND</b> et <b>OR</b>.<br>
@@ -244,7 +245,7 @@ a
 		<li><a href="#play">PLAY</a></li>
 		<li><a href="#polygon">POLYGON</a></li>
 		<li><a href="#power">POWER</a></li>
-		<li><a href="#prepend">PREPEND</a></li>
+		<li><a href="#prepend$">PREPEND$</a></li>
 		<li><a href="#print">PRINT | ?</a></li>
 		<li><a href="#pset">PSET</a></li>
 		<li><a href="#putc">PUTC</a></li>
@@ -1408,7 +1409,7 @@ a
 	</li>
 	<div class="item_div"></div>
     <li><a name="or"></a><b><i>log_expr1</i> OR <i>log_expr2</i></b><br>
-    retourne vrai si l'une ou l'autre des 2 <i>log_expr</i> est vrai. Ne peut-être utilisé que dans les test logique.<br>
+    Retourne vrai si l'une ou l'autre des 2 <i>log_expr</i> est vrai. Ne peut-être utilisé que dans les test logique.<br>
 	exemple:
 	<div  style="background-color: black;color: white;">
     <pre><code>
@@ -1470,9 +1471,139 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-    <li><b>PRINT|? [<i>expr</i>|<i>chaîne</i>|<i>var</i>] [,<i>expr</i>|<i>chaîne</i>|<i>var</i>]+ [;]</b><br>
-    Imprime à l'écran la liste des expressions, chaîne ou variable. Un espace sépare chaque valeur. Si la commande est terminée
+	<li><a name="play"></a><b>PLAY(str_expr)</b><br>
+	Joue une mélodie.
+	<ul>
+		<li><b>str_expr</b>, La mélodie est contenu dans une chaîne ASCII qui représente un langage pour coder la musique.</li>
+	</ul>
+	<div><b>Description du langage</b></div>
+	<ul>
+		<li>Les notes sont représentées par les lettres utilisées par les anglophones, La séquence commence par <b>C</b> pour <b>DO</b> et on
+		a dans l'ordre: <b>C,D,E,F,G,A,B</b> ce qui représente: <b>DO,RÉ,MI,FA,SOL,LA,SI</b>.</li>
+		<li><b>Ln</b>, détermine la durée des notes. Il ne s'agit pas d'une durée absolue mais de la durée relative. <b>n</b> est dans
+		l'interval {1..64} où <b>1</b> représente une ronde, <b>2</b> une blanche, <b>4</b> une noire, etc. Pour les triplets, quintets,...,
+		on utilise les entiers impairs {3,5,...}.<br>On peut aussi indiquer la durée individuelle de chaque note en faisant suivre la note par sa durée.
+		Par exemple <b>"F4G8"</b> est un raccourci pour <b>"L4FL8G"</b>. Notez que les espaces ne sont pas significatifs dans ce langage.</li>
+		<li><b>On</b>, Détermine l'octave dans lequel les notes sont jouée. L'interval est de <b>n</b> {0..6}.</li>
+		<li><b>&lt;</b>, Pour descendre d'un octave.</li>
+		<li><b>&gt;</b>, Pour monter d'un octave.</li>
+		<li><b>Nn</b>, Sélectionne une note dans l'interval des 7 octaves. <b>n</b> est dans l'interval {0..84}.</li>
+		<li><b>MN</b>, Joue une note normale, c'est à dire que sa durée est de 7/8 de la durée indiquée par <b>Ln</b>.</li>
+		<li><b>ML</b>, Joue une note legato, c'est à dire que sa durée est de 100% de la durée indiquée par <b>Ln</b>.</li>
+		<li><b>MS</b>, joue une note staccato, c'est à dire que sa durée est de 3/4 de la durée indiquée par <b>Ln</b>.</li>
+		<li><b>Pn</b>, Pause d'une durée <b>n</b>. Les valeurs de <b>n</b> sont les même que pour <b>L</b>.</li>
+		<li><b>Tn</b>, Détermine le tempo, c'est à dire le nombre de noires par minute. <b>n</b> est dans l'interval {32..255}.
+		 La valeur par défaut du tempo est de 120 noires/minute.</li>
+		 <li><b>MB</b>, Joue la mélodie en arrière plan. L'exécution du programme BASIC se poursuit tandis que la mélodie joue.</li>
+		 <li><b>MF</b>, Joue la mélodie en avant plan. L'exécution du programme BASIC est suspendue pour la durée de la mélodie.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	? "ode a la joie"
+
+	ode$="t80mbL8eefggfedccdeL6eL16dL4d"+
+		 "L8eefggfedccdeL6dL16cL4c"+
+		 "L8ddecdL16efL8ecdL16efL8edcdL4&tl;g&gt;"+
+		 "L8eefggfedccdeL6dL16cL4c"
+	play(ode$)
+	</code></pre>
+	</div>	
+	Contenu du fichier <b>ode_joie.bas</b>, programme qui joue ode à la joie de Beethoven.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="polygon"></a><b>POLYGON(@points,n)</b><br>
+	Dessine un polygone fermé.
+	<ul>
+		<li><b>points</b>, est un tableau d'entiers passé par référence. Ce tableau contient les coordonnés de chaque sommet du
+		polygone. Le dernier et le premier points sont reliés pour fermer le polygone.</li>
+		<li><b>n</b>, est le nombre de sommets. Puisqu'il faut 2 entiers pour les coordonnées de chaque sommet, le tableau doit avoir une
+		demension de <b>2*n</b>.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;dim points(8)=(200,100,245,145,260,180,200,200) ' x0,y0,x1,y1,...xn,yn
+
+	&gt;vgacls:polygon(@points,4)
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div>
+	<canvas id="polygonCanvas" width="480" height="240" sytle="background-color:black;">
+	Votre fureteur ne supporte pas les canvas HTML5.</canvas>
+	<script>
+	var c = document.getElementById("polygonCanvas");
+	var ctx = c.getContext("2d");
+	ctx.fillStyle="#000000";
+	ctx.fillRect(0,0,480,240);
+	ctx.strokeStyle="#ffffff";
+	ctx.beginPath();
+	ctx.moveTo(200,100);
+	ctx.lineTo(245,145);
+	ctx.lineTo(260,180);
+	ctx.lineTo(200,200);
+	ctx.lineTo(200,100);
+	ctx.stroke();
+	</script></div> 
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="power"></a><b>POWER(base,exposant)</b><br>
+	Fonction qui retourne un float qui est base^exposant.
+	<ul>
+		<li><b>base</b>, expression numérique qui représente la base numérique.</li>
+		<li><b>exposant</b>, expression numérique qui représente la puissance à laquelle la base sera élevée.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? power(3,4)
+	81 
+
+	&gt;?power(4.1,3.2)
+	91.392 
+
+	&gt;? power(10,3)
+	1000
+	
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="prepend$"></a><b>PREPEND$(str_expr1,str_expr2)</b><br>
+	Fonction chaîne qui préfixe une chaîne à une autre.
+	<ul>
+		<li><b>str_expr1</b>, Chaîne à laquelle <b>str_expr2</b> sera préfixée.</li>
+		<li><b>str_expr2</b>, Chaîne qui sera préfixée à <b>str_expr1</b>.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;ch1$=" world"
+
+	&gt;? prepend$(ch1$,"hello")
+	hello world 
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+    <li><a name="print"></a><b>PRINT|? [#n,]<i>expr</i>|<i>str_expr</i>|<i>var</i> [,<i>expr</i>|<i>str_expr</i>|<i>var</i>]* [;]</b><br>
+    Imprime à l'écran ou dans un fichier la liste des expressions, chaîne ou variable. Un espace sépare chaque valeur. Si la commande est terminée
     par une <b>';'</b> il n'y a pas de retour à la ligne.<br>
+    <ul>
+		<li><b>#n</b>, Pour imprimer dans un fichie le premier argument doit-être le numéro de fichier.</li>
+		<li><b>expr</b>, une expression arithmétique résultant en un nombre.</li>
+		<li><b>str_expr</b>, une expression de type chaîne.</li>
+		<li><b>var</b>, le contenu d'une variable.</li>
+    </ul>
 	exemple:
 	<div  style="background-color: black;color: white;">
     <pre><code>
@@ -1480,7 +1611,7 @@ a
     &gt;print a, msg$, "bonjour" 
     34 hello world bonjour
     
-    &gt;|
+    &gt;_
     </code></pre>
     </div>
 	<div><a href="#index">index</a></div>
@@ -1504,22 +1635,19 @@ a
 	<div><a href="#index">index</a></div>
     </li>
 	<div class="item_div"></div>
-    <li><a name="putc"></a><b>PUTC expr</b><br>
-    Imprime un caractère à l'écran sans ajout d'espace ou de retour à la ligne. Si <i>expr</i> est évaluée en dehors
-    de l'intervalle {0-127} rien n'est imprimé. La majorité des codes entre 0 et 31 n'ont aucun effet. les codes reconnus sont les suivants:
+    <li><a name="putc"></a><b>PUTC [#n,] expr</b><br>
+    Imprime un caractère à l'écran ou dans un fichier sans ajout d'espace ou de retour à la ligne. 
+    La majorité des codes entre 0 et 31 n'ont aucun effet. les codes reconnus sont les suivants:
     <ul>
-		<li><b>7</b> alerte sonore</li>
-		<li><b>9</b> tabulation</li>
-		<li><b>10</b> retour à la ligne</li>
-		<li><b>12</b> efface écran</li>
-		<li><b>13</b> retour à la ligne</li>
+		<li><b>#n</b>, Pour envoyer le caractère dans un fichier il faut indiquer son numéro avant <i>expr</i> suivit d'une virgule.</li>
+		<li><b>expr</b>, évaluée comme un entier dans l'interval {0..127} pour l'écran et {0..255} pour les fichiers.</li>
     </ul>
 	exemple:
 	<div  style="background-color: black;color: white;">
     <pre><code>
     &gt;putc \a : putc 98
     ab
-    &gt;
+    &gt;_
     </code></pre>
     </div>
 	<div><a href="#index">index</a></div>
@@ -1541,48 +1669,214 @@ a
 	<div><a href="#index">index</a></div>
     </li>
 	<div class="item_div"></div>
-    <li><b>RECT(x,y,width,height,color)</b><br>
-    Dessine un rectangle vide à l'écran.
+	<li><a name="randomize"></a><b>RANDOMIZE</b><br>
+	Initialize le générateur pseudo hazard avec le contenu de la variable système <b>systicks</b>.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;randomize
+	&gt;? rnd,rnd,rnd
+	1747362710  107152609  1620603382  
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+    <li><a name="rect"></a><b>RECT(x,y,width,height)</b><br>
+    Dessine un rectangle  à l'écran.
     <ul>
-    <li><b>{x,y}</b> coordonnée du coin supérieur gauche</li>
+    <li><b>{x,y}</b> coordonnées du coin supérieur gauche.</li>
     <li><b>width</b> largeur du  rectangle en pixels.</li>
-    <li><b>height</b> auteur du rectangle en pixels.</li>
-    <li><b>color</b> couleur (ton de gris) du périmèter du rectangle.</li>
+    <li><b>height</b> hauteur du rectangle en pixels.</li>
     </ul>
-    <pre><code>RECT(10,10,20,60,7) ' position {10,10}, largeur 20, hauteur 60,  couleur 7</code></pre></li>
-	<li><b>REM|' <i>texte</i></b><br>
-	Indique un commentaire. Les commentaires se termine à la fin de la ligne.
-	<pre><code>example:
-	REM ce commentaire se termine a la fin de ligne.
-	' l'apostrophe peut remplacé le mot REM.</code></pre></li>
-	<li><b>RETURN</b><br>
-	Voir <a href="#function">FUNC</a></li>
+	exemple:
+	<div  style="background-color: black;color: white;">
+    <pre><code>
+	&gt;RECT(10,10,20,60) ' position {10,10}, largeur 20, hauteur 60
+	
+	&gt;_
+    </code></pre>
+    </div>
+    <div>
+	<canvas id="rectCanvas" width="480" height="240" sytle="background-color:black;">
+	Votre fureteur ne supporte pas les canvas HTML5.</canvas>
+	<script>
+	var c = document.getElementById("rectCanvas");
+	var ctx = c.getContext("2d");
+	ctx.fillStyle="#000000";
+	ctx.fillRect(0,0,480,240);
+	ctx.fillStyle="#ffffff";
+	ctx.strokeStyle="#ffffff";
+	ctx.strokeRect(10,10,20,60);
+	</script></div> 
+	<div><a href="#index">index</a></div>
+    </li>
+	<div class="item_div"></div>
+	<li><a name="rem"></a><b>REM|' <i>texte</i></b><br>
+	Indique un commentaire. Les commentaires se termine à la fin de la ligne.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;rem ce commentaire se termine a la fin de la line
+
+	&gt;' le mot &lt;rem&gt; peut etre remplace par l'apostrophe.
+
+	&gt;_                                                 
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="restscr"></a><b>RESTSCR(adresse)</b><br>
+	Restore l'écran VGA à partir d'une image préalablement sauvegardée dans la RAM externe. Voir <a href="#savescr">SAVESCR</a>.
+	<ul>
+		<li><b>adresse</b>, est l'adresse dans la RAM externe où est stockée l'image.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;savescr(0):vgacls  ' maintenant l'ecran VGA est vide.
+
+	&gt;restscr(0) ' maintenant l'ecran VGA est tel qu'il etait avant la commande vgacls.
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="return"></a><b>RETURN value</b><br>
+	Voir <a href="#func">FUNC</a>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="right$"></a><b>RIGHT$(str_expr,expr)</b><br>
+	Fonction chaîne qui retourne les <b>n</b> derniers caractères d'une chaîne.
+	<ul>
+		<li><b>str_expr</b>, Chaîne d'où sont extraient les <b>n</b> derniers caractères.</li>
+		<li><b>exp</b>, expression entière représentant le nombre de caractères à extraire.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? right$("hello world",5)
+	world
+	
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
 	<li><b>RND()</b><br>
-	Cette fonction retourne un entier de 16 bits pseudo aléatoire.
-	<pre><code>example:
-	&gt;while not key() : ? rnd() : wend
-	REM imprime sans arrêt une série de nombre aléatoire.
-	REM il faut enfoncer une touche du clavier pour arrêter l'exécution.</code></pre></li>
-	<li><b>SCRLUP(expr)</b><br>
-	Fait glisser l'affichage vers le haut d'un nombre de pixels correspondant à la valeur
-	de <i>expr</i>
-	<pre><code>example:
-	&gt; scrlup(8) ' défilement vers le haut de la hauteur d'un caractère.</code></pre></li>
-	<li><b>SCRLDN(expr)</b><br>
-	Fait glisser l'affichage vers le bas d'un nombre de pixels correspondant à la valeur
-	de <i>expr</i>
-	<pre><code>example:
-	&gt; scrldn(8) ' défilement vers le bas de la hauteur d'un caractère.</code></pre></li>
-	<li><b>SCRLRT(expr)</b><br>
-	Fait glisser l'affichage vers la droite d'un nombre de pixels correspondant à la valeur
-	de <i>expr</i>. Cette valeur doit-être un nombre pair, sinon le nombre pair inférieur est choisi.
-	<pre><code>example:
-	&gt; scrlrt(6) ' défilement vers la droite de la largeur d'un caractère.</code></pre></li>
-	<li><b>SCRLLT(expr)</b><br>
-	Fait glisser l'affichage vers la gauche d'un nombre de pixels correspondant à la valeur
-	de <i>expr</i>. Cette valeur doit-être un nombre pair, sinon le nombre pair inférieur est choisi.
-	<pre><code>example:
-	&gt; scrllt(6) ' défilement vers la gauche de la largeur d'un caractère.</code></pre></li>
+	Cette fonction retourne un entier de 32 bits pseudo aléatoire.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;while not tkey: ? rnd%100; wend                                                
+	20  96  38  53  30  14  49  35  3  40  83  70  95  42  99  10  70  56  19  59  3
+	1  96  18  11  73  13  48  7  23  39  71  60  12  7  6  43  63  52  34  18  41  
+	43  55  63  98  16  90  72  97  53  53  72  84  88  50  10  41  86  27  70  42  
+	49  91  54  94  64  30  26  61  22  27  19  32  2  81  0  54  91  87  82  75  86
+	  77  53  63  27  97  24  84  53  50  46  84  49  46  48  54  34  87  39  35  92
+	  84  12  30  70  65  89  32  21  95  84  90  41  99  59  93  38  5  55  74  58 
+	 69  69  77  8  88  86  45  32  55  83  95  18  5  64  70  68  25  87  54  44  5
+	6  55  50  73  42  27  46  24  18  92  57  43  26  77  67  65  31  98  56  54  1
+	</code></pre>
+	</div>
+	Imprime des entiers de 0 à 99 sans arrêt jusqu'à l'enfoncement d'une touche.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="run"></a><b>RUN file_name</b><br>
+	Cette commande permet de charger et d'exécuter un fichier BASIC sauvegarder sur la carte SD.
+	<ul>
+		<li><b>file_name</b>, est le nom du fichier à exécuter. Il n'est pas nécessaire de donner l'extension <b>*.BAS</b>.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;run snake
+	</code></pre>
+	<pre><code>
+	length: 3                   
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	X                             O  X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X       OO&lt;                   X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	X                                X
+	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="savescr"></a><b>SAVESCR(adresse)</b><br>
+	Sauvegarde le contenu de l'écran VGA dans la RAM externe. Voir <a href="#restscr">RESTSCR</a>.
+	<ul>
+		<li><b>adresse</b>, Est l'adresse dans la RAM externe où sera sauvegardée l'image de l'écran VGA. Cette image occupe 14400 octets.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;savescr(0)
+	
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="scrldn"></a><b>SCRLDN</b><br>
+	Fait glisser l'affichage vers le bas d'une ligne texte.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt; scrldn
+	
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="scrlup"></a><b>SCRLUP</b><br>
+	Fait glisser l'affichage vers le haut d'un nombre d'une ligne texte.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt; scrlup
+	
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
 	<li><a name="selectcase"></a><b>SELECT CASE expr</b><br>
 	<b>CASE </b><i>expr_list</i><br>
 	<i>block</i><br>
@@ -1592,22 +1886,29 @@ a
 	<i>block</i>]<br>
 	<b>END SELECT</b><br> 
 	Cette structure de contrôle permet de sélectionnr un bloc d'instruction en fonction de la valeur d'une expression. Contrairement au
-	<i>switch</i> du langage 'C' l'exécution d'un bloc se termine au prochain <b>CASE</b> sans besoin de mettre un <i>break</i>.
-	<pre><code>example:
-	select case jstick()
-	case 1 ' bouton du joystick enfoncé
+	<i>switch</i> du langage 'C' l'exécution d'un bloc se termine au prochain <b>CASE</b> sans besoin de mettre un <i>break</i>.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	REM controle du mouvement d'un sprite à l'ecran a l'aide des touches curseur.
+	while 1
+	select case tkey()
+	case 13 ' touche ENTER
 	   bye
-	case 2 ' levier à droite
+	case 144 ' fleche a droite
 	  move_right()
-	case 4 ' levier vers la gauche
+	case 143 ' fleche vers la gauche
 	  move_left()
-	case 8 ' levier vers le bas
+	case 142 ' fleche vers le bas
 	  move_down()
-	case 16 ' levier vers le haut
+	case 141 ' fleche vers le haut
 	  move_up()
 	end select
-	REM contrôle du mouvement d'un sprite à l'écran à l'aide du joystick     
-	  </code></pre></li>
+	wend
+	</code></pre></div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
 	<li><b>SETPIXEL(x,y,color)</b><br>
 	Colore le pixel à la coordonnée <i>{x,y}</i> avec la couleur <i>color</i>.
 	<pre><code>example:

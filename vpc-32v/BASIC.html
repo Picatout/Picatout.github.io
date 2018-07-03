@@ -179,7 +179,7 @@ a
 		<li><a href="#abs">ABS</a></li>
 		<li><a href="#acos">ACOS</a></li>
 		<li><a href="#and">AND</a></li>
-		<li><a href="#append">APPEND$</a></li>
+		<li><a href="#append$">APPEND$</a></li>
 		<li><a href="#as">AS</a></li>
 		<li><a href="#asc">ASC</a></li>
 		<li><a href="#asine">ASINE</a></li>
@@ -190,7 +190,7 @@ a
 		<li><a href="#bye">BYE</a></li>
 		<li><a href="#case">CASE</a></li>
 		<li><a href="#ceil">CEIL</a></li>
-		<li><a href="#chr">CHR$</a></li>
+		<li><a href="#chr$">CHR$</a></li>
 		<li><a href="#circle">CIRCLE</a></li>
 		<li><a href="#close">CLOSE</a></li>
 		<li><a href="#cls">CLS</a></li>
@@ -211,10 +211,10 @@ a
 		<li><a href="#fgetc">FGETC</a></li>
 		<li><a href="#fill">FILL</a></li>
 		<li><a href="#floor">FLOOR</a></li>
-		<li><a href="#free">FREE</a></li>
 		<li><a href="#for">FOR</a></li>
+		<li><a href="#free">FREE</a></li>
 		<li><a href="#func">FUNC</a></li>
-		<li><a href="#hex">HEX$</a></li>
+		<li><a href="#hex$">HEX$</a></li>
 		<li><a href="#input">INPUT</a></li>
 		<li><a href="#insert">INSERT$</a></li>
 		<li><a href="#insertln">INSERTLN</a></li>
@@ -287,7 +287,7 @@ a
 		<li><a href="#tkey">TKEY</a></li>
 		<li><a href="#trace">TRACE</a></li>
 		<li><a href="#ubound">UBOUND</a></li>
-		<li><a href="#ucase">UCASE</a></li>
+		<li><a href="#ucase$">UCASE$</a></li>
 		<li><a href="#until">UNTIL</a></li>
 		<li><a href="#use">USE</a></li>
 		<li><a href="#val">VAL</a></li>
@@ -306,52 +306,72 @@ a
 	<div>Mais certaines procédures ou fonctions utilisent des arguments de type pointeur. 
 	Il suffit de faire précéder le nom de la variable du caractère <b>@</b> pour passer une pointeur vers
 	cette variable.</div>
-	<div>exemple:
+	exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;sprite(x,y,w,h,@sp)
-	</code></pre>
+	</code></pre></div>
 	Pour afficher un sprite sur l'écran VGA il faut passer le tableau qui contient le sprite par référence. Dans cet exemple sp est une tableau de type
 	octets qui contient le sprite à afficher.
-	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="abs"></a><b>ABS(expr)</b><br>
+	<li><a name="abs"></a><b>ABS(<i>expr</i>)</b><br>
 	Fonction qui retourne la valeur absolue de l'expresssion passée comme paramètre.
-	<pre><code>example:
+	<ul>
+		<li><b>expr</b>, expression numérique dont la valeur absolue sera retournée.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
 	&gt;b=-5
 	&gt;? abs(3*b)
 	15
 	&gt;_
 	</code></pre>
+	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="acos"></a><b>ACOS(expr)</b><br>
-	Fonction qui retourne l'arc-cosinus de l'expression passée comme paramètre.
+	<li><a name="acos"></a><b>ACOS(<i>expr</i>)</b><br>
+	Fonction trigonométrique qui retourne l'arc-cosinus exprimé en radians.<br>
+	<ul>
+		<li><b>expr</b>, expression numérique qui représente le cosinus d'un angle.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;? acos(.5)
 	1.0472
 	&gt;_
 	</code></pre>
-	La valeur retournée est en radians.
+	</div>
+	La valeur retournée <i>1.0472</i> est en radians.
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
 	<li><a name="and"></a><b>AND</b><br>
-	Conjonction logique <b>ET</b> utilisé dans les <i>log_expr</i>.
-	<div>exemple:
+	Conjonction logique <b>ET</b> utilisé dans les <i>log_expr</i>. L'opérateur <b>AND</b> a une priorité plus élevé que 
+	l'opérateur <a href="#or">OR</a> donc dans <i>log_expr</i> de forme  <b>A AND B OR C AND D</b>, les relations <b>A AND B</b>
+	et <b>C AND D</b> sont évéaluées avant à la relation <b>OR</b>. On peut utiliser des parenthèses pour changer la priorité.
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
-	if hour>=12 and hour<=17 then print "afternoon" end if
+	if hour&gt;=12 and hour&lt;=17 then print "afternoon" end if
 	REM si la varialbe <i>hour</i> a une valeur entre 12 et 17 imprime le mot <i>afternoon</i>.
 	</code></pre>
 	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="append"></a><b>APPEND$(str_expr1, str_expr2)</b><br>
-	Fonction chaîne qui retourne la concaténation de str_expr2 à la fin de str_expr1.
-	<div>exemple:
+	<li><a name="append$"></a><b>APPEND$(<i>str_expr1, str_expr2</i>)</b><br>
+	Fonction chaîne qui retourne la concaténation de 2 chaînes. Le deuxième argument étant attaché à la fin du premier.
+	<ul>
+		<li><b>str_expr1</b>, expression chaîne principale.</li>
+		<li><b>str_expr2</b>, expression chaîne secondaire ajoutée à la fin de la principale.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 		&gt;? append$("hello ","world!")
 		hello world!
@@ -361,21 +381,20 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="as"></a><b>AS type_donne</b><br> 
-	Mot réservé pour spécififier le type de donné
-	d'une variable dans une déclaration. Voir <a href="#dim">DIM</a>.
-	<div>exemple:
-	<pre><code>
-		&gt;dim message as string
-	</code></pre>
-	Dans cet exemple message est une variable de type chaîne.
-	</div>
+	<li><a name="as"></a><b>AS</b><br> 
+	Ce mot réservé a 2 utilisations différentes.<br>
+	Voir <a href="#dim">DIM</a>.<br>
+	Voir <a href="#open">OPEN</a>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="asc"></a><b>ASC(str_expr)</b><br>
-	Fonction qui retourne la valeur ASCII du premier caractère de la chaîne str_expr.
-	<div>exemple:
+	<li><a name="asc"></a><b>ASC(<i>str_expr</i>)</b><br>
+	Fonction qui retourne la valeur ASCII du premier caractère de la chaîne passée en paramètre.
+	<ul>
+		<li><b>str_expr</b>, chaîne dont la valeur ASCII du premier caractère sera retournée.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;? asc("bonjour")
 	98
@@ -385,10 +404,10 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="asine"></a><b>ASINE(expr)</b><br>
-	Fonction qui retourne l'arc-sinus de expr.
-	<div>
-	exemple:
+	<li><a name="asine"></a><b>ASINE(<i>expr</i>)</b><br>
+	Fonction trigonométrique qui retourne l'arc-sinus de l'argument.
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 		&gt;? asine(0.5)
 		0.523599
@@ -398,9 +417,13 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="atn"></a><b>ATN(expr)</b><br>
-	Fonction qui retourne l'arctangeante de expr.
-	<div>exemple:
+	<li><a name="atn"></a><b>ATN(<i>expr</i>)</b><br>
+	Fonction trigonométrique qui retourne l'arctangeante de son argument.
+	<ul>
+		<li><b>expr</b>, expression numérique dont on veut connaître l'arctangeante.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 		&gt;? atn(1.0)
 		0.785398
@@ -411,29 +434,33 @@ a
 	</li>
 	<div class="item_div"></div>
 	<li><a name="beep"></a><b>BEEP()</b><br> Génère une tonalité de 1000 hertz d'une durée de 40 millisecondes.
-	<div>
-	<pre><code>example:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
 	&gt;BEEP
 	
 	&gt;_
 	</code></pre>
 	</div>
-	Pour les commandes qui n'utilisent aucun argument les parenthèses sont facultatives.
+	Pour les sous-routines qui n'utilisent aucun argument les parenthèses sont optionnelles.
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="box"></a><b>BOX(x0,y0,width,height)</b><br> Dessine un rectangle plein sur le moniteur VGA. 
-	<ul><li><b>x0</b>, représente la coordonnée x en pixels du coin supérieur gauche.</li>
-	<li><b>y0</b>, représente la coordonnée y en pixels du coin supérieur gauche.</li>
-	<li><b>width</b> représente la largeur de la boite en pixels.</li>
-	<li><b>height</b> représente la hauteur de la boite en pixels.</li>
+	<li><a name="box"></a><b>BOX(<i>x0,y0,width,height</i>)</b><br> Dessine un rectangle plein sur le moniteur VGA. 
+	<ul>
+		<li><b>x0</b>, représente la coordonnée x en pixels du coin supérieur gauche.</li>
+		<li><b>y0</b>, représente la coordonnée y en pixels du coin supérieur gauche.</li>
+		<li><b>width</b> représente la largeur de la boite en pixels.</li>
+		<li><b>height</b> représente la hauteur de la boite en pixels.</li>
 	</ul>
-	<div>
-	<pre><code>example:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
 	&gt;BOX(10,20,100,50)
 	
 	&gt;_
 	</code></pre>
+	</div>
 	<div>
 	<canvas id="BoxCanvas" width="480" height="240" sytle="background-color:black;">
 	Votre fureteur ne supporte pas les canvas HTML5.</canvas>
@@ -445,20 +472,20 @@ a
 	ctx.fillStyle="#ffffff";
 	ctx.fillRect(10, 20, 100, 50);
 	</script></div> 
-	Dans cet exemple, le coin supérieur gauche du rectangle est à la position {10,20}, la largeur est de 100 pixels et la hauteur
+	Dans cet exemple, le coin supérieur gauche de la boite est à la position {10,20}, la largeur est de 100 pixels et la hauteur
 	de 50 pixels. Le fonctions graphiques sont limitées au moniteur VGA même si la commande est faite à partir de la console <B>REMOTE</B>.
-	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="btest"></a><b>BTEST(<i>expr</i>,bit)</b><br>
+	<li><a name="btest"></a><b>BTEST(<i>expr,bit</i>)</b><br>
 	Fonction qui vérifie l'état d'un bit. Retourne <i>vrai</i> si le bit est à 1 sinon retourne <i>faux</i>.
 	<ul>
 	<li><b>expr</b> valeur entière pour laquelle on veut vérifier l'état d'un bit.</li>
 	<li><b>bit</b> bit est une expression de valeur comprise entre 0 et 31 puisque les entiers sont de 32 bits. <b>0</b> est le bit 
 	le plus faible et <b>31</b> le plus fort.</li>
 	</ul>
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;n=44
 	&gt;if btest(n,0) then ? "nombre impair" else ? "nombre pair" end if               
@@ -477,8 +504,9 @@ a
 	<div class="item_div"></div>
 	<li><a name="bye"></a><b>BYE</b><br>
 	Cette commande termine l'éxécution d'un programme et peut-être utilisée n'importe où à l'intérieur d'un programme.
-	Invoquée en mode interactif provoque la sortie vers le shell de commandes.
-	<div>exemple:
+	Invoquée en mode interactif provoque la sortie du shell BASIC vers le shell de commandes.<br>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt; REM imprime chaque caractere saisie au clavier jusqu'a ce que 'q' soit enfoncé.
 	&gt;while 1                    
@@ -501,18 +529,22 @@ a
 	</li>
 	<div class="item_div"></div>
 	<li><a name="case"></a><b>CASE</b><br>
-	Voir <a href="#selectcase">SELECT CASE</a>
+	Voir <a href="#select">SELECT CASE</a>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="ceil"></a><b>CEIL(expr)</b><br>
-	Fonction qui retourne l'entier arrondie au plus grand d'un nombre.
-	<div>exemple:
+	<li><a name="ceil"></a><b>CEIL(<i>expr</i>)</b><br>
+	Fonction qui retourne un entier d'un float arrondie vers l'infini positif. Voir aussi <a href="#floor">FLOOR</a>
+	<ul>
+		<li><b>expr</b>, paramètre numérique de type float.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;? ceil(3.0001)
 	4 
 
-	&gt;? ceil(-3.0001)
+	&gt;? ceil(-3.999)
 	-3 
 
 	&gt;_
@@ -521,9 +553,13 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="chr"></a><b>CHR$(n)</b><br>
-	Fonction qui retourne une chaîne de caractère de longueur 1 correspondant au code ASCII de n.
-	<div>exemple:
+	<li><a name="chr$"></a><b>CHR$(<i>n</i>)</b><br>
+	Fonction chaîne qui retourne une chaîne de longueur 1 correspondant au code ASCII de n.
+	<ul>
+		<li><b>n</b>, valeur entière dans l'interval {0..255}.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;? chr$(65)
 	A 
@@ -537,19 +573,21 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="circle"></a><b>CIRCLE(cx,cy,r)</b><br>
+	<li><a name="circle"></a><b>CIRCLE(<i>cx,cy,r</i>)</b><br>
 	Fonction graphique qui dessine un cercle sur le moniteur VGA.
 	<ul>
 	<li><b>cx</b>, coordonnée x du centre du cercle exprimé en pixels.</li>
 	<li><b>cy</b>, coordonnée y du centre du cercle exprimé en pixels.</li>
 	<li><b>r</b>, rayon du cercle exprimé en pixels.</li>
 	</ul>
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;for i=10 to 100 step 10: circle(240,120,i):next i
 
 	&gt;_
 	</code></pre>
+	</div>
 	<div>
 	<canvas id="CircleCanvas" width="480" height="240">
 	Votre fureteur ne supporte pas les canvas HTML5.
@@ -568,14 +606,17 @@ a
 	</script> 
 	</div>
 	Cette exemple dessine 9 cercles concentriques au centre de l'écran.
-	</div>
+
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="close"></a><b>CLOSE(#n)</b><br>
-	Ferme un fichier préalablement ouvert avec la commande <a href="#open">OPEN</a>. <b>n</b> est le numéro assigné au fichier
-	lors de son ouverture.
-	<div>exemple de programme utilisant un fichier.
+	<li><a name="close"></a><b>CLOSE(<i>#n</i>)</b><br>
+	Ferme un fichier préalablement ouvert avec la commande <a href="#open">OPEN</a>.
+	<ul>
+		<li><b>n</b>, numéro assigné à ce fichier lors de son ouverture.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	rem file system test
 	open "hello.txt" for output as #1
@@ -597,32 +638,35 @@ a
 	</li>
 	<div class="item_div"></div>
 	<li><a name="cls"></a><b>CLS</b><br>
-	Efface l'écran et positionne le curseur texte dans le coin supérieur gauche.
+	Efface l'écran de la console active et positionne le curseur texte dans le coin supérieur gauche.
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
 	<li><a name="con"></a><b>CON REMOTE|LOCAL</b><br>
 	Cette commande fonctionne à l'identique de la même commande dans le shell de commande et permet de passer de la console
-	locale à la console à distance. Cependant le passage d'un console à l'autre en vpcBASIC n'affiche aucun message et n'efface
+	locale à la console à distante. Cependant le passage d'un console à l'autre en vpcBASIC n'affiche aucun message et n'efface
 	pas l'écran.
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;REM impression d'un message sur la console remote 
 	&gt;REM a partir de la console locale.
 	&gt;con remote: ? "hello world!" : con local
 	&gt;_
 	</code></pre>
+	</div> 
 	Dans cet exemple on transfert à la console <B>REMOTE</B> ensuite on imprime le message <b>"hello world!"</b> pour ensuite
 	revenir à la console <B>LOCAL</B>. Cette commande peut-être utilisée pour envoyer et recevoir de l'information via le port 
 	<B>COM</B> à partir d'un programme BASIC.
-	</div> 
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
 	<li><a name="const"></a><b>CONST nom=valeur [,nom=valeur]</b><br> Déclare une ou plusieurs constantes séparées par une virgule <b>','</b>.
-	<ul><li><b>nom</b> est le nom de la constante. Le type de la constante est défini de la même manière que pour les variables.</li>
-	<li><b>valeur</b> selon le type de la constante il s'agit d'un entier, d'un float ou d'une chaîne ASCII.</li></ul>
-	<div>exemple:
+	<ul>
+		<li><b>nom</b> est le nom de la constante. Le type de la constante est défini de la même manière que pour les variables.</li>
+	   <li><b>valeur</b> selon le type de la constante il s'agit d'un entier, d'un float ou d'une chaîne ASCII.</li></ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;const pi as float=3.1415, e as float=2.718, nom$="Capitaine Bonhomme"
 
@@ -640,14 +684,18 @@ a
 
 	&gt;_
 	</code></pre>
-	Lorsqu'on tente de redéfinir une constante le compilateur affiche une erreur.
 	</div>
+	Lorsqu'on tente de redéfinir une constante le compilateur affiche une erreur.
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="cos"></a><b>COS(expr)</b><br>
-	Fonction trigonométrique cosinus. <i>expr</i> est exprimé en radians.
-	<div>exemple:
+	<li><a name="cos"></a><b>COS(<i>expr</i>)</b><br>
+	Fonction trigonométrique cosinus.
+	<ul>
+		<li><b>expr</b>, expression qui représente un angle en radians.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;? cos(3.1415) ' cosinus de PI i.e. 180&deg;
 	-1 
@@ -661,18 +709,21 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="curcol"></a><b>CURCOL()</b><br>Retourne la poisition colonne du curseur texte, {0..79}.
-	<div>exemple:
+	<li><a name="curcol"></a><b>CURCOL()</b><br>
+	Retourne la position colonne du curseur texte, {0..79}.
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	if curcol()=78 then locate(curline()+1,0) end if
 	</code></pre>
-	Dans cet exemple on force un retour au début de la ligne suivante lorsque le curseur texte atteint la colonne 78.
     </div>
+	Dans cet exemple on force un retour au début de la ligne suivante lorsque le curseur texte atteint la colonne 78.
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
 	<li><a name="curline"></a><b>CURLINE()</b><br>Retourne la position ligne du curseur texte, {0..29}.
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	if curline()=29 and curcol()=79 then scrlup(): locate(curline(),0) end if
 	</code></pre>
@@ -683,7 +734,8 @@ a
 	<div class="item_div"></div>
 	<li><a name="date$"></a><b>DATE$</b><br>
 	Fonction chaîne qui retourne la date inscrite dans le RTCC. Voir <a href="#time$">TIME$</a>
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;? date$
 	Thursday 2018/06/28  
@@ -694,9 +746,11 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="declare"></a><b>DECLARE FUNC|SUB nom(arg_list)</b><br>Ce mot réservé sert à déclarer une fonction ou sous-routine sans la définir.
+	<li><a name="declare"></a><b>DECLARE FUNC|SUB nom(<i>arg_list</i>)</b><br>
+	Ce mot réservé sert à déclarer une fonction ou sous-routine sans la définir.
 	Ça permet de faire des appels à celle-ci avant qu'elle ne soit définie dans le texte source. Ce qui authorise les appels circulaire.
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;declare sub test1(n)
 
@@ -720,9 +774,9 @@ a
 
 	&gt;_
 	</code></pre>
+	</div>
 	Dans cet exemple la sous-routine <b>test1</b> est définie après la sous-routine <b>test2</b> cependant <b>test2</b> peut appeller <b>test1</b> car
 	elle a été prédéclarée. Si on supprimait la déclaration le compilateur afficherait une erreur lorsque <b>test2</b> appelle <b>test1</b>.
-	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
@@ -731,11 +785,12 @@ a
 	<li><b>DIM var_name[$|#|!] [,var_name[$|#|!]]</b> pour déclarer des variables sans les initialiser. Le type de variable
 	est déterminé par le dernier caractère du nom de la variable.</li>
 	<li><b>DIM var_name as DATATYPE [,var_name as DATATYPE]</b>, pour déclarer des variables en spécifiant le type de donnée par
-	utilisation du mot réservé <b>AS</b> suivit d'un des spécificateur de type suivant: <b>BYTE,INTEGER,FLOAT,STRING</b>.</li>
+	utilisation du mot réservé <b>AS</b> suivit d'un des spécificateurs de type suivant: <b>BYTE,INTEGER,FLOAT,STRING</b>.</li>
 	<li><b>DIM table(10) as INTEGER=(1,2,3,4,5,6,7,8,9.10)</b>, pour déclarer un tableau à 1 dimension et l'initialiser.</li>
 	</ul>
 	<div>Chaque déclaration de variable peut-être suivie d'un caractère <b>=</b> et d'une valeur d'initialisation.</div>
-	 <div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	 <pre><code>
 		&gt;dim table(10)=(1,2,3,4,5,6,7,8,9,10)
 
@@ -759,14 +814,18 @@ a
 	 </li>
 	<div class="item_div"></div>
 	 <li><a name="do"></a><b>DO</b><br>
+	 Débute une structure de contrôle de type <b>DO ... LOOP UNTIL|WHILE</b><br><br>
+	 <b>DO</b>
 	  <i>block</i><br>
 	  <b>LOOP WHILE <i>log_expr</i></b><br>
-	  Le bloc d'instruction est exécuté en boucle tant que <i>log_expr</i> est vrai.<br>
+	  Le bloc d'instructions est exécuté en boucle tant que <i>log_expr</i> est vrai.<br><br>
 	  <b>DO</b><br>
 	  <i>block</i><br>
 	  <b>LOOP UNTIL <i>log_expr</i></b></b><br> 
-	  Le bloc d'instruction est exécuté en boucle jusqu'à ce que <i>log_expr</i> soit vrai.
-	<pre><code>example:
+	  Le bloc d'instructions est exécuté en boucle jusqu'à ce que <i>log_expr</i> soit vrai.<br>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
 	&gt;i=0 : DO ? i : i=i+1 LOOP UNTIL i=5
 	0
 	1
@@ -784,16 +843,18 @@ a
 	2
 	1
 	</code></pre>
+	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="ellipse"></a><b>ELLIPSE(x0,y1,x1,y1)</b><br>
+	<li><a name="ellipse"></a><b>ELLIPSE(<i>x0,y1,x1,y1</i>)</b><br>
 	Dessine une ellipse circonscrite dans un rectangle. Les coordonnées sont en pixels.
 	<ul>
 		<li><b>{x0,y0}</b> coordonnées d'un des coin du rectangle.</li>
 		<li><b>{x1,y1}</b> coordonnées du coin opposé en diagonale du rectangle.</li>
 	</ul>
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;ellipse(200,100,280,140)
 
@@ -817,21 +878,20 @@ a
 	</li>
 	<div class="item_div"></div>
 	<li><a name="else"></a><b>ELSE</b><br>
-	Est utilisé avec le <a href="#if">IF</a> et le <a href="#selectcase">SELECT CASE</a>.
+	Le mot réservé <b>ELSE</b> est utilisé dans 2 situations.<br>
+	Voir <a href="#if">IF</a><br>
+	Voir <a href="#select">SELECT CASE</a>.<br>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="end"></a><b>END FUNC</b><br>
-	Termine la définiction d'une fonction. Voir <a href="#function">FUNC</a>.<br>
-	<div class="item_div"></div>
-	<b> END SUB</b><br>
-	Termine la définiction d'une sous-routine. Voir <a href="#sub">SUB</a>.<br>
-	<div class="item_div"></div>
-	<b>END IF</b><br>
-	Termine une structure de contrôle <b>IF ... THEN ... ELSE ... END IF</b>. Voir <a href="#if">IF</a><br>
-	<div class="item_div"></div>
-	<b>END SELECT</b><br>
-	Termine une structure de contrôle <b>SELECT CASE</b>. Voir <a href="#selectcase">SELECT CASE</a>.
+	<li><a name="end"></a><b>END</b><br>
+	Le mot réservé <b>END</b> est utilisé dans les 4 contextes suivants.
+	<ul>
+		<li><a href="#func">FUNC</a></li>
+		<li><a href="#sub">SUB</a></li>
+		<li><a href="#if">IF</a></li>
+		<li><a href="#select">SELECT</a></li>
+	</ul>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
@@ -840,9 +900,13 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="exp"></a><b>EXP(expr)</b><br>
-	Fonction qui retourne un float de valeur e^expr, ou <b>e</b> est la base naturelle.
-	<div>exemple:
+	<li><a name="exp"></a><b>EXP(<i>expr</i>)</b><br>
+	Fonction de type float qui retourne l'exponentielle de la base naturelle <b>e</b>.
+	<ul>
+		<li><b>expr</b>, expression numérique qui représente l'exposant.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;? exp(4)
 	54.5981 
@@ -853,56 +917,101 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="fgetc"></a><b>FGETC(#n)</b><br>
-	Cette fonction retourne un caractère lu à partir d'un fichier.
+	<li><a name="fgetc"></a><b>FGETC(<i>#n</i>)</b><br>
+	Cette fonction retourne un octet lu à partir d'un fichier.
 	<ul>
 	<li><b>#n</b>, est le numéro qui a été assigné au fichier lors de son ouverture. Voir <a href="#open">OPEN</a>.</li>
 	</ul>
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
-	&gt;open "snake.bas" for input as #1: ? chr$(fgetc(#1)):close(#1)
-	r 
+	&gt;open "snake.bas" for input as #1
+
+	&gt;?chr$(fgetc(#1));:?chr$(fgetc(#1));:?chr$(fgetc(#1)):close(#1)
+	r e m 
 
 	&gt;_
 	</code></pre>
 	</div>
+	Le fichier <i>snake.bas</i> débute par la ligne <b>rem snake game.</b>
 	<div><a href="#index">index</a></div>
 	</li>	
 	<div class="item_div"></div>
-	<li><a name="fill"></a><b>FILL(x,y)</b><br>
+	<li><a name="fill"></a><b>FILL(<i>x,y</i>)</b><br>
 	Procédure graphique qui remplie une figure géométrique fermée.
-	<div>exemple:
+	<ul>
+		<li><b>x</b>, coordonnée <b>x</b> du point de départ de la procédure de remplissage.</li>
+		<li><b>y</b>, coordonnée <b>y</b> du point de départ de la procédure de remplisssage.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
+	&gt;vgacls
+
+	&gt;dim triangle(6)=(240,120,250,120,250,130)
+
+	&gt;polygon(@triangle,3)
+
+	&gt;fill(245,121)
+
+	&gt;_
 	</code></pre>
+	</div>
+	<div>
+	<canvas id="fillCanvas" width="480" height="240" sytle="background-color:black;">
+	Votre fureteur ne supporte pas les canvas HTML5.</canvas>
+	<script>
+	var c = document.getElementById("fillCanvas");
+	var ctx = c.getContext("2d");
+	ctx.fillStyle="#000000";
+	ctx.fillRect(0,0,480,240);
+	ctx.strokeStyle="#ffffff";
+	ctx.beginPath();
+	ctx.moveTo(240,120);
+	ctx.lineTo(250,120);
+	ctx.lineTo(250,130);
+	ctx.lineTo(240,120);
+	ctx.stroke();
+	ctx.fillStyle="#ffffff";
+	ctx.moveTo(245,121);
+	ctx.fill();
+	</script>
+	</div>
 	<b>AVERTISSEMENT:</b> Il s'agit d'une procédure récursive qui fait déborder la pile lorsque la figure dépasse une certaine taille.
 	Il se peut donc que l'ordinateur génère une exception lorsqu'elle est utilisée.
-	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="floor"></a><b>FLOOR(expr)</b><br>
-	Fonction de type entier qui accepte une expression arithmétique qui résulte en un type float pour retourner la partie entière de 
-	cette expression.
-	<div>exemple:
+	<li><a name="floor"></a><b>FLOOR(<i>expr</i>)</b><br>
+	Fonction qui retourne un entier qui est l'arrondie d'un float vers l'infini négatif. Voir aussi <a href="#ceil">CEIL</a> 
+	<ul>
+		<li><b>expr</b>, expression de type float qui sera arrondie.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;? floor(45.23)
 	45 
-
+	&gt;? floor(-4.001)
+	-5
+	
 	&gt;_
 	</code></pre>
 	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="for"></a><b>FOR <i>var=expr</i> TO <i>expr</i> [STEP <i>expr</i>]</b><br>
+	<li><a name="for"></a><b>FOR</b><br>
+	Débute une structure de contrôle basée sur une énumération.<br><br>
+	<b>FOR <i>var=expr</i> TO <i>expr</i> [STEP <i>expr</i>]</b><br>
 	  <i>block</i><br>
 	<b>NEXT <i>var</i></b><br>
 	Permet l'exécution d'un bloc d'instructions en boucle un nombre de fois déterminé par l'incrémentation d'une variable. Le programme sort de
 	la boucle lorsque la variable dépasse la valeur de la limite. l'incrément par défaut est <b>1</b>. Si <b>STEP</b> est présent l'incrément est
 	le résultat d'<i>expression</i> et peut-être un entier quelconque. La valeur de la variable de contrôle est vérifiée au début de la boucle
-	d'instructions. Si au départ elle dépasse la limite le bloc d'instruction n'est jamais exécuté.<br>
-	<div>exemple:
-	</div>
+	d'instructions. Si au départ elle dépasse la limite le bloc d'instruction n'est jamais exécuté.<br><br>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;for i=0 to 10 step 2
 
@@ -918,32 +1027,58 @@ a
 
 	&gt;_
 	</code></pre>
+	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><b><a name="func"></a>FUNC name(<i>arg_list</i>)</b><br>
+	<li><a name="free"></a><b>FREE</b><br>
+	Cette commande ne peut-être utilisée qu'en mode interactif. Elle affiche la quantité
+	de mémoire programme utilisée et la partie encore disponible ainsi que l'espace disponible pour les chaînes allouées
+	dynamiquement.
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;free
+
+	Program space (bytes): used 0 , available 38184
+	strings space (bytes): available 4096
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="func"></a><b>FUNC</b><br>
+	Mot réservé servant à <a href="#declare">déclarer</a> ou définir une fonction. Une fonction est une sous-routine qui retourne une valeur.
+	La valeur retournée peut-être de n'importe quel type de base, BYTE,INTEGER,FLOAT,STRING. Le type retourné est déterminé
+	par le dernier caractère du nom de la fonction comme pour les variables.<br><br>
+	<b>FUNC name(<i>arg_list</i>)</b><br>
 	[<b>LOCAL var_list</b>]<br>
 	<i>block</i><br>
 	<b>RETURN <i>expr</i></b><br>
 	<b>END FUNC</b><br>
-	Sert à définir une fonction.<br>
 	<ul>
-		<li><b>name</b> est le nom de la fonction qui sera utilisé pour son appel.</li>
+		<li><b>name</b> est le nom de la fonction qui sera utilisé pour son appel. Les caractères de typage <b>$,#</b> et <b>!</b> peuvent-être
+		utilisés pour définir le type de donnée retournée par la fonction.</li>
 		<li><i>arg_list</i> Liste du nom des arguments de la fonctions. Les éléments sont séparé par la virgule <b>','</b></li>
 		<li><b>LOCAL var_list</b> Si la fonction utilise des variables locales la liste doit-être donnée au début.</li>
 		<li><i>block</i> bloc d'instructions exécuté par cette fonction.</li>
 		<li><b>RETURN <i>expr</i></b> Cette directive termine la fonction en retournant la valeur de l'expresssion qui suit. Cette 
-		directive peut apparaître plusieurs fois dans le bloc d'instruction dans une structure conditionnelle.
-		<pre><code>example:
+		directive peut apparaître plusieurs fois dans le bloc d'instruction dans une structure conditionnelle.</li>
+	</ul>	
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+		<pre><code>
 		REM cette fonction calcule  la factorielle d'un entier
-		REM méthode récursive
+		REM methode recursive
 		FUNC fact(n)
-		  if n<1 then 1/0 end if ' nombre &lt; 1 génère une exception
+		  if n&lt;1 then 1/0 end if ' nombre &lt; 1 génère une exception
 		  if n=1 then return 1 end if
 		  return n*fact(n-1)
 		END FUNC
 		
-		REM même fonction mais en utilisant une boucle FOR
+		REM meme fonction mais en utilisant une boucle FOR
 		FUNC fact(n)
 		LOCAL f,i
 		   f=1
@@ -952,18 +1087,19 @@ a
 		   next i
 		   return f
 		END FUNC
-		</code></pre></li>
-	</ul>
+		</code></pre>
+		</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="hex"></a><b>HEX$(expr)</b><br>
+	<li><a name="hex$"></a><b>HEX$(expr)</b><br>
 	Fonction chaîne qui retourne la représentation hexadécimale d'un entier.
 	<ul>
 		<li><b>expr</b>, est évaluée et sa valeur convertie en chaîne hexadécimale. Si cette valeur est un float la partie décimale
 		est tronquée.</li>
 	</ul>
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;? hex$(3.1415)
 	$3 
@@ -976,28 +1112,33 @@ a
 
 	&gt;_
 	</code></pre>
+	</div>
 	Les chaînes représentant un nombre en hexadécimal débute par le caractère <b>$</b> pour éviter toute confusion avec la représentation
 	décimale.
-	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="if"></a><b>IF <i>log_expr</i> THEN</b><br>
+	<li><a name="if"></a><b>IF</b><br>
+	Mot réservé qui débute une structure de contrôle <b>IF ... THEN ... ELSE ... END IF</b><br><br>
+	<b>IF <i>log_expr</i> THEN</b><br>
 	<i>block</i><br>
 	[<b>ELSE</b><br>
 	<i>block</i>]<br>
 	<b>END IF</b><br>
-	Structure de contrôle qui évalue l'expression logique qui suit le <b>IF</b> et si la valeur est vrai le bloc d'instruction qui
+	La expresssion booléenne <i>log_expr</i> est évaluée et si elle est vrai le block d'instructions qui
 	suit le <b>THEN</b> est exécuté. Dans le cas contraire c'est le bloc d'instruction qui suit le <b>ELSE</b>
-	qui est exécuté. La clause <b>ELSE</b> est optionnelle.
-	<div>exemple:
+	qui est exécuté. La clause <b>ELSE</b> est optionnelle.<br>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
-	IF btest(4,0) then
-	  ? "nombre impair"
-	ELSE
-	  ? "nombre pair"
-	END IF
-	REM va imprimé <i>nombre pair</i>
+	&gt;IF btest(4,0) THEN
+	&gt;&gt;  ? "nombre impair"
+	&gt;&gt;ELSE
+	&gt;&gt;  ? "nombre pair"
+	&gt;&gt;END IF
+	nombre pair
+	
+	&gt;_
 	</code></pre>
 	</div>
 	<div><a href="#index">index</a></div>
@@ -1005,13 +1146,14 @@ a
 	<div class="item_div"></div>
 	<li><a name="input"></a><b>INPUT [#n,] | [<i>invite</i>,] <i>var_list</i></b>
 	<ul>
-		<li><b>#n</b>, est le numéro d'un fichier ouvert si la lecture doit se faire à partir d'un fichier.</li>
+		<li><b>n</b>, est le numéro d'un fichier ouvert si la lecture doit se faire à partir d'un fichier.</li>
 		<li><b>invite</b> est un message facultatif à imprimer à l'écran avant la saisie des données.</li>
 		<li><b>var_list</b> est la liste des variables auquelles les valeurs saisies au clavier seront affectées.
 		La saisie se fait une variable à la fois dans leur ordre d'apparation dans la liste. Pour chaque variable
 		son nom est affichée à l'écran suivit d'un point d'interrogation.</li>
 	</ul>
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
  	 &gt;INPUT "Entrez votre prenom et votre age", nom$, age
 	 Entrez votre prenom et votre age
@@ -1023,9 +1165,9 @@ a
 	 
 	 &gt;_
 	</code></pre>
+	</div>
 	<b>#n</b> et <b>invite</b> sont mutuellement exclusifs. <b>#n</b> n'est utilisé que pour la lecture de fichier et <b>invite</b> pour
 	la saisie à l'écran.
-	</div>
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
@@ -1038,7 +1180,8 @@ a
 		dans <b>s1</b>. Le premier caractère d'une chaîne porte l'indice 1.</li>
 	</ul>
 	</li>
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;heo$="heo"
 
@@ -1054,12 +1197,36 @@ a
 	</li>
 	<div class="item_div"></div>
 	<li><a name="insertln"></a><b>INSERTLN</b><br>
-	Insère une ligne texte vide au dessus de ligne où est le curseur texte et positionne le curseur au début de cette ligne.
-	Cette commande ne requière aucun argument.
+	Fait glisser vers le bas toutes les lignes à partir de celle où se trouve le curseur en laissant la ligne du curseur vide et
+	le curseur texte au début de celle-ci.<br>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	hello 
+	vpcBASIC v1.0
+	RAM available: 38240 bytes
+	strings space: 4096 bytes
+
+	&gt;locate(0,0):insertln:?"hello":locate(6,0)
+
+	&gt;_
+	</code></pre>
+	</div>	
+	Lorsqu'on appelle le shell BASIC à partir du shell de commande l'écran initial shell BASIC est comme ceci.
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	vpcBASIC v1.0
+	RAM available: 38240 bytes
+	strings space: 4096 bytes
+
+	&gt;_
+	</code></pre>
+	</div>
+	On a saisie la liste de commandes montrée dans l'exemple pour obtenir le résultat affiché.
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="instr"></a><b>INSTR([start],s1,s2)</b><br>
+	<li><a name="instr"></a><b>INSTR(<i>[start],s1,s2</i>)</b><br>
 	Recherche d'une sous-chaîne dans une chaîne.
 	<ul>
 		<li><b>start</b>, Position de départ de la recherche dans la chaîne <b>s1</b>. Cet argument est facultatif. Si absent
@@ -1067,7 +1234,8 @@ a
 		<li><b>s1</b>, chaîne dans laquelle la recherche est effectuée.</li>
 		<li><b>s2</b>, chaîne recherchée dans <b>s1</b>.</li>
 	</ul>
-	<div>exemple:
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	&gt;couleurs$="rouge,vert,bleu"                                                    
 																					
@@ -1123,7 +1291,10 @@ a
 	</li>
 	<div class="item_div"></div>
 	<li><a name="lcase$"></a><b>LCASE$(<i>str_expr</i>)</b><br>
-	Fonction chaîne qui convertie <i>str_expr</i> en lettres minuscules.<br>
+	Fonction chaîne qui convertie <i>str_expr</i> en lettres minuscules. Voir aussi <a href="#ucase$">UCASE$</a>
+	<ul>
+		<li><b>str_expr</b>, expression chaîne de caractère qui sera convertie en minucuscules.</li>
+	</ul>
 	exemple:
 	<div  style="background-color: black;color: white;">
 	<pre><code>
@@ -2445,81 +2616,118 @@ a
 	<div class="item_div"></div>
 	 <li><a name="ubound"></a><b>UBOUND(<i>var</i>)</b><br>
 	 Cette fonction retourne la valeur du dernier indice d'une variable tableau.
-	 <pre><code>example:
-	 &gt;dim vector(100)
-	 &gt;? ubound(vector)
-	 100
-	 &gt;|
-	 </code>
-	 </pre></li>
+	 <ul>
+		<li><b>var</b>, est la variable tableau dont on veut obtenir la grandeur.</li>
+	 </ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	 <pre><code>
+		&gt;dim chime(3)=(698,784,523)
+
+		&gt;for i=1 to ubound(chime):sound(chime(i),500):next i
+
+		&gt;_
+	 </code></pre>
+	 </div>
+	 Utile pour énumérer tous les éléments d'un tableau.
+	<div><a href="#index">index</a></div>
+	 </li>
 	<div class="item_div"></div>
-	 <li><a name="use"></a><b>USE "<i>file</i>"</b><br>
-	 Cette directive sert à compiler un fichier BASIC utilisé par le fichier principal. <i>file</i> est le nom du fichier à inclure. 
-	 Il doit s'agir d'un fichier existant sur la carte SD. Un fichier inclus peut aussi utiliser la directive <b>USE</b> 
-	 jusqu'à un niveau d'imbrication de 4. 4 étant le nombre maximal de fichiers pouvant-être ouvert simultanément.
-	 <pre><code>example:
-	 use "joystick.inc" ' fichier définissant des constantes pour le joystick
-	 use "lem.spr"      ' fichier définissant un sprite appellé LEM.
+	<li><a name="ucase$"></a><b>UCASE$(<i>str_expr</i>)</b><br>
+	Fonction chaîne qui convertie une chaîne en majuscule. Voir aussi <a href="#lcase$">LCASE$</a>
+	<ul>
+		<li><b>str_expr</b>, expression chaîne de caractère qui sera convertie en majuscule.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? ucase$("aBcDeF")
+	ABCDEF 
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="until"></a><b>UNTIL</b><br>
+	Termine une boucle de contrôle <a href="#do">DO</a>.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	 <li><a name="use"></a><b>USE "<i>fichier</i>"</b><br>
+	 Cette directive sert à compiler un fichier BASIC utilisé par le fichier principal.
+	 <ul>
+		<li><b>fichier</b>, est une chaîne de caractère représentant le fichier qui sera chargé et compilé. Ce fichier peut lui-même
+		utilisé la directive <b>USE</b> mais le niveau d'imbrication est limité à 4. Le fichier doit existé sur la carte SD.</li>
+	 </ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	 <pre><code>
+	 use "lem.spr"      ' fichier definissant un sprite appelle LEM.
 	 ' code du programme principal
 	 .
 	 .
 	 .
 	 </code></pre>
+	 </div>
+	<div><a href="#index">index</a></div>
 	 </li>
-	 <li><b>video(<i>expr</i>)</b><br>
-	 Si <i>expr</i> est évaluée à <b>0</b> la sortie vidéo est désactivée autre elle est activée.  La sortie vidéo accapare le plus grand
-	 nombre de cycles du CPU. La désactivation de la sortie vidéo permet d'accélérer une sous-routine.
-	 <pre><code>example:
-	 sub test(n)
-	 local t0
-	   cls
-	   if n then 'rapide
-	     t0=ticks()
-	     video(0)
-	     box(0,0,240,170,4)
-	     video(1)
-	     ? ticks()-t0, "msec"
-	   else 'lent
-	     t0=ticks()
-	     box(0,0,240,170,4)
-	     ? ticks()-t0, "msec"
-	   end if
-	 end sub
-	 
-	 &gt; test(0)
-	 55 msec
-	 &gt; test(1)
-	 32 msec
-	 </code></pre></li>
-	 <li><b>WAITKEY()</b><br>
-	 Cette fonction attend que l'utilisateur enfonce une touche au clavier et retourne la valeur de cette touche.
-	 <pre><code>example:
-	 &gt;putc waitkey()
-	 r
-	 &gt;|
-	 REM l'utilisateur a enfoncé la touche 'r'</code></pre></li>
-	 <li><b>WHILE <i>log_expr</i></b><br>
-	 [<i>block</i>]<br>
-	 <b>WEND</b><br>
-	 La structure de contrôle <b>WHILE</b> exécute le bloc d'instructions <i>block</i> terminé par le <b>WEND</b> tant que <i>log_expr</i>
-	 retourne vrai.<br>
-	 <pre><code>example:
-	 dim i=0
-	 while i<100
-	   ? i
-	   i=i+1
-	 wend
-	 0
-	 1
-	 2
-	 ...
-	 99
-	 </code></pre>
-	 </li>
+	<div class="item_div"></div>
+	<li><a name="val"></a><b>VAL(<i>str_expr</i>)</b><br>
+	Fonction qui retourne la valeur numérique d'une chaîne de caractère qui représente un nombre. C'est l'inversede <a href="#str$">STR$</a>
+	<ul>
+		<li><b>str_expr</b>, expression chaîne de caractère qui représente un nombre.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="vgacls"></a><b>VGACLS</b><br>
+	Vide l'écran du moniteur VGA. Contrairement à <a href="#cls">CLS</a> cette commande agit sur le moniteur VGA même lorsque 
+	la console est en mode <i>REMOTE</i>.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="wend"></a><b>WEND</b><br>
+	Termine une boucle <a href="#while">WHILE ... <B>WEND</B></a><br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;i=10:while i: ? i;:i=i-1:wend                                                       
+	10  9  8  7  6  5  4  3  2  1                                                   
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="while"></a><b>WHILE <i>log_expr</i></b><br>
+	<i>bloc d'instructions</i><br>
+	<b>WEND</b><br><br>
+	Boucle de contrôle qui s'exécute seulement si l'expression logique <i>log_expr</i> est vrai.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;i=10:while i: ? i;:i=i-1:wend                                                       
+	10  9  8  7  6  5  4  3  2  1                                                   
+	&gt;_
+	</code></pre>
+	</div>
+	Le mot réservé <b>WHILE</b> est aussi utilisé dans les boucles boucles <a href="#do">DO ... LOOP <b>WHILE</b></a>.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
 	</ul>
 </p>
 <h3><a name="examples">Examples de programmes</a></h3>
 <p>
+	En suivant ce <a href="https://github.com/Picatout/vpc-32vga/tree/master/vpcBASIC/programs">lien</a> vous trouverez quelque
+	programmes écris en vpcBASIC.
 </p>
 <hr width="50%" align="center">
 <h2>INDEX</h2>

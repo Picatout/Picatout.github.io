@@ -199,7 +199,7 @@ a
 		<li><a href="#cos">COS</a></li>
 		<li><a href="#curcol">CURCOL</a></li>
 		<li><a href="#curline">CURLINE</a></li>
-		<li><a href="#date">DATE$</a></li>
+		<li><a href="#date$">DATE$</a></li>
 		<li><a href="#declare">DECLARE</a></li>
 		<li><a href="#dim">DIM</a></li>
 		<li><a href="#do">DO</a></li>
@@ -286,7 +286,6 @@ a
 		<li><a href="#timeout">TIMEOUT</a></li>
 		<li><a href="#tkey">TKEY</a></li>
 		<li><a href="#trace">TRACE</a></li>
-		<li><a href="#tune">TUNE</a></li>
 		<li><a href="#ubound">UBOUND</a></li>
 		<li><a href="#ucase">UCASE</a></li>
 		<li><a href="#until">UNTIL</a></li>
@@ -682,8 +681,8 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="date"></a><b>DATE$</b><br>
-	Fonction chaîne qui retourne la date.
+	<li><a name="date$"></a><b>DATE$</b><br>
+	Fonction chaîne qui retourne la date inscrite dans le RTCC. Voir <a href="#time$">TIME$</a>
 	<div>exemple:
 	<pre><code>
 	&gt;? date$
@@ -1103,7 +1102,8 @@ a
 	</li>
 	<div class="item_div"></div>
 	<li><a name="key"></a><b>KEY</b><br>
-	Cette fonction attend qu'une touche soit tapée au clavier et retourne sa valeur ASCII.<br>
+	Cette fonction attend qu'une touche soit tapée au clavier et retourne sa valeur ASCII.
+	 Voir aussi <a href="#tkey">TKEY</a><br>
 	exemple:
 	<div  style="background-color: black;color: white;">
 	<pre><code>
@@ -1877,7 +1877,37 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><a name="selectcase"></a><b>SELECT CASE expr</b><br>
+	<li><a name="seek"></a><b>SEEK(#n,position)</b><br>
+	Déplace le curseur à l'intérieur d'un fichier.
+	<ul>
+		<li><b>#n</b>, Indique le numéro du fichier</li>
+		<li><b>position</b>, indique la nouvelle position du curseur. <b>0</b> place le curseur au début du fichier et
+		<b>-1</b> indique la fin du fichier. Si <b>position</b> dépasse la grandeur du fichier le curseur est placé à la fin
+		de celui-ci.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;open "test.txt" for output as #1
+
+	&gt;putc #1, \1
+
+	&gt;putc #1, \2
+
+	&gt;putc #1, \3
+
+	&gt;close(#1)
+
+	&gt;open "test.txt" for input as #1:seek(#1,2):? chr$(fgetc(#1)):close(#1)
+	3                                                                               
+																					
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="select"></a><b>SELECT CASE expr</b><br>
 	<b>CASE </b><i>expr_list</i><br>
 	<i>block</i><br>
 	[<B>case </B><i>expr_list</i><br>
@@ -1887,6 +1917,8 @@ a
 	<b>END SELECT</b><br> 
 	Cette structure de contrôle permet de sélectionnr un bloc d'instruction en fonction de la valeur d'une expression. Contrairement au
 	<i>switch</i> du langage 'C' l'exécution d'un bloc se termine au prochain <b>CASE</b> sans besoin de mettre un <i>break</i>.<br>
+	les <b>case</b> peuvent comprendre plus d'une expression séparées par la virgule. Contrairement à d'autres dialectes BASIC les expressions
+	chaînes sont exclues.<br>
 	exemple:
 	<div  style="background-color: black;color: white;">
 	<pre><code>
@@ -1909,50 +1941,122 @@ a
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
-	<li><b>SETPIXEL(x,y,color)</b><br>
-	Colore le pixel à la coordonnée <i>{x,y}</i> avec la couleur <i>color</i>.
-	<pre><code>example:
-	setpixel(10,20,4) ' le pixel à la postion {10,20} prend la valeur 4
-	</code></pre></li>  
-	<li><b>SETTMR(<i>expr</i>)</b><br>
-	Initialise la minuterie de pause sans bloquer l'exécution. À utiliser avec la fonction
-	<a href="#timeout">TIMEOUT</a>
-	<pre><code>example:
-    DIM count
-    settmr(100) ' minuterie initialisée à 100 millisecondes.
-    while not timeout()
-      rem combien de WHILE par seconde?
-      count=count+1
-    wend
-    print "boucle WHILE par seconde: ",10*count
-	  </code></pre></li>
-	<li><b>SHL(<i>expr</i>)</b><br>
-	Décale vers la gauche <i>expr</i> de 1 bit (multiplication par 2).
-	<pre><code>example:
-	&gt;? shl(4)
-	8
-	&gt;|</code></pre></li>
-	<li><b>SHR(<i>expr</i></b><br>
-	Décale vers la droite <i>expr</i> de 1 bit (division par 2).
-	<pre><code>example:
-	&gt;? shr(-9)
+	<li><a name="settmr"></a><b>SETTMR(expr)</b><br>
+	Démarre une minuterie à rebours. Voir <a href="#timeout">TIMEOUT</a>
+	<ul>
+		<li><b>expr</b>, paramètre de type entier représentant la durée en millisecondes.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;settmr(10):while not timeout():?"waiting time out":wend
+	waiting time out 
+	waiting time out 
+	waiting time out 
+	waiting time out 
+	waiting time out 
+	waiting time out 
+	waiting time out 
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="shl"></a><b>SHL(<i>expr, n</i>)</b><br>
+	Décale vers la gauche <i>expr</i> de n bist (multiplication par 2).
+	<ul>
+		<li><b>expr</b>, est une expression de type entier qui sera décalé vers la gauche.</li>
+		<li><b>n</b>, est une expression de type entier qui représente le nombre de bits de décalage. La valeur de décalage est n%32.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? shl(1,4)
+	16
+	&gt;_</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="shr"></a><b>SHR(<i>expr,n</i>)</b><br>
+	Décale vers la droite <i>expr</i> de n bits (division par 2).
+	<ul>
+		<li><b>expr</b>, est une expression de type entier qui sera décalé vers la droite.</li>
+		<li><b>n</b>, est une expression de type entier qui représente le nombre de bits de décalage. La valeur de décalage est n%32.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? shr(-9,1)
 	-5 
-	&gt; REM pensiez-vous que ça donnait -4 ?
-	&gt;|</code></pre></li> 
-    <li><a name="sleep"></a><b>SLEEP(<i>expr</i>)</b><br>
-    Suspend l'exécution du programme pour une durée en millisecondes égale à la valeur de <i>expr</i>.
-    <div>exemple:
+	&gt;_</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li> 
+	<div class="item_div"></div>
+	<li><a name="sine"></a><b>SINE(expr)</b><br>
+	Fonction trigonométrique sinus, retournant un type float.
+	<ul>
+		<li><b>expr</b> de type float représent l'ange en radian.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;rem imprime sinus de 45 degr.
+
+	&gt;?sine(2.0*3.14159*45/360)
+	0.707106 
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="sleep"></a><b>SLEEP(<i>expr</i>)</b><br>
+    Suspend l'exécution du programme pour une durée en millisecondes.
+    <ul>
+		<li><b>expr</b>, est une expression entière représentant la durée en millisecondes. Si <b>expr</b> est un float le délais
+		ne sera pas celui escompté.</li>
+    </ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
     <pre><code>
-    &gt;sleep(1000)
-    
-    &gt;_
+	&gt;cls:while not tkey: locate(0,0):? time$:sleep(1000):wend                       
+	</code></pre></div><div></div>
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	10:52:29  
+
+	&gt;_
     </code></pre>
-    L'invite de commande va réapparaître après 1 seconde.
     </div>
+    Vide l'écran et ensuite dans dans la boucle <i>while...wend</i>, affiche l'heure à interval d'une seconde dans le coin supérieur gauche. 
+    Termine lorsqu'une touche est enfoncée.
 	<div><a href="#index">index</a></div>
     </li>
 	<div class="item_div"></div>
-	<li><b>SPRITE(x,y,width,height,@var#)</b><br>
+	<li><a name="sound"></a><b>SOUND(freq,duration)</b><br>
+	Émet une tonalité.
+	<ul>
+		<li><b>freq</b>, expression qui détermine la fréquence de la tonalité. L'expression doit résulté en un entier.</li>
+		<li><b>duration</b>, expression qui détermine la durée en millisecondes. L'expression doit résulté en un entier.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;for i=200 to 2000 step 10: sound(i,4):next i                                   
+																					
+	&gt;_
+	</code></pre>
+	</div>
+	Succession rapide de tonalités de 200 hertz à 2000 hertz.	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="sprite"></a><b>SPRITE(x,y,width,height,@var#)</b><br>
 	fonction qui affiche un sprite à l'écran. Cette fonction retourne une
 	valeur booléenne qui indique si le sprite est entré en collision avec un autre objet.
 	<ul>
@@ -1960,87 +2064,186 @@ a
 		<li><b>width</b> Largeur du sprite en pixels.</li>
 		<li><b>height</b> Hauteur du sprite en pixels.</li>
 		<li><b>var#</b> Nom de la variable tableau d'octets qui contient le sprite. Cette variable doit-être passée par 
-		référence comme indiqué par le caractère <b>'@'</b>.</li>
+		référence comme indiqué par le caractère <b>'@'</b>. Chaque octet du tableau contient 2 pixels. Chaque pixel étant
+		représenté par 4 bits correspondant à 16 couleurs. Cependant puisque VPC-32V est monochrome, seul le bit 3 est utilisé.
+		Si le bit 3 est à 1 le pixel et blanc sinon il est noir. Lorsqu'un pixel blanc est déposé sur un pixel déjà blanc on 
+		considère qu'il y a eu collision.</li>
 	</ul>
-	<pre><code>example:
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
 	dim cross#(8)=($0f,$f0,$ff,$ff,$ff,$ff,$0f,$f0) 'petite croix de 4x4 pixels
 	if sprite(56,24,4,4,@cross#) then ? "collision" end if
-	</code></pre>
-	Les sprites sont affichés à l'écran en utilisant une fonction XOR (OU exclusif) pixel à pixel. Cette méthode 2 avantages.
+	</code></pre></div>
+	Les sprites sont affichés à l'écran en utilisant une fonction XOR (OU exclusif) pixel à pixel. Cette méthode a 2 avantages.
 	Le premier est qu'elle permet de détecter les collisions en supposant que le fond d'écran est noir (0). Le deuxième est qu'il
 	suffit de réafficher le sprite par dessus lui-même pour l'effacer. la méthode pour déplacer un sprite à l'écran est la suivante:
+	<div  style="background-color: black;color: white;">
 	<pre><code>
 	while 1
 	  collision=sprite(x,y,8,8,@spr#) ' affiche un sprite de 8x8 pixels
-	  pause(10) ' pause de 10 millisecondes, cette valeur n'est pas critique peut-être 20 msec.
+	  sleep(10) ' pause de 10 millisecondes, cette valeur n'est pas critique peut-être 20 msec.
 	  sprite(x,y,8,8,@spr#) 'efface le sprite
 	  ' ici on peut mettre du code pour gérer les collisions
 	  '...
-	  select case jstick() 'lecture du joystick et déplacement dans la direction indiquée.
-	  case 1 ' bouton enfoncé
+	  select case tkey() 'lecture du clavier et deplacement dans la direction indiquee.
+	  case \q ' lettre 'q' quitter
 	    cls
 	    bye
-	  case 16 'vers le haut
+	  case 141 'vers le haut
 	    if y&gt;0 then y=y-1 end if
-	  case 8 'vers le bas
-	    if y&lt;170-8 then y=y+1 end if
-	  case 2 'vers la droite
-	    if x&lt;240-8 then x=x+1 end if
-	  case 4 ' vers la gauche
+	  case 142 'vers le bas
+	    if y&lt;240-8 then y=y+1 end if
+	  case 144 'vers la droite
+	    if x&lt;480-8 then x=x+1 end if
+	  case 143 ' vers la gauche
 	    if x&gt;0 then x=x-1 end if
 	  ' on peut ajouter des CASE pour gérer les 4 directions diagonales.
 	  '...  
 	  end select  
 	wend   
 	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
 	</li> 
-	<li><b>SRCLEAR(<i>expr</i>)</b><br>
-	Cette commande efface le contenu de la mémoire SPI RAM. <i>expr</i> est le nombre d'octets à effacer. L'effacement se fait 
-	toujours à partir de l'adresse 0.
-	<pre><code>example:
-	srclear(1000) ' efface les 1000 premiers octets de la mémoire SPI RAM.</code></pre></li>
-	<li><b>SRLOAD <i>"file_name"</i></b><br>
-	<b>SRLOAD <i>var$</i></b><br>
-	Il s'agit d'une fonction qui charge en mémoire SPI RAM le contenu d'un fichier. Le chargement débute à l'adresse 0.
-	La taille maximale est de 65535 octets. La fonction retourne le nombre d'octets chargés.
-	<pre><code>example:
-	size=srload "test.spr" ' charge le fichier <i>test.spr</i> et retourne sa grandeur dans <i>size</i>.</code></pre></li>
-	<li><b>SRREAD(<i>adr</i>,@var,<i>size</i>)</b><br>
-	Lecture d'un bloc d'octets de la SPI RAM dans une variable.
-	<ul><li><b>adr</b> adresse SPI ou doit débuter la lecture.</li>
-	<li><b>var</b> nom de la variable dans laquelle les valeurs lues seront copiées. Cette variable doit-être passée par
-	référence comme l'indique le caractère <b>'@'</b>.
-	<li><b>size</b> nombre d'octets à lire.</li>
-	<pre><code>example:
-	DIM i, spr#(32)
-	srread(0,@i,2) ' lit un entier et le met dans la variable <i>i</i>.
-	srread(4,@spr#,32) ' lit un bloc de <i>32</i> octets à partir de l'adresse <i>4</i> dans le tableau <i>spr#</i>
+	<div class="item_div"></div>
+	<li><a name="sqrt"></a><b>SQRT(expr)</b><br>
+	Fonction de type float qui retourne la racine carré.
+	<ul>
+		<li><b>expr</b>, Valeur numérique dont on veut obtenir la racine carré. Si <i>expr</i> est un entier celui-ci
+		est converti en float avant extraction de la racine carré.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? sqrt(7)
+	2.64575
+		
+	&gt; ? sqrt(7)*sqrt(7)
+	7
+	
+	&gt;_
 	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
 	</li>
-	</ul>
-	<li><b>SRSAVE <i>"file_name"</i>, <i>size</i></b><br>
-	<b>SRSAVE <i>var$</i>, <i>size</i></b><br>
-	Sauvegarde dans un fichier le contenu de la mémoire SPI RAM. La sauvegarde se fait à partir de l'adresse 0.<br>
+	<div class="item_div"></div>
+	<li><a name="srclear"></a><b>SRCLEAR(<i>adresse,grandeur</i>)</b><br>
+	Cette commande met à zéro un bloc de la mémoire RAM externe.
 	<ul>
-	<li><b>file_name|var$</b> Nom du fichier de sauvegarde.</li>
-	<li><b>size</b> Nombre d'octets à sauvegarder.</li></ul>
-	<pre><code>example:
-	srsave "test.dat", 1024 ' sauvegarde <i>1024 octets</i> dans le fichier <i>test.dat</i></code></pre>
+		<li><b>adresse</b>, est une expression entière indiquant l'adresse du début du bloc.</li>
+		<li><b>grandeur</b>, est une expression entiere indiquant le nombre d'octets à mettre à zéro.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	srclear(0,1000) ' efface les 1000 premiers octets de la mémoire RAM externe.</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
 	</li>
-	<li><b>SRWRITE(<i>adr,@var,size</i>)</b><br>
-	Copie le contenu d'une variable dans la mémoire SPI RAM.<br>
+	<div class="item_div"></div>
+	<li><a name="srload"></a><b>SRLOAD(<i>adresse,"fichier")</i></b><br>
+	Il s'agit d'une fonction qui charge en mémoire SPI RAM le contenu d'un fichier.
+	La taille maximale est de 65535 octets. La fonction retourne le nombre d'octets chargés.
 	<ul>
-	<li><b>adr</b> adresse destination dans la SPI RAM.</li>
-	<li><b>var</b> nom de la variable qui contient les données à transférer dans la SPI RAM. Cette variable est passée par référence
-	comme indiqué par le caractère <b>'@'</b>.</li>
-	<li><b>size</b> nombre d'octets à copier.</li>
+		<li><b>adresse</b>, une expression entière indiquant l'adresse dans la RAM où débute le chargement.</li>
+		<li><b>fichier</b>, est le nom du fichier à charger.</li>
 	</ul>
-	<pre><code>example:
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;size=srload(0,"lem.spr")
+
+	&gt;? size
+	1075  
+
+	&gt;_
+	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="srread"></a><b>SRREAD(<i>adresse</i>,@var,<i>grandeur</i>)</b><br>
+	Lecture d'un bloc d'octets de la RAM externe dans une variable.
+	<ul>
+		<li><b>adresse</b>, adresse RAM externe où doit débuter la lecture.</li>
+		<li><b>@var</b>, nom de la variable tableau dans laquelle les valeurs lues seront copiées. Cette variable doit-être passée par
+			référence comme l'indique le caractère <b>'@'</b>.</li>
+	<li><b>grandeur</b>, nombre d'octets à lire.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
 	DIM i, spr#(32)
-	srwrite(0,@i,2) ' écrit  l'entier <i>i</i> dans la SPI RAM à l'adresse 0.
+	srread(0,@i,4)
+	srread(4,@spr#,32)
+	</code></pre>
+	</div>
+	 Lit un entier et le met dans la variable <i>i</i>.<br>
+	 Lit un bloc de <i>32</i> octets à partir de l'adresse <i>4</i> dans le tableau <i>spr#</i>.
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="srsave"></a><b>SRSAVE(<i>adresse,fichier, grandeur</i>)</b><br>
+	Sauvegarde dans un fichier le contenu de la mémoire RAM externe.
+	<ul>
+		<li><b>adresse</b>, adresse où débute le région à sauvegarder.</li>
+	<li><b>fichier</b>, expression chaîne donnant le nom du fichier de sauvegarde.</li>
+	<li><b>grandeur</b>, nombre d'octets à sauvegarder.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	 &gt;srsave(100,"test.dat",1024) 
+	 
+	 &gt;_
+	 </code></pre>
+	 </div>
+	 Sauvegarde <i>1024 octets</i> dans le fichier <i>test.dat</i>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="srwrite"></a><b>SRWRITE(<i>adresse,@var,grandeur</i>)</b><br>
+	Copie le contenu d'une variable dans la mémoire RAM externe.<br>
+	<ul>
+	<li><b>adresse</b>, expression donnant l'adresse destination dans la RAM externe.</li>
+	<li><b>@var</b>, variable qui contient les données à transférer dans la RAM externe. Cette variable est passée par référence
+	comme indiqué par le caractère <b>'@'</b>.</li>
+	<li><b>grandeur</b>, nombre d'octets à copier.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	DIM i, spr#(32)
+	srwrite(0,@i,2)
 	srwrite(4,@spr#,32) ' écris un bloc de <i>32</i> octets à l'adresse <i>4</i> à partir du tableau <i>spr#</i>
 	</code></pre>
+	</div>
+	 Écrit  l'entier <i>i</i> dans la RAM externe à l'adresse 0.<br>
+	 Écris un bloc de <i>32</i> octets à l'adresse <i>4</i> à partir du tableau <i>spr#</i>.
+	<div><a href="#index">index</a></div>
 	</li>
+	<div class="item_div"></div>
+	<li><a name="str$"></a><b>STR$(<i>expr</i>)</b><br>
+	Fonction chaîne retournant la représentaion d'une expression numérique.
+	<ul>
+		<li><b>expr</b>, expression numérique à représenter en chaîne.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? append$("2*PI=",str$(3.1416*2))
+	2*PI=6.2832 
+
+	&gt;? append$("le carre de 9 est ",str$(9*9))
+	le carre de 9 est  81 
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
 	<li><a name="sub"></a><b>SUB name([<i>arg_list</i>])</b><br>
 	[<b>LOCAL</b> <i>var_list</i>]<br>
 	<i>block</i><br>
@@ -2048,94 +2251,199 @@ a
 	<i>block</i>]<br>
 	<b>END SUB</b><br>
 	Cette déclaration sert à définir une sous-routine. La liste des variables locales, s'il y en a, doit-être énumérée au début.
-	<b>EXIT SUB</b> peut-être utilisé pour sortir de la sous-routine si une certaine condition est remplie.
-	<pre><code>example:
+	<b>EXIT SUB</b> peut-être utilisé pour sortir de la sous-routine si une certaine condition est remplie.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
 	sub box_madness() ' dessine des boites au hasard
-	  local x,y,w,h,c
-	  while not key() ' arrête lorsqu'une touche est enfoncée.
-	    x=abs(rnd())%240
-	    y=abs(rnd())%170
-	    w=abs(rnd())%240
-	    h=abs(rnd())%170
-	    c=abs(rnd())%16
-	    box(x,y,w,h,c)
+	  local x,y,w,h
+	  while not tkey() ' arrete lorsqu'une touche est enfoncee.
+	    x=rnd()%480
+	    y=rnd()%240
+	    w=rnd()%480
+	    h=rnd()%240
+	    box(x,y,w,h)
 	  wend
 	end sub
 	</code></pre>
+	</div>
+	<div><a href="#index">index</a></div>
 	</li>
-	<li><b>THEN</b><br>
-	Voir <a href="#if">IF</a></li>
-	<li><b>TICKS()</b><br>
-	 PV16SOG possède un compteur interne qui est incrémenté à chaque milliseconde. Cette fonction retourne la valeur de ce compteur.
-	 Ce compteur de 16 bits retourne à zéro à intervalle d'environ 65 secondes.
-	 <pre><code>example:
-	 REM utilisation du compteur interne pour mesurer un interval de temps.
-	 t0=ticks()
-	 for i=0 to 10000
-	 next i
-	 ? "temps écoulé pour 10000 itération FOR ", ticks()-t0
+	<li><a name="subst$"></a><b>SUBST$(<i>s1,s2,n</i>)</b><br>
+	Fonction chaîne qui permet de substituer une partie de <b>s1</b> par la chaîne <b>s2</b> à partir de la position <b>n</b>.
+	<ul>
+		<li><b>s1</b>, est une expression chaîne.</li>
+		<li><b>s2</b>, est une expression chaîne.</li>
+		<li><b>n</b>, expression entière représentant la position de départ de la substituion.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;greet$="bonjour Arthur"                                                        
+																					
+	&gt;? subst$(greet$,"Robert",9)                                                    
+	bonjour Robert                                                                  
+																					
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="tan"></a><b>TAN(<I>expr</I>)</b><br>
+	Fonction trigonométrique retournant la tangeante d'un angle exprimé en radian.
+	<ul>
+		<li><b>expr</b>, expression de type float, exprimant un angle en radiant. Si expression est un entier celui-ci est converti
+		en float avant l'appel de la fonction.</li>
+	</ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? tan(2) ' L'entier 2 sera convertie en float 2.0                                                                       
+	-2.18504                                                                        
+																					
+	&gt;? tan(2.0) ' On obtient le même résultat avec un float.                                                                     
+	-2.18504                                                                        
+																					
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="then"></a><b>THEN</b><br>
+	Voir <a href="#if">IF</a>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="ticks"></a><b>TICKS()</b><br>
+	 Le VPC-32v possède un compteur interne de 32 bits qui est incrémenté à chaque milliseconde. Cette fonction retourne la valeur de ce compteur.
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+	 <pre><code>
+	 &gt; REM utilisation du compteur interne pour mesurer un interval de temps.
+	 &gt;t0=ticks():for i=0 to 10000:next i:? ticks()-t0                                
+	 77                                                                              
+	 
+	 &gt;_
 	 </code></pre>
+	 </div>
+	<div><a href="#index">index</a></div>
 	 </li>
-	 <li><b>TIMEOUT()</b><br>
-	 Cett fonction vérifie la valeur de la minuterie de pause et retourne vrai si elle est expirée.
-	 <pre><code>example:
-	 settmr(1000)
-	 while not timeout()
-	   ? "pas encore expiree"
-	 wend
+	<li><a name="time$"></a><b>TIME$</b><br>
+	Fonction chaîne retournant l'heure donnée par le RTCC. Voir <a href="#date$">DATE$</a><br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? time$                                                                        
+	21:19:23                                                                        
+																					
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+ 	 <div class="item_div"></div>
+	 <li><a name="timeout"></a><b>TIMEOUT()</b><br>
+	 Cett fonction vérifie la valeur de la minuterie à rebours et retourne vrai si elle est expirée. Voir <a href="#settmr">SETTMR</a>.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	 <pre><code>
+	 &gt;settmr(1000):while not timeout():? "pas encore expiree":wend
+	 pas encore expiree
+	 pas encore expiree
+	 pas encore expiree
+	 ...
+ 	 pas encore expiree
+
+	 &gt;_
 	 </code></pre>
+	 </div>
+	<div><a href="#index">index</a></div>
 	 </li>
-	 <li><b>TONE(<i>note,msec,wait</i>)</b><br>
-	 Fait entendre une note de la gamme tempérée.
-	 <ul>
-		 <li><b>note</b> note de la gamme dans l'intervalle {0-47}. <b>0</b> correspond à DO2# et <b>47</b> à DO6. L'étendu est de 4 octaves. On peut
-		 utiliser un nombre négatif pour faire une pause.</li>
-		 <li><b>msec</b> durée de la note en millisecondes.</li>
-		 <li><b>wait</b> Si cette valeur vaut <b>0</b> l'exécution du programme se poursuit pendant l'exécution de cette note. Autrement le programme
-		 attend la fin de la note avant de poursuivre.</li>
-	 </ul>
-	 <pre><code>example:
-	 REM ce programme joue les 5 premières notes
-	 REM du thème musical du film rencontre du 3ième type.
-	 dim ce3k#(10)=(13,200,15,200,11,200,1,200,6,200)
-	 for i=1 to ubound(ce3k#) step 2
-	     tone(ce3k#(i)+12,3*ce3k#(i+1),1)
-	 next i
-	 </code></pre>
-	 </li>
-	 <li><b>TRACE(0|1)</b><br>
+	<div class="item_div"></div>
+	<li><a name="tkey"></a><b>TKEY()</b><br>
+	Fonction qui retourne un caractère s'il y en a un dans la file du clavier, sinon retourne 0. Contrairement à <a href="#key">KEY</a>, 
+	<b>TKEY</b> n'attend pas si la file est vide.<br>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;while not tkey:?"pas de touche dans la file":sleep(500):wend:? "touche obtenu" 
+	pas de touche dans la file                                                      
+	pas de touche dans la file                                                      
+	pas de touche dans la file                                                      
+	pas de touche dans la file                                                      
+	touche obtenu                                                                   
+																					
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	 <li><a name="trace"></a><b>TRACE(0|1|2)</b><br>
 	 C'est un outil de débogage des programmes BASIC pour les utilisateurs avancés. 
 	 Pour l'utiliser il faut connaître le fonctionnement de la machine virtuelle et ses
-	 <a href="./stackvm.html#opcoddes">opcodes</a>.<br>
-	 la commande <b>trace(1)</b> active le mode trace et <b>trace(0)</b> le désactive. Le mode trace exécute le programme pas à pas et affiche
-	 après chaque instruction de la machine virtuelle le contenu de la pile des arguments ainsi que le nombre
-	 d'éléments sur la pile des retours. La touche <b>ESC</b> permet de quitter le mode trace, toute autre touche exécute le code machine
-	 suivant et revient à pause.  La mode peut-être activé/désactivé n'importe où dans le programme. L'état de l'écran est sauvegarder dans 
-	 la RAM SPI avant que les informations de traçage soit affichée et l'écran est restauré avant de continuer l'exécution. Pour plus 
-	 d'information consultez le document <a href="./stackvm.html">stackvm.html</a>
-	 <pre><code>example:
-	 REM activation conditionnelle de trace
-	 for i=1 to 100
-	   if (i=50) then trace(1) end if
-	   ? i
-	 next i
-	 
-	 
-	 REM information qui vont apparaître 
-	 REM à l'écran de traçage lors de l'activation
-     
-     28
-     R:2
-     1 : 31726	 
-     
-     ' 28 est le dernier opcode exécuté et correspond à l'intruction <b>LIT</b>
-     ' R:2 signifit qu'il y a 2 éléments sur la pile <b>rstack</b>
-     ' 1 : 31726  signifit qu'il y a 1 élément sur la pile des arguments
-     '           31726 est la valeur de cet argument. Il s'agit d'un pointeur
-     '           sur la variable <i>i</i> qui va être imprimé par l'instrution
-     '           suivante.
-	 </code></pre></li>
-	 <li><b>UBOUND(<i>var</i>)</b><br>
+	 <a href="./stackvm.html#opcodes">opcodes</a>. Lorsque trace est actif, à chaque instruction de la machine virtuelle l'état
+	 des piles est affiché à l'écran.
+	 <ul>
+		<li><b>0</b>, désactive la fonction trace.</li>
+		<li><b>1</b>, active la fonction trace en mode continue.</li>
+		<li><b>2</b>, active la fonction trace en mode pas à pas. L'exécution est suspendue après chaque instruction de la machine virtuelle
+		et l'utilisateur doit enfoncer une touche pour exécuter l'instruction suivante. La touche <b>q</b> permet de sortir du mode trace pas
+		à pas.
+		</li>
+	 </ul>
+	exemple:
+	<div  style="background-color: black;color: white;">
+	 <pre><code>
+		&gt;trace(2):for i=1 to 10:? i:next i
+
+		trace: R(0 ) S(0 )
+		ip: A00047DB dp: A0003F60 next opcode: FOR>R
+		(Q) leave trace, other step
+
+
+		trace: R(2 ) S(0 )
+		ip: A00047DC dp: A0003F60 next opcode: LIT
+		(Q) leave trace, other step
+
+
+		trace: R(2 ) S(1 )A000DCC4 
+		ip: A00047E1 dp: A0003F64 next opcode: CLIT
+		(Q) leave trace, other step
+
+
+		trace: R(2 ) S(2 )A000DCC4 1 
+		ip: A00047E3 dp: A0003F68 next opcode: SWAP
+		(Q) leave trace, other step
+
+
+		trace: R(2 ) S(2 )1 A000DCC4 
+		ip: A00047E4 dp: A0003F68 next opcode: !
+		(Q) leave trace, other step
+
+		1  
+		2  
+		3                                                                               
+		4                                                                               
+		5                                                                               
+		6                                                                               
+		7                                                                               
+		8                                                                               
+		9                                                                               
+		10                                                                              
+																						
+		&gt;_
+	 </code></pre>
+	 </div>
+	 Le mode trace a été activé en mode pas à pas avant d'exécuter la boucle FOR...NEXT. Ici on voit l'état de la machine virtuelle avant 
+	 l'exécution des 5 premières instructions machine. Puis l'utilisateur a enfoncé la touche <b>q</b> pour sortir du mode trace.
+	<div><a href="#index">index</a></div>
+	 </li>
+	<div class="item_div"></div>
+	 <li><a name="ubound"></a><b>UBOUND(<i>var</i>)</b><br>
 	 Cette fonction retourne la valeur du dernier indice d'une variable tableau.
 	 <pre><code>example:
 	 &gt;dim vector(100)
@@ -2144,7 +2452,8 @@ a
 	 &gt;|
 	 </code>
 	 </pre></li>
-	 <li><b>USE "<i>file</i>"</b><br>
+	<div class="item_div"></div>
+	 <li><a name="use"></a><b>USE "<i>file</i>"</b><br>
 	 Cette directive sert à compiler un fichier BASIC utilisé par le fichier principal. <i>file</i> est le nom du fichier à inclure. 
 	 Il doit s'agir d'un fichier existant sur la carte SD. Un fichier inclus peut aussi utiliser la directive <b>USE</b> 
 	 jusqu'à un niveau d'imbrication de 4. 4 étant le nombre maximal de fichiers pouvant-être ouvert simultanément.

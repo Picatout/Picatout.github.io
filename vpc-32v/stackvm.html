@@ -117,12 +117,12 @@
 	<tr><td>51</td><td>&gt;=</td><td>f=n1&gt;=n2</td><td>( n1 n2 -- f )</td></tr>
 	<tr><td>52</td><td>FOR&gt;R</td><td>Sauvegarde de <i>limit</i> et <i>step</i> sur <i>rstack</i></td><td>( R:  -- limit step )</td></tr>
 	<tr><td>53</td><td>R&gt;FOR</td><td>Restaure <i>limit</i> et <i>step</i> à partir de <i>rstack</i></td><td>( limit step --  )</td></tr>
-	<tr><td>54</td><td><td>FOR</td>Initialisation de <i>limit</i> et <i>step</i> pour la boucle FOR...NEXT</td><td>( limit step --  )</td></tr>
+	<tr><td>54</td><td>FOR</td><td>Initialisation de <i>limit</i> et <i>step</i> pour la boucle FOR...NEXT</td><td>( limit step --  )</td></tr>
 	<tr><td>55</td><td>FOR?</td><td>Compare <b>n</b> à <i>limit</i> pour dépassement. f=vrai si n&gt;<i>limit</i>.</td><td>( n -- f )</td></tr>
 	<tr><td>56</td><td>FORNEXT</td><td>Incrément la variable de contrôle de la boucle FOR...NEXT avec la valeur de <i>step</i>.
 	L'adresse de la variable est au sommet de <i>dstack</i>.</td><td>( adr --  )</td></tr>
 	<tr><td>57</td><td>RANDOMIZE</td><td>Initialize le générateur pseudo-hasard en utilisant <i>systicks</i>.</td><td>(  --  )</td></tr>
-	<tr><td>58</td><td>RND</td>Empile un entier pseudo-aléatoire entre 0 et MAXINT.<td></td><td>(  -- u )</td></tr>
+	<tr><td>58</td><td>RND</td><td>Empile un entier pseudo-aléatoire entre 0 et MAXINT.</td><td>(  -- u )</td></tr>
 	<tr><td>59</td><td>KEY</td><td>Attend réception d'un caractère de la console.</td><td>(  -- c )</td></tr>
 	<tr><td>60</td><td>KEY?</td><td>Vérifie s'il y a un caractère dans la file du clavier console. Retourne le caractère
 	disponible ou 0.</td><td>(  -- 0|c )</td></tr>
@@ -130,112 +130,82 @@
 	<tr><td>62</td><td>PSTR</td><td>Envoie à la console la chaîne imbriquée dans le code à la suite de ce opcode.</td><td>(  --  )</td></tr>
 	<tr><td>63</td><td>CR</td><td>Envoie à la console une commande de retour à la ligne</td><td>(  --  )</td></tr>
 	<tr><td>64</td><td>.</td><td>Imprime sur la console l'entier <b>n</b></td><td>( n --  )</td></tr>
-	<tr><td>65</td><td>TYPE</td>Imprime sur la console la chaîne située à l'adresse <b>adr</b><td></td><td>( adr --  )</td></tr>
-	<tr><td>66</td><td>SPACES</td>Imprime sur la console <b>n</b> espaces.<td></td><td>( n --  )</td></tr>
+	<tr><td>65</td><td>TYPE</td><td>Imprime sur la console la chaîne située à l'adresse <b>adr</b></td><td>( adr --  )</td></tr>
+	<tr><td>66</td><td>SPACES</td><td>Imprime sur la console <b>n</b> espaces.</td><td>( n --  )</td></tr>
 	<tr><td>67</td><td>SOUND</td><td>Fait entendre une tonalité de fréquence <b>u1</b> et de durée <b>u2</b> millisecondes.</td><td>( u1 u2 --  )</td></tr>
 	<tr><td>68</td><td>BEEP</td><td>Fait entendre une tonalitée brève de 1000 hertz.</td><td>( -- )</td></tr>
 	<tr><td>69</td><td>PLAY</td><td>Joue une mélodie dont le code est à l'adresse <b>adr</b>. Voir la commande BASIC PLAY.</td><td>( adr --  )</td></tr>
 	<tr><td>70</td><td>CLS</td><td>Vide l'écran de la console et positionne le curseur texte dans le coin supérieur gauche.</td><td>(  --  )</td></tr>
 	<tr><td>71</td><td>UBOUND</td><td>Empile la grandeur de la variable tableau à l'adresse <b>adr</b></td><td>( adr -- u )</td></tr>
+	<tr><td>72</td><td>LC!</td><td>Sauvegarde la variable locale dont la position suit cet opcode. Les variables locales sont conservées
+	sur <i>dstack</i>. L'opcode est suivit de la position de la variable relativement au pointeur <i>frame</i>.</td><td>( n --  )</td></tr>
+	<tr><td>73</td><td>LC@</td><td>Empile la variable locale dont la position suit cet opcode.  Les variables locales sont conservées
+	sur <i>dstack</i>. L'opcode est suivit de la position de la variable relativement au pointeur <i>frame</i>.</td><td>(  -- n )</td></tr>
+	<tr><td>74</td><td>LCADR</td><td>Empile l'adresse absolue d'une variable locale dont l'offset suit cet opcode.</td><td>(  -- adr )</td></tr>
+	<tr><td>75</td><td>FRAME</td><td>Sauvegarde <i>frame</i> sur <i>rstack</i> et l'initialise avec la nouvelle valeur. 
+	Un octet suit le opcode pour indiquer le nombre de cellules qui ont été réservées sur <i>dstack</i> pour les arguments de la fonction. 
+	<i>frame</i> pointe le premier argument. Cet opcode précède un <b>CALL</b></td><td>(R:  -- frame )</td></tr>
+	<tr><td>76</td><td>CALL</td><td>Appel la sous-routine à l'adresse <i>adr</i>. Sauvegarde <i>ip</i> sur <i>rstack</i> et initialise
+	<i>ip</i> avec <i>adr</i>.</td><td>( adr --  )<br>(R: -- ip)</td></tr>
+	<tr><td>77</td><td>LEAVE</td><td>Sortie de sous-routine. Transfert <i>frame</i> dans <i>dp</i> pour libérer les arguments et
+	variables locales <i>j*n</i>q ui étaient utilisées par cette sous-routine. Dépile <i>rstack</i> dans <i>ip</i> et ensuite dans
+	<i>frame</i> </td><td>( j*n --  )<br>(R: frame ip -- )</td></tr>
+	<tr><td>78</td><td>LOCAL</td><td>Cet opcode viens à la suite d'un <b>CALL</b>. Ajuste <i>dp</i> pour réserver sur <i>dstack</i> 
+	l'espace pour les variables locales. Le nombre 	de cellules à réserver est un octet qui suit l'opcode. 
+	<i>j*n</i> représente les cellules supplémentaires réservées sur <i>dstack</i>.
+	</td><td>(  -- j*n )</td></tr>
+	<tr><td>79</td><td>TRACE</td><td>Activation de l'outil de débogage <a href="#trace">TRACE</a>. Voir la discription plus bas. <b>n</b> indique le
+	mode de débogage.</td><td>( n --  )</td></tr>
+	<tr><td>80</td><td>$ADR</td><td>Empile l'adresse de la chaîne imbriquée dans le code à la suite de cet opcode.
+	Après exécution de cet instruction <i>ip</i> pointe l'opcode qui suit immédiatement la chaîne.</td><td>(  -- adr )</td></tr>
+	<tr><td>81</td><td>LEN</td><td>Retourne la longueur de la chaîne <i>adr</i>.</td><td>( adr -- u )</td></tr>
+	<tr><td>82</td><td>READLN</td><td>Lecture d'une ligne à partir de la console. <b>adr</b> est l'adresse du tampon qui doit recevoir les caractères.
+	<b>n1</b> est la longueur du tampon. <b>n2</b> est la longueur de la chaîne lue.
+	</td><td>(  adr n1 -- adr n2 )</td></tr>
+	<tr><td>83</td><td>VAL</td><td>Convertie la chaîne en nombre.</td><td>( adr -- n )</td></tr>
+	<tr><td>84</td><td>VALLOC</td><td>Alloue <b>n</b> octets dans l'espace réservé aux variables BASIC. <i>adr</i> est l'adresse 
+	de l'espace allouée</td><td>(  -- adr )</td></tr>
+	<tr><td>85</td><td>$ALLOC</td><td>Alloue une chaîne dynamique de longueur <b>n</b>. <i>adr</i> est l'adresse de l'espace alloué.</td><td>(  -- adr )</td></tr>
+	<tr><td>86</td><td>$FREE</td><td>Libère une chaîne allouée dynamiquement. <i>adr</i> est l'adresse retournée par $ALLOC</td><td>( adr --  )</td></tr>
+	<tr><td>87</td><td>$FREE</td><td></td><td>(  --  )</td></tr>
+	<tr><td>88</td><td>$FREENOTREF</td><td>Libère la chaîne <i>adr</i> seulement si elle n'est pas référencée. </td><td>( adr --  )</td></tr>
+	<tr><td>89</td><td>$CPY</td><td>Copie la chaîne <i>src</i> dans <i>dest</i>.</td><td>( src dest -- dest )</td></tr>
+	<tr><td>90</td><td>CURLINE</td><td>Retourne la ligne sur laquelle se trouve le curseur texte.</td><td>(  -- n )</td></tr>
+	<tr><td>91</td><td>CURCOL</td><td>Retourne la colonne sur laquelle se trouve le curseur texte.</td><td>(  -- n )</td></tr>
+	<tr><td>92</td><td>LOCATE</td><td>Posistion le curseur texte à <i>ligne</i>, <i>col</i>.</td><td>( ligne col --  )</td></tr>
+	<tr><td>93</td><td>BTEST</td><td>Retourne la valeur du bit <b>b</b> de l'entier <b>n</b></td><td>( n b -- 0|1 )</td></tr>
+	<tr><td>94</td><td>SETTMR</td><td>Initialize la minuterie à <b>u</b> millisecondes.</td><td>( u --  )</td></tr>
+	<tr><td>95</td><td>TIMEOUT</td><td>Vérifie si la minuterie est expirée.</td><td>(  -- f )</td></tr>
+	<tr><td>96</td><td>INVERTVID</td><td>Sélectionne le mode vidéo. <b>0</b> blanc/noir, <b>1</b> noir/blanc</td><td>( 0|1 --  )</td></tr>
+	<tr><td>97</td><td>SCRLDN</td><td>Glisse l'écran console d'une ligne texte vers le bas, laissant la ligne du haut vide.</td><td>(  --  )</td></tr>
+	<tr><td>98</td><td>SCRLUP</td><td>Glisse l'écan console d'une ligne vers le haut, laissant la ligne du bas vide.</td><td>(  --  )</td></tr>
+	<tr><td>99</td><td>INSERLN</td><td>Insère une ligne vide là où le curseur texte se trouve. Positionne le curseur au 
+	début de la ligne.</td><td>(  --  )</td></tr>
+	<tr><td>100</td><td>PGET</td><td>Obtient la valeur du pixel du moniteur VGA aux coordonnées {x,y}.</td><td>( x y -- 0|1 )</td></tr>
+	<tr><td>101</td><td>PSET</td><td>Fixe l'état du pixel du moniteur VGA aux coordonées {x,y} à l'état <i>p</i>.</td><td>( x y p --  )</td></tr>
+	<tr><td>102</td><td>PXOR</td><td>Inverse l'état du pixel du moniteur VGA aux coordonnées {x,y}.</td><td>( x y --  )</td></tr>
+	<tr><td>103</td><td>LINE</td><td>Trace une ligne entre les points <b>{x0,y0}</b> et <b>{x1,y1}</b>.</td><td>( x0 y0 x1 y1 --  )</td></tr>
+	<tr><td>104</td><td>RECT</td><td>Desssine un rectangle, <b>{x,y}</b> coin supérieur gauche. <b>w</b> largeur, <b>h</b> hauteur</td><td>( x y w h --  )</td></tr>
+	<tr><td>105</td><td>BOX</td><td>Dessine une boite, <b>{x,y}</b> coin supérieur gauche. <b>w</b> largeur, <b>h</b> hauteur</td><td>(  --  )</td></tr>
+	<tr><td>106</td><td>CIRCLE</td><td>Dessine un cercle de centre <b>{x,y}</b> et de rayon <b>r</b></td><td>( x y r --  )</td></tr>
+	<tr><td>107</td><td>ELLIPSE</td><td>Dessine une ellipse circonscrite dans le rectangle.</td><td>( x0 y0 x1 y1  --  )</td></tr>
+	<tr><td>108</td><td>POLYGON</td><td>Dessine un polygon. Voir la commande BASIC correspondante.</td><td>( adr n --  )</td></tr>
+	<tr><td>109</td><td>FILL</td><td>Remplie une figure fermée. Voir la commande BASIC correspondante.</td><td>( x y --  )</td></tr>
+	<tr><td>110</td><td>SPRITE</td><td>Dessine un sprite. Voir la commande BASIC correspondante.</td><td>( adr w h --  )</td></tr>
+	<tr><td>111</td><td>VGACLS</td><td>Vide l'écran du moniteur VGA.</td><td>(  --  )</td></tr>
+	<tr><td>112</td><td>SRCLEAR</td><td> Voir la commande BASIC correspondante.</td><td>( adr size --  )</td></tr>
+	<tr><td>113</td><td>SRREAD</td><td> Voir la commande BASIC correspondante.</td><td>( adr_ram adr_v size --  )</td></tr>
+	<tr><td>114</td><td>SRWRITE</td><td> Voir la commande BASIC correspondante.</td><td>( adr_ram adr_v size --  )</td></tr>
+	<tr><td>115</td><td>SAVESCR</td><td> Voir la commande BASIC correspondante.</td><td>( adr --  )</td></tr>
+	<tr><td>116</td><td>RESTSCR</td><td> Voir la commande BASIC correspondante.</td><td>( adr --  )</td></tr>
+	<tr><td>117</td><td>SRLOAD</td><td> Voir la commande BASIC correspondante.</td><td>( addr_ram char* -- size )</td></tr>
+	<tr><td>118</td><td>SRSAVE</td><td> Voir la commande BASIC correspondante.</td><td>( addr_ram char* size -- exit_code )</td></tr>
 
 	<tr><td></td><td></td><td></td><td>(  --  )</td></tr>
-	<tr><td>13</td><td>SETTMR</td><td>Initialise la minuterie pause avec la valeur au sommet de la pile. Voir commande BASIC <b>SETTMR()</b></td><td>( n -- )</td></tr>
-	<tr><td>14</td><td>TIMEOUT</td><td>retourne vrai si la minuterie pause est à zéro. Voir fonction BASIC <b>TIMEOUT()</b></td><td>( -- f )</td></tr>
-	<tr><td>15</td><td>NOISE</td><td>Produit un bruit blanc d'une durée dont la valeur est au sommet de la pile.
-	Voir commande BASIC <b>NOISE()</b></td><td>( u -- ) </td></tr>
-	<tr><td>16</td><td>CLS</td><td>Met tous les pixels de l'écran à la valeur indiquée au sommet de la pile.
-	Voir commande BASIC <b>CLS</b></td><td>( n -- )</td></tr>
-	<tr><td>17</td><td>LOCATE</td><td>positionne le curseur texte</td><td>(ligne col -- )</td></tr>
-	<tr><td>18</td><td>BACK_COLOR</td><td>Fixe la couleur de fond d'écran pour le texte.</td><td>( n -- )</td></tr>
-	<tr><td>19</td><td>FONT_COLOR</td><td>Fixe la couleur des caractères.</td><td>( n -- )</td></tr>
-	<tr><td>20</td><td>EMIT</td><td>Affiche à la position courante du curseur le caractère au sommet de la pile.</td><td>( n -- )</td></tr>
-	<tr><td>21</td><td>DOT</td><td>Imprime l'entier au sommet de la pile.</td><td>( n -- )</td></tr>
-	<tr><td>22</td><td>WKEY</td><td>Attend que l'utilisateur entre un caractère au clavier</td><td>( -- n )</td></tr>
-	<tr><td>23</td><td>TYPE</td><td>Imprime la chaîne dont l'adresse est au sommet de la pile.</td><td>( adr -- )</td></tr>
-	<tr><td>24</td><td>ACCEPT</td><td>Lecture du clavier jusqu'à &tl;ENTER&gt;</td><td>( -- adr len)</td></tr>
-	<tr><td>25</td><td>SPACE</td><td>Imprime un espace (ASCII 32)</td><td>( -- )</td></tr>
-	<tr><td>26</td><td>CRLF</td><td>Renvoie le curseur texte au début de la ligne suivante.</td><td>( -- )</td></tr>
-	<tr><td>27</td><td>LITS</td><td>Chaîne litérale. Cet opcode est suivit d'un octet et d'une chaîne ASCIIZ. L'octet
-	est la longueur de la chaîne incluant le zéro terminal. L'adresse de la chaîne est placé au sommet de la pile et
-	IP est positionné après la chaîne.</td><td>IP=IP+LEN<br>( -- adr)</td></tr>
-	<tr><td>34</td><td>NEGATE</td><td>Remplace l'entier au sommet de la pile par son complément à 2</td><td>( n -- -n ) </td></tr>
-	<tr><td>41</td><td>SHR</td><td>Déclalage à droite de 1 bit.</td><td>( n -- n/2 )</td></tr>
-	<tr><td>42</td><td>SHL</td><td>Décalage à gauche de 1 bit.</td><td>( n -- 2*n )</td></tr>
-	<tr><td>43</td><td>SQRT</td><td>Racine carrée entière.</td><td>( n -- sqrt(n) )</td></tr>
-	<tr><td>44</td><td>EQUAL</td><td>Compare les 2 nombres pour l'égalité. Si égaux f=-1 sinon f=0.</td><td>( n1 n2 -- f )</td></tr>
-	<tr><td>45</td><td>NOTEQUAL</td><td>Compares les 2 nombres si différent f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
-	<tr><td>46</td><td>GT</td><td>Si n1&gt;n2 f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
-	<tr><td>47</td><td>GE</td><td>Si n1&gt=n2 f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
-	<tr><td>48</td><td>LT</td><td>Si n1&lt;n2 f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
-	<tr><td>49</td><td>LE</td><td>Si n1&lt;=n2 f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
-	<tr><td>51</td><td>ZBRANCH</td><td>Branchement relatif conditionnel à f=0.L'offset de 16 bits suis le opcode. IP=IP+offset </td><td>( f -- )</td></tr>    
-	<tr><td>53</td><td>CALL</td><td>Branchement à une sous-routine dont l'adresse de 16 bits suis le opcode. Empile IP sur rstack.
-	<br>NOTE: Le opcode FRAME doit toujours être exécuté après celui-ci.</td><td>(R: -- IP )</td></tr>
-	<tr><td>54</td><td>LEAVE</td><td>Sortie de sous-routine restore IP et FP.</td><td>(R: IP FP -- )</td></tr>
-	<tr><td>55</td><td>STRCPY</td><td>Copy la chaîne ASCIIZ de src vers dest</td><td>( sr dest -- )</td></tr>
-	<tr><td>56</td><td>DOTS</td><td>Utilisé par TRACE pour afficher l'information sur rstack et dstack</td><td>( -- )</td></tr>
-	<tr><td>57</td><td>SAVESTEP</td><td>Initisalise le registre STEP avec la valeur qui est au sommet de la pile.
-	<br>STEP=T</td><td>( n -- )</td></tr>
-	<tr><td>58</td><td>SAVELIMIT</td><td>Initialise le registre LIMIT avec la valeur qui est au sommet de la pile.<br>
-	LIMIT=T</td><td>( n -- )</td></tr>
-	<tr><td>59</td><td>NEXT</td><td>Incrémente la variable de contrôle d'une boucle FOR avec la valeur STEP.<br>
-	 <i>adr</i> est l'adresse de la variable à incrémenter.</td><td>( adr -- adr )</td></tr>
-	<tr><td>60</td><td>BTEST</td><td>Test le bit <i>b</i> de <i>n</i>. Si b=1 f=-1 sinon f=0.</td><td>( n b -- f )</td></tr>
-	<tr><td>61</td><td>ALLOC</td><td>Réserve un bloc de <i>size</i> octets dans l'espace programme et empile l'adresse du bloc. Si l'espace libre
-	est insuffisant empile 0.</td><td>( size -- adr|0 )</td></tr>     
-	<tr><td>62</td><td>LCSTORE</td><td>Met le sommet de la pile dans la variable locale dont l'index suit l'opcode.<br>
-	[FP+2*I]=T</td><td>( n -- )</td></tr>
-	<tr><td>63</td><td>LCFETCH</td><td>Empile la valeur de la variable locale dont l'index suit l'opcdode.<br>
-	T=[FP+2*I]</td><td>( -- n)</td></tr>
-	<tr><td>64</td><td>LCADR</td><td>Empile l'adresse absolue de la variable local dont l'index suit le opcode.<br>
-	T=FP+2*I</td><td>( -- adr )</td></tr>
-	<tr><td>65</td><td>FRAME</td><td>Sauvegarde FP sur rstack et ajuste FP à sa nouvelle valeur en utilisant l'octet qui suis le opcode.
-	<br> FP=DSP+2*N</td><td>( R: -- FP )</td></tr>
-	<tr><td>66</td><td>LCVARSPACE</td><td>Réserve de l'espace sur dstack pour les variables locales. Le nombre de variables
-	locales suis l'opcode.<br> DSP=DSP+2*N où N est la valeur qui suis le opcode.</td><td>( ... -- ... )</td></tr>
-	<tr><td>67</td><td>IDLE</td><td>Exécution d'une boucle vide pour une durée en msec=T. Voir instruction BASIC PAUSE()</td><td>( n -- )</td></tr>
-	<tr><td>69</td><td>SETPIXEL</td><td>Fixe la valeur du pixel situé aux coordonnées <i>{x,y}</i> à la valeur <i>c</i></td><td>(x y c -- )</td></tr>
-	<tr><td>70</td><td>GETPIXEL</td><td>Empile la valeur du pixel situé aux  coordonnées <i>{x,y}</i></td><td>( x y -- c )</td></tr>
-	<tr><td>71</td><td>INT</td><td>Convertie en entier la chaîne ASCII qui se trouve dans le <i>_pad</i>. Le 
-	<i>_pad</i> est un espace réservé pour la saisie par INPUT.</td><td>( -- n )</td></tr>    
-	<tr><td>72</td><td>XORPIXEL</td><td>Applique la fonction XOR au pixel situé au coordonnées <i>{x,y}</i> 
-	en utilisant la valeur n.</td><td>( x y n -- )</td></tr>
-	<tr><td>73</td><td>SCRLUP</td><td>Glisse l'affichage de n pixels vers le haut.</td><td>( n -- )</td></tr>
-	<tr><td>74</td><td>SCRLDN</td><td>Glisse l'affichage de n pixels vers le bas.</td><td>( n -- )</td></tr>
-	<tr><td>75</td><td>SCRLRT</td><td>Glisse l'affichage de n pixels vers la droite. n doit-être pair.</td><td>( n -- )</td></tr>
-	<tr><td>76</td><td>SCRLLT</td><td>Glisse l'affichage de n pixels vers la gauche. n doit-être pair.</td><td>( n -- )</td></tr>
-	<tr><td>77</td><td>LINE</td><td>Relie les coordonnées <i>{x0,y0}</i> et <i>{x1,y}</i> par une ligne droite. La
-	valeur <i>c</i> est la couleur de ligne.</td><td>( x0 y0 x1 y1 c -- )</td></tr>
-	<tr><td>78</td><td>SPRITE</td><td>Applique un sprite à l'écran en utilisant la fonction XOR bit à bit.
-	Les coordonnées <i>{x,y}</i> représente la position du coin supérieur gauche. 
-	<i>w</i> est la largeur en pixels. <i>h</i> est la hauteur en pixel. <i>adr</i> est l'adresse du sprite.
-	Empile un indicateur de collision. <i>f=-1 si collision sinon f=0.</i></td>.<td>( x y w h adr -- f)</td></tr>
-	<tr><td>82</td><td>TRACE</td><td>Active ou désactive le pas à pas de débogage. Déctive si f=0, autrement active.</td><td>( f -- )</td></tr>
-	<tr><td>83</td><td>ROT</td><td>Rotation des 3 éléments supérieurs de la pile dstack.</td><td>( n1 n2 n3 -- n1 n2 n3 )</td></tr>
-	<tr><td>84</td><td>BOX</td><td>Dessine une rectangle plein de couleur <i>c</i> dont le coin supérieur gauche est
-	aux coordonnées <i>{x,y}</i>. <i>w</i> est la largeur en pixels et <i>>h</i> la hauteur.</td><td>( x y w h c -- )</td></tr>
-	<tr><td>85</td><td>KEY</td><td>Lecture du clavier. S'il n'y pas de touche enfoncée retourne 0.</td><td>( -- k|0 )</td></tr>
-	<tr><td>86</td><td>RECT</td><td>Dessine un rectangle vide de couleur <i>c</i> dont le coin supérieur gauche est
-	aux coordonnées <i>{x,y}</i>. <i>w</i> est la largeur en pixels et <i>>h</i> la hauteur.</td><td>( x y w h c -- )</td></tr>
-	<tr><td>87</td><td>LEN</td><td>retourne la longueur de la chaîne ASCIIZ dont l'adresse est au sommet de la pile.</td><td>( adr -- n )</td></tr>
-	<tr><td>88</td><td>SRLOAD</td><td>Charge un fichier dans la mémoire SPI RAM. <i>adr</i> est l'adresse de la chaîne ASCIIZ
-	qui correspond au nom du fichier. <i>n</i> est le nombre d'octets lus.</td><td>( adr -- n )</td></tr>
-	<tr><td>89</td><td>SRSAVE</td><td>Sauvegarde la mémoire SPI RAM dans un fichier. <i>adr</i> est un pointeur sur
-	le nom du fichier et <i>size</i> est le nombre d'octets à sauvegarder.</td><td></td></tr>
-	<tr><td>90</td><td>SRCLEAR</td><td>Met à zéro une région de la mémoire SPI RAM. <i>adr</i> est l'adresse de début.
-	<i>size</i> est la grandeur en octets.</td><td>( adr size -- )</td></tr>
-	<tr><td>91</td><td>SRREAD</td><td>Copie d'une région de la mémoire SPI RAM dans une variable. <i>adr</i> est 
-	l'adresse du début de la région et <i>size</i> est le nombre d'octets à copier. <i>var</i>  est un pointeur
-	sur la variable.</td><td>( adr var size -- )</td></tr>
-	<tr><td>92</td><td>SRWRITE</td><td>Copie du contenu d'une variable dans la mémoire SPI RAM. <i>adr</i> est l'adresse de début
-	de la copie dans SPI RAM. <i>size</i> est le nombre d'octets à copier. <i>var</i> est un pointeur sur la variable.</td><td>(adr var size -- )</td></tr>
-	<tr><td>95</td><td>MDIV</td><td>Multiplication double précision suivit d'une division.</td><td>(n1 n2 n3 -- n1*n2/n3 )</td></tr>
-	<tr><td>96</td><td>UBOUND</td><td>Empile l'indice supérieur du tableau dont l'adresse est au sommet de la pile.</td><td>( adr -- u )</td></tr>
-	<tr><td>97</td><td>VIDEOCTRL</td><td>Activation ou désactivation de la sortie vidéo. Si f=0 la sortie vidéo
-	est activée sinon elle est déscativée.</td><td>( f -- )</td></tr>
-	<tr><td>98</td><td>CURLINE</td><td>Empile la ligne du curseur texte.</td><td>( - u )</td></tr>
-	<tr><td>99</td><td>CURCOL</td><td>Empile la colonne du curseur texte.</td><td>( -- u )</td></tr>
 	</table>
+</p>
+<h3><a name="trace"></a>Outil de débogage TRACE</h3>
+<p>
 </p>
 <hr width="50%" align="center">
 <h2>INDEX</h2>

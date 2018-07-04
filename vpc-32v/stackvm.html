@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 </header>
 <body>
-<h2>machine virtuelle du PV16SOG</h2>
+<h2>machine virtuelle du VPC-32V</h2>
 <h4>Licence</h4>
 <p>  
   Ce document fait partie du projet <a href="https://github.com/picatout/pv16sog">PV16SOG</a> et est fourni sous licence 
@@ -22,32 +22,37 @@
 </p>
 <h3></a>Présentation</h3>
 <p>
-	L'ordinateur PV16SOG possède un interpréteur BASIC qui exécute du bytecode sur une machine virtuelle à piles. Ce document décris cette
+	L'ordinateur VPC-32V possède un interpréteur BASIC qui exécute du bytecode sur une machine virtuelle à piles. Ce document décris cette
 	machine virtuelle. 
+</p>
+<p>
+	L'interpréteur vpcBASIC ecris en <b>C</b> commence par compiler le code source BASIC en bytecode pour cette machine virtuelle ensuite appelle la fonction<br>
+	<b>int StackVM(const uint8_t* prog_space)</b><br> 
+	qui est une fonction écrite en assembleur dans le fichier <b>vm.S</b>.<br>
+	<b>prog_space</b> est la mémoire RAM allouée par l'interpréteur vpcBASIC où il compile le bytecode.
 </p>
 <h4>Architecture</h4>
 <p>
-	Cette machine virtuelle utilise 8 des 16 registres du PIC24EP512MC202 pour ses états internes ainsi que 2 piles. la première pile <i>dstack</i>
+	Cette machine virtuelle utilise les 9 registres <b>S0 à S8</b> du PIC32MX170F256B pour ses états internes ainsi que 2 piles. la première pile <i>dstack</i>
 	est utilisée pour les arguments et la deuxième <i>rstack</i> est utilisée pour conserver les adresses de retours des sous-programmes ainsi que
-	pour sauvegarder les registres <i>STEP</i> et <i>LIMIT</i> lors de l'imbrication de boucles <b>FOR</b>. Les registres de la machine virtuelle
+	pour sauvegarder les registres <i>step</i> et <i>limit</i> lors de l'imbrication de boucles <b>FOR</b>. Les registres de la machine virtuelle
 	sont les suivants:
 	<ul>
-	<li><b>IP</b> pointeur d'instruction. Les instructions sont de longueur variable mais les opcodes sont encodés sur 8 bits.</li>
-	<li><b>WP</b> pointeur pour la table des fonctions machine. Cette valeur est constante tout au long de l'exécution du programme.</li>
-	<li><b>DSP</b> pointeur pour la pile <i>dstack</i></li>
-	<li><b>RSP</b> pointeur pour la pile <i>rstack</i></li>
-	<li><b>FP</b>  pointeur pour les paramètres et variables locales qui sont sur la pile <i>dstack</i></li>
-	<li><b>_PAGE</b> ce registre conserve pour la durée d'exécution du programme la valeur du registre <b>DSRPAG</b> tel qu'elle 
-	était au démarrage de la machine virtuelle. Permet d'initialiser rapidement le registre <b>DSRPAG</b> lorsque la machine virtuelle 
-	appelle une fonction externe écrite en <b>C</b>.</li>
-	<li><b>STEP</b> Ce registre est utilisé par les boucles <b>FOR</b> et correspond à la valeur <b>STEP</b> de la boucle 
+	<li><b>S0</b> <i>ip</i>, pointeur d'instruction. Les instructions sont de longueur variable mais les opcodes sont encodés sur 8 bits.</li>
+	<li><b>S1</b> <i>dp</i>, pointeur pour la pile <i>dstack</i></li>
+	<li><b>S2</b> <i>rp</i>, pointeur pour la pile <i>rstack</i></li>
+	<li><b>S3</b> <i>w</i>, pointeur de travail.</li>
+	<li><b>S4</b> <i>T</i>, sommet de la pile dstack.</li>
+	<li><b>S5</b> <i>R</i>, sommet de la pile rstack.</li>
+	<li><b>S6</b> <i>limit</i>, Ce registre est utilisé par les boucles <b>FOR</b> et correspond à la limite du compteur de boucle.</li>
+	<li><b>S7</b> <i>step</i>, Ce registre est utilisé par les boucles <b>FOR</b> et correspond à la valeur <b>STEP</b> de la boucle 
 	<b>FOR</b>.</li>
-	<li><b>LIMIT</b> Ce registre est utilisé par les boucles <b>FOR</b> et correspond à la limite du compteur de boucle.</li>
+	<li><b>S8</b> <i>frame</i>, pointeur pour les paramètres et variables locales qui sont sur la pile <i>dstack</i></li>
 	</ul>
 </p>
 <p>
-	la pile <b>dstack</b> peut contenir 128 éléments et la pile <b>rstack</b> 64. Étant donné ces tailles limités il faut-être prudent dans
-	l'utilisation des fonctions récursives.
+	les piles <b>dstack</b> et <b>rstack</b> peuvent contenir 256 éléments de 32 bits appellé <b>cellule</b>. Étant donné ces tailles 
+	limités il faut-être prudent dans l'utilisation des fonctions récursives.
 </p>
 <h4><a name="opcodes"></a>codes machines</h4>
 <p>
@@ -55,20 +60,85 @@
 	est une illustration de l'état de la pile <I>dstack</I> ou <i>rstack</i> avant et après l'exécution de cette instruction.
 	<table border="single">
 	<tr><th>opcode</th><th>mnémonique</th><th>description</th><th>état stacks</th></tr>
-	<tr><td>0</td><td>BYE</td><td>Termine l'exécution du programme et sortie de la machine virtuelle. Void commane BASIC <b>BYE</b></td><td>( -- )</td></tr>
-	<tr><td>1</td><td>DROP</td><td>Jette l'élément au sommet de la pile <i>dstack</i>.</td><td>( n -- )</td></tr>
-	<tr><td>2</td><td>DUP</td><td>Clone le sommet de la pile <i>dstack</i></td><td>( n -- n n )</td></tr>
-	<tr><td>3</td><td>SWAP</td><td>Interchange les 2 éléments au sommet de <I>dstack</I></td><td>( n1 n2 -- n2 n1 )</td></tr>
-	<tr><td>4</td><td>OVER</td><td>Copie le 2ième élément de la pile <i>dstack</i> au sommet.</td><td>( n1 n2 -- n1 n2 n1 )</td></tr>
-	<tr><td>5</td><td>SAVELOOP</td><td>Sauvegarde les registres <i>LIMIT</i> et <I>STEP</I> sur la pile <i>rstack</i></td><td>(R: -- STEP LIMIT)</td></tr>
-	<tr><td>6</td><td>RESTLOOP</td><td>Restaure l'état des registres <i>LIMIT</i> et <i>STEP</i> à partir des valeurs au sommet de <i>rstack</i></td>
-	<td>(R: STEP LIMIT -- )</td></tr>
-	<tr><td>7</td><td>LOOPTEST</td><td>Vérifie si la variable de contrôle d'une boucle <b>FOR</b> a dépassé la valeur limite.</td><td>( -- )</td></tr>
-	<tr><td>8</td><td>RND</td><td>Génère un nombre pseudo aléatoire qui est empilé sur <I>dstack</I></td><td>( -- n )</td></tr>
-	<tr><td>9</td><td>ABS</td><td>Remplace la valeur au sommet de <i>dstack</i> par sa valeur absolue</td><td>( n -- n )</td></tr>
-	<tr><td>10</td><td>BEEP</td><td>Fait entendre une tonalitée. Voir commande BASIC <b>BEEP()</b></td><td>( fr ms wait -- )</td></tr>
-	<tr><td>11</td><td>TONE</td><td>Fait entendre une note de la gamme tempérér. Voir commande BASIC <b>TONE()</b></td><td>(note ms wait -- )</td></tr>
-	<tr><td>12</td><td>TICKS</td><td>Empile la valeur du compteur de millisecondes du système. Voi fonction BASIC <b>TICKS()</b></td><td>( -- u )</td></tr>
+	<tr><td>0</td><td>BYE</td><td>Termine l'exécution du programme et sortie de la machine virtuelle. La machine virtuelle retourne un 
+	code d'erreur ou 0 s'il n'y a pas d'erreur. Consulter les fichiers <b>basic.c</b> et <b>basic.h</b> pour plus d'information sur
+	ces codes d'erreurs. La commande BASIC <b>BYE</b> appelle cet opcode.</td><td>( -- )</td></tr>
+	<tr><td>1</td><td>ABORT</td><td>Exécuté lorsque la machine virtuelle rencontre une erreur interne. Mais fin à l'exécution du programme avec sortie
+	de stackVM avec un code d'erreur.</td><td>( j*x -- j*x )</td></tr>
+	<tr><td>2</td><td>LIT</td><td>Entier litéral 32 bits. L'entier suit l'opcode et est empilé au sommet de la pile.</td><td>( -- n)</td></tr>
+	<tr><td>3</td><td>WLIT</td><td>Entier litéral 16 bits. L'entier suit l'opcode et est empilé au sommet de la pile.</td><td>( -- n)</td></tr>
+	<tr><td>4</td><td>CLIT</td><td>Entier litéral 8 bits. L'entier suit l'opcode et est empilé au sommet de la pile.</td><td>( -- n)</td></tr>
+	<tr><td>5</td><td>BRA</td><td>Branchement relatif inconditionnel. L'offset de 16 bits signé suis le opcode. IP=IP+offset</td><td>( -- )</td></tr> 
+	<tr><td>6</td><td>?BRA</td><td>Branchement relatif conditionnel à f<>0.L'offset de 16 bits signé suis le opcode. IP=IP+offset </td><td>( f -- )</td></tr>
+	<tr><td>7</td><td>!</td><td>Sauvegarde T dans une variable 32 bits. <i>var=n</i></td><td>( n adr -- )</td></tr>
+	<tr><td>8</td><td>@</td><td>Empile la variable entier 32 bits dont l'adresse est au sommet de la pile.</td><td>( adr -- n )</td></tr>
+	<tr><td>9</td><td>C!</td><td>Sauvegarde une variable entier 8 bits. <i>var#=c</i></td><td>( c adr -- )</td></tr>
+	<tr><td>10</td><td>C@</td><td>Empile la variable entier 8 bits dont l'adresse est au sommet de la pile.</td><td>( adr -- c )</td></tr>
+	<tr><td>11</td><td>DROP</td><td>Jette l'élément au sommet de la pile <i>dstack</i>.</td><td>( n -- )</td></tr>
+	<tr><td>12</td><td>DUP</td><td>Clone le sommet de la pile <i>dstack</i></td><td>( n -- n n )</td></tr>
+	<tr><td>13</td><td>SWAP</td><td>Interchange les 2 éléments au sommet de <I>dstack</I></td><td>( n1 n2 -- n2 n1 )</td></tr>
+	<tr><td>14</td><td>OVER</td><td>Copie le 2ième élément de la pile <i>dstack</i> au sommet.</td><td>( n1 n2 -- n1 n2 n1 )</td></tr>
+	<tr><td>15</td><td>PICK</td><td>Copie le nième élément de la pile <i>dstack</i> au sommet.</td><td>( n1 n2...nx ... ox -- n1 n2 ... nx ... nx )</td></tr>
+	<tr><td>16</td><td>INVERT</td><td>négation arithmétique du sommet de la pile.</td><td>( n -- -n )</td></tr>
+	<tr><td>17</td><td>+</td><td>Addition</td><td>( n1 n2 -- n1+n2 )</td></tr>
+	<tr><td>18</td><td>-</td><td>Soustraction</td><td>( n1 n2 -- n1-n2 )</td></tr>
+	<tr><td>19</td><td>*</td><td>Multiplication entière</td><td>( n1 n2 -- n1*n2 )</td></tr>
+	<tr><td>20</td><td>/</td><td>Division entière</td><td>( n1 n2 -- n1/n2 )</td></tr>
+	<tr><td>21</td><td>MOD</td><td>Modulo</td><td>( n1 n2 -- n1%n2 )</td></tr> 
+	<tr><td>22</td><td>0&lt;</td><td>Si T<0 f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
+	<tr><td>23</td><td>0=</td><td>Si T==0 f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
+	<tr><td>24</td><td>&</td><td>Fonction binaire ET.</td><td>( n1 n2 -- n1&n2 )</td></tr>     
+	<tr><td>25</td><td>|</td><td>Fonction binaire OU inclusif.</td><td>( n1 n2 -- n1|n2 )</td></tr>
+	<tr><td>26</td><td>^</td><td>Fonction binaire OU exclusif.</td><td>( n1 n2 -- n1^n2 )</td></tr>
+	<tr><td>27</td><td>!</td><td>Remplace l'entier au sommet de la pile par son complément à 1</td><td>( n -- ~n )</td></tr>
+	<tr><td>28</td><td>NOT</td><td>négation booléenne. Si f1 est faux alors f2=vrai sinon f2=faux.</td><td>( f1 -- f2 )</td></tr>
+	<tr><td>29</td><td>OR</td><td>OU booléen. Si f1 ou f2 est vrai alors f3=vrai sinon f3=faux.</td><td>( f1 f2 -- f3 )</td></tr>
+	<tr><td>30</td><td>AND</td><td>ET booléen. Si f1 et f2 sont vrai alors f3=vrai sinon T=faux.</td><td>( f1 f2 -- f3 )</td></tr>
+	<tr><td>31</td><td>TICKS</td><td>Empile la valeur de la variable système <i>systicks</i></td><td>(  -- u )</td></tr>
+	<tr><td>32</td><td>SLEEP</td><td>suspend l'exécution du programme pour <b>u</b> millisecondes.</td><td>( u --  )</td></tr>
+	<tr><td>33</td><td>?DUP</td><td>Clone le sommet de la pile <i>dstack</i> si différent de zéro.</td><td>( n -- 0 | n n )</td></tr>
+	<tr><td>34</td><td>1+</td><td>Incrémente le sommet de la pile.</td><td>( n -- n+1 )</td></tr>
+	<tr><td>35</td><td>1-</td><td>Décrément le sommet de la pile</td><td>( n -- n-1 )</td></tr>
+	<tr><td>36</td><td>+!</td><td>Incrémente la variable à l'adresse <b>adr</b> de la valeur <b>n</b>.</td><td>( n adr --  )</td></tr>
+	<tr><td>37</td><td>ROT</td><td>Rotation horaire des 3 éléments au sommet de <i>dstack</i>.</td><td>( n1 n2 n3 -- n2 n3 n1 )</td></tr>
+	<tr><td>38</td><td>-ROT</td><td>Rotation anti-horaire des 3 éléments au sommet de <i>dstatck</i>.</td><td>( n1 n2 n3  -- n3 n1 n2 )</td></tr>
+	<tr><td>39</td><td>MIN</td><td>Conserve le plus petit de <b>n1</b> et <b>n2</b></td><td>( n1 n2 -- n )</td></tr>
+	<tr><td>40</td><td>MAX</td><td>Conserve le plus grand de <b>n1</b> et <b>n2</b></td><td>( n1 n2 -- n )</td></tr>
+	<tr><td>41</td><td>ABS</td><td>Remplace l'entier <b>n</b> par sa valeur absolue.</td><td>( n -- u )</td></tr>
+	<tr><td>42</td><td>LSHIFT</td><td>Décale vers la gauche l'entier <b>n</b> de <b>u</b> bits.</td><td>( n u -- n )</td></tr>
+	<tr><td>43</td><td>RSHIFT</td><td>Décale vers la droite l'entier <b>n</b> de <b>u</b> bits.</td><td>( n u -- n )</td></tr>
+	<tr><td>44</td><td>0BRA</td><td>Branchement relatif de 16 bits si <b>n</b>==0. Le déplacement suis l'opcode.</td><td>( n --  )</td></tr>
+	<tr><td>45</td><td>DCNT</td><td>Empile le nombre d'éléments sur <i>dstack</i></td><td>(  -- u )</td></tr>
+	<tr><td>46</td><td>=</td><td>Compare <b>n1</b> et <b>n2</b> pour l'égalité</td><td>( n1 n2 -- f )</td></tr>
+	<tr><td>47</td><td>&lt;&gt;</td><td>Compare <b>n1</b> et <b>n2</b>, retourne vrai si différents.</td><td>( n1 n2 -- f )</td></tr>
+	<tr><td>48</td><td>&lt;</td><td>f=n1&lt;n2</td><td>( n1 n2 -- f )</td></tr>
+	<tr><td>49</td><td>&gt;</td><td>f=n1&gt;n2</td><td>( n1 n2 -- f )</td></tr>
+	<tr><td>50</td><td>&lt;=</td><td>f=n1&lt;=n2</td><td>( n1 n2 -- f )</td></tr>
+	<tr><td>51</td><td>&gt;=</td><td>f=n1&gt;=n2</td><td>( n1 n2 -- f )</td></tr>
+	<tr><td>52</td><td>FOR&gt;R</td><td>Sauvegarde de <i>limit</i> et <i>step</i> sur <i>rstack</i></td><td>( R:  -- limit step )</td></tr>
+	<tr><td>53</td><td>R&gt;FOR</td><td>Restaure <i>limit</i> et <i>step</i> à partir de <i>rstack</i></td><td>( limit step --  )</td></tr>
+	<tr><td>54</td><td><td>FOR</td>Initialisation de <i>limit</i> et <i>step</i> pour la boucle FOR...NEXT</td><td>( limit step --  )</td></tr>
+	<tr><td>55</td><td>FOR?</td><td>Compare <b>n</b> à <i>limit</i> pour dépassement. f=vrai si n&gt;<i>limit</i>.</td><td>( n -- f )</td></tr>
+	<tr><td>56</td><td>FORNEXT</td><td>Incrément la variable de contrôle de la boucle FOR...NEXT avec la valeur de <i>step</i>.
+	L'adresse de la variable est au sommet de <i>dstack</i>.</td><td>( adr --  )</td></tr>
+	<tr><td>57</td><td>RANDOMIZE</td><td>Initialize le générateur pseudo-hasard en utilisant <i>systicks</i>.</td><td>(  --  )</td></tr>
+	<tr><td>58</td><td>RND</td>Empile un entier pseudo-aléatoire entre 0 et MAXINT.<td></td><td>(  -- u )</td></tr>
+	<tr><td>59</td><td>KEY</td><td>Attend réception d'un caractère de la console.</td><td>(  -- c )</td></tr>
+	<tr><td>60</td><td>KEY?</td><td>Vérifie s'il y a un caractère dans la file du clavier console. Retourne le caractère
+	disponible ou 0.</td><td>(  -- 0|c )</td></tr>
+	<tr><td>61</td><td>EMIT</td><td>Envoie à la console le caractère <b>c</b>.</td><td>( c --  )</td></tr>
+	<tr><td>62</td><td>PSTR</td><td>Envoie à la console la chaîne imbriquée dans le code à la suite de ce opcode.</td><td>(  --  )</td></tr>
+	<tr><td>63</td><td>CR</td><td>Envoie à la console une commande de retour à la ligne</td><td>(  --  )</td></tr>
+	<tr><td>64</td><td>.</td><td>Imprime sur la console l'entier <b>n</b></td><td>( n --  )</td></tr>
+	<tr><td>65</td><td>TYPE</td>Imprime sur la console la chaîne située à l'adresse <b>adr</b><td></td><td>( adr --  )</td></tr>
+	<tr><td>66</td><td>SPACES</td>Imprime sur la console <b>n</b> espaces.<td></td><td>( n --  )</td></tr>
+	<tr><td>67</td><td>SOUND</td><td>Fait entendre une tonalité de fréquence <b>u1</b> et de durée <b>u2</b> millisecondes.</td><td>( u1 u2 --  )</td></tr>
+	<tr><td>68</td><td>BEEP</td><td>Fait entendre une tonalitée brève de 1000 hertz.</td><td>( -- )</td></tr>
+	<tr><td>69</td><td>PLAY</td><td>Joue une mélodie dont le code est à l'adresse <b>adr</b>. Voir la commande BASIC PLAY.</td><td>( adr --  )</td></tr>
+	<tr><td>70</td><td>CLS</td><td>Vide l'écran de la console et positionne le curseur texte dans le coin supérieur gauche.</td><td>(  --  )</td></tr>
+	<tr><td>71</td><td>UBOUND</td><td>Empile la grandeur de la variable tableau à l'adresse <b>adr</b></td><td>( adr -- u )</td></tr>
+
+	<tr><td></td><td></td><td></td><td>(  --  )</td></tr>
 	<tr><td>13</td><td>SETTMR</td><td>Initialise la minuterie pause avec la valeur au sommet de la pile. Voir commande BASIC <b>SETTMR()</b></td><td>( n -- )</td></tr>
 	<tr><td>14</td><td>TIMEOUT</td><td>retourne vrai si la minuterie pause est à zéro. Voir fonction BASIC <b>TIMEOUT()</b></td><td>( -- f )</td></tr>
 	<tr><td>15</td><td>NOISE</td><td>Produit un bruit blanc d'une durée dont la valeur est au sommet de la pile.
@@ -88,19 +158,7 @@
 	<tr><td>27</td><td>LITS</td><td>Chaîne litérale. Cet opcode est suivit d'un octet et d'une chaîne ASCIIZ. L'octet
 	est la longueur de la chaîne incluant le zéro terminal. L'adresse de la chaîne est placé au sommet de la pile et
 	IP est positionné après la chaîne.</td><td>IP=IP+LEN<br>( -- adr)</td></tr>
-	<tr><td>28</td><td>LIT</td><td>Entier litéral 16 bits. L'entier suit l'opcode et est empilé au sommet de la pile.</td><td>( -- n)</td></tr>
-	<tr><td>29</td><td>LITC</td><td>Entier litéral 8 bits. L'entier suit l'opcode et est empilé au sommet de la pile.</td><td>( -- n)</td></tr>
-	<tr><td>30</td><td>FETCH</td><td>Empile la variable entier 16 bits dont l'adresse est au sommet de la pile.</td><td>( adr -- n )</td></tr>
-	<tr><td>31</td><td>FETCHC</td><td>Empile la variable entier 8 bits dont l'adresse est au sommet de la pile.</td><td>( adr -- c )</td></tr>
-	<tr><td>32</td><td>STORE</td><td>Sauvegarde une variable entier 16 bits. <i>var=n</i></td><td>( n adr -- )</td></tr>
-	<tr><td>33</td><td>STOREC</td><td>Sauvegarde une variable entier 8 bits. <i>var#=c</i></td><td>( c adr -- )</td></tr>
 	<tr><td>34</td><td>NEGATE</td><td>Remplace l'entier au sommet de la pile par son complément à 2</td><td>( n -- -n ) </td></tr>
-	<tr><td>35</td><td>NOT</td><td>Remplace l'entier au sommet de la pile par son complément à 1</td><td>( n -- ~n )</td></tr>
-	<tr><td>36</td><td>ADD</td><td>Addition</td><td>( n1 n2 -- n1+n2 )</td></tr>
-	<tr><td>37</td><td>SUB</td><td>Soustraction</td><td>( n1 n2 -- n1-n2 )</td></tr>
-	<tr><td>38</td><td>MUL</td><td>Multiplication</td><td>( n1 n2 -- n1*n2 )</td></tr>
-	<tr><td>39</td><td>DIV</td><td>Division entière</td><td>( n1 n2 -- n1/n2 )</td></tr>
-	<tr><td>40</td><td>MOD</td><td>Modulo</td><td>( n1 n2 -- n1%n2 )</td></tr> 
 	<tr><td>41</td><td>SHR</td><td>Déclalage à droite de 1 bit.</td><td>( n -- n/2 )</td></tr>
 	<tr><td>42</td><td>SHL</td><td>Décalage à gauche de 1 bit.</td><td>( n -- 2*n )</td></tr>
 	<tr><td>43</td><td>SQRT</td><td>Racine carrée entière.</td><td>( n -- sqrt(n) )</td></tr>
@@ -110,9 +168,7 @@
 	<tr><td>47</td><td>GE</td><td>Si n1&gt=n2 f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
 	<tr><td>48</td><td>LT</td><td>Si n1&lt;n2 f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
 	<tr><td>49</td><td>LE</td><td>Si n1&lt;=n2 f=-1 sinon f=0</td><td>( n1 n2 -- f )</td></tr>
-	<tr><td>50</td><td>BRANCH</td><td>Branchement relatif inconditionnel. L'offset de 16 bits suis le opcode. IP=IP+offset</td><td>( -- )</td></tr> 
 	<tr><td>51</td><td>ZBRANCH</td><td>Branchement relatif conditionnel à f=0.L'offset de 16 bits suis le opcode. IP=IP+offset </td><td>( f -- )</td></tr>    
-	<tr><td>52</td><td>NZBRANCH</td><td>Branchement relatif condition à f<>0.L'offset de 16 bits suis le opcode. IP=IP+offset </td><td>( f -- )</td></tr>
 	<tr><td>53</td><td>CALL</td><td>Branchement à une sous-routine dont l'adresse de 16 bits suis le opcode. Empile IP sur rstack.
 	<br>NOTE: Le opcode FRAME doit toujours être exécuté après celui-ci.</td><td>(R: -- IP )</td></tr>
 	<tr><td>54</td><td>LEAVE</td><td>Sortie de sous-routine restore IP et FP.</td><td>(R: IP FP -- )</td></tr>
@@ -138,7 +194,6 @@
 	<tr><td>66</td><td>LCVARSPACE</td><td>Réserve de l'espace sur dstack pour les variables locales. Le nombre de variables
 	locales suis l'opcode.<br> DSP=DSP+2*N où N est la valeur qui suis le opcode.</td><td>( ... -- ... )</td></tr>
 	<tr><td>67</td><td>IDLE</td><td>Exécution d'une boucle vide pour une durée en msec=T. Voir instruction BASIC PAUSE()</td><td>( n -- )</td></tr>
-	<tr><td>68</td><td>JSTICK</td><td>Lecture du joystick et empile le résultat.Voir fonction BASIC JSTICK()</td><td>( -- n )</td></tr>
 	<tr><td>69</td><td>SETPIXEL</td><td>Fixe la valeur du pixel situé aux coordonnées <i>{x,y}</i> à la valeur <i>c</i></td><td>(x y c -- )</td></tr>
 	<tr><td>70</td><td>GETPIXEL</td><td>Empile la valeur du pixel situé aux  coordonnées <i>{x,y}</i></td><td>( x y -- c )</td></tr>
 	<tr><td>71</td><td>INT</td><td>Convertie en entier la chaîne ASCII qui se trouve dans le <i>_pad</i>. Le 
@@ -155,9 +210,6 @@
 	Les coordonnées <i>{x,y}</i> représente la position du coin supérieur gauche. 
 	<i>w</i> est la largeur en pixels. <i>h</i> est la hauteur en pixel. <i>adr</i> est l'adresse du sprite.
 	Empile un indicateur de collision. <i>f=-1 si collision sinon f=0.</i></td>.<td>( x y w h adr -- f)</td></tr>
-	<tr><td>79</td><td>OR</td><td>Fonction binaire OU inclusif.</td><td>( n1 n2 -- n1|n2 )</td></tr>
-	<tr><td>80</td><td>XOR</td><td>Fonction binaire OU exclusif.</td><td>( n1 n2 -- n1^n2 )</td></tr>
-	<tr><td>81</td><td>AND</td><td>Fonction binaire ET.</td><td>( n1 n2 -- n1&n2 )</td></tr>     
 	<tr><td>82</td><td>TRACE</td><td>Active ou désactive le pas à pas de débogage. Déctive si f=0, autrement active.</td><td>( f -- )</td></tr>
 	<tr><td>83</td><td>ROT</td><td>Rotation des 3 éléments supérieurs de la pile dstack.</td><td>( n1 n2 n3 -- n1 n2 n3 )</td></tr>
 	<tr><td>84</td><td>BOX</td><td>Dessine une rectangle plein de couleur <i>c</i> dont le coin supérieur gauche est
@@ -177,8 +229,6 @@
 	sur la variable.</td><td>( adr var size -- )</td></tr>
 	<tr><td>92</td><td>SRWRITE</td><td>Copie du contenu d'une variable dans la mémoire SPI RAM. <i>adr</i> est l'adresse de début
 	de la copie dans SPI RAM. <i>size</i> est le nombre d'octets à copier. <i>var</i> est un pointeur sur la variable.</td><td>(adr var size -- )</td></tr>
-	<tr><td>93</td><td>MIN</td><td>Conserve le plus petit des 2 entiers.</td><td>( n1 n2 -- min ) </td></tr>
-	<tr><td>94</td><td>MAX</td><td>Conserve le plus grand des 2 entiers.</td><td>( n1 n2 -- min ) </td></tr>
 	<tr><td>95</td><td>MDIV</td><td>Multiplication double précision suivit d'une division.</td><td>(n1 n2 n3 -- n1*n2/n3 )</td></tr>
 	<tr><td>96</td><td>UBOUND</td><td>Empile l'indice supérieur du tableau dont l'adresse est au sommet de la pile.</td><td>( adr -- u )</td></tr>
 	<tr><td>97</td><td>VIDEOCTRL</td><td>Activation ou désactivation de la sortie vidéo. Si f=0 la sortie vidéo

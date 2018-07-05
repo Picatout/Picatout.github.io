@@ -13,8 +13,8 @@
 <h2>Langage BASIC du VPC-32V</h2>
 <h4>Licence</h4>
 <p>  
-  Ce document fait partie du projet <a href="https://github.com/picatout/vpc-32vga">VPC-32V</a> et est fourni sous licence 
-  <a href="https://creativecommons.org/">CC-NC-SA-BY V3.0</a><br><br>
+  Ce document fait partie du projet <a href="https://github.com/picatout/vpc-32vga"  target="_blank">VPC-32V</a> et est fourni sous licence 
+  <a href="https://creativecommons.org/"  target="_blank">CC-NC-SA-BY V3.0</a><br><br>
   <b>auteur:</b> Jacques Deschênes<br>
   <b>révision</b> 1.0</br>
   <b>Copyright:</b> 2013-2018, Jacques Deschênes<br>	
@@ -206,6 +206,7 @@ a
 		<li><a href="#ellipse">ELLIPSE</a></li>
 		<li><a href="#else">ELSE</a></li>
 		<li><a href="#end">END</a></li>
+		<li><a href="#env$">ENV$</a></li>
 		<li><a href="#exit">EXIT</a></li>
 		<li><a href="#exp">EXP</a></li>
 		<li><a href="#fgetc">FGETC</a></li>
@@ -892,6 +893,27 @@ a
 		<li><a href="#if">IF</a></li>
 		<li><a href="#select">SELECT</a></li>
 	</ul>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="env$"></a><b>ENV$(<i>env_var</i>)</b><br>
+	Fonction chaîne qui retourne la valeur d'une variable d'environnement.
+	<ul>
+		<li><b>env_var</b>, est une chaîne représentant le nom d'une variable d'environnement. Si cette variable n'existe pas
+		la fonction retourne un pointeur NULL.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? env$("shell_version")
+	1.0 
+
+	&gt;? env$("existe_pas")
+	 
+
+	&gt;_
+	</code></pre>
+	</div>	
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>

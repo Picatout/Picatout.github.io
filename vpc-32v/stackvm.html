@@ -57,7 +57,10 @@
 <h4><a name="opcodes"></a>codes machines</h4>
 <p>
 	Cette table contient la description de chacun des codes  machine (opcode) utilisés par la machine virtuelle. La notation <i>état stack</i>
-	est une illustration de l'état de la pile <I>dstack</I> ou <i>rstack</i> avant et après l'exécution de cette instruction.
+	est une illustration de l'état de la pile <I>dstack</I> ou <i>rstack</i> avant et après l'exécution de cette instruction.<br />
+	<br/>
+	La majorité des opcodes correspondent directement à des commandes ou fonctions BASIC je ne décrirais donc pas celle-ci car ce serait redonnant
+	avec la documentation du <a href="./BASIC.html">vpcBASIC.</a>
 	<table border="single">
 	<tr><th>opcode</th><th>mnémonique</th><th>description</th><th>état stacks</th></tr>
 	<tr><td>0</td><td>BYE</td><td>Termine l'exécution du programme et sortie de la machine virtuelle. La machine virtuelle retourne un 
@@ -200,6 +203,37 @@
 	<tr><td>116</td><td>RESTSCR</td><td> Voir la commande BASIC correspondante.</td><td>( adr --  )</td></tr>
 	<tr><td>117</td><td>SRLOAD</td><td> Voir la commande BASIC correspondante.</td><td>( addr_ram char* -- size )</td></tr>
 	<tr><td>118</td><td>SRSAVE</td><td> Voir la commande BASIC correspondante.</td><td>( addr_ram char* size -- exit_code )</td></tr>
+	<tr><td>119</td><td>MDIV</td><td> Voir la commande BASIC correspondante.</td><td>( n1 n2 n3 -- n1*n2/n3 )</td></tr>
+	<tr><td>120</td><td>STR$</td><td>Correspond à la fonction BASIC du même nom. <b>n</b> est l'entier à représenter en chaîne.
+	<b>pad</b> est un espace de travail fourni par le compilateur et <b>adr</b> est un pointeur sur la chaîne allouée 
+	dynamiquement qui contient la représentation texte de l'entier.</td><td>( n pad -- adr )</td></tr>
+	<tr><td>121</td><td>ASC</td><td>Correspond à la fonction BASIC du même nom. <b>adr</b> est un pointeur sur une chaîne
+	dont la valeur ASCII du premier caractère est retournée <b>n</b>.</td><td>( adr -- n )</td></tr>
+	<tr><td>122</td><td>CHR$</td><td>correspond à la commande BASIC du même nom. <b>n</b> est un entier dont les 8 bits
+	les moins significatifs sont le caractère stocké dans la chaîne <b>adr</b> allouée dynamiquement.</td><td>( n -- adr )</td></tr>
+	<tr><td>123</td><td>DATE$</td><td>Voir la fonction BASIC. <b>adr</b> est le pointeur de la chaîne <i>date</i> 
+	allouée dynamiquement.</td><td>(  -- adr  )</td></tr>
+	<tr><td>124</td><td>TIME$</td><td>Voir la fonction BASIC. <b>adr</b> est le pointeur de la chaîne <i>heure</i> 
+	allouée dynamiquement.</td><td>(  -- adr )</td></tr>
+	<tr><td>125</td><td>APPEND$</td><td>Voir la fonction BASIC. <b>s1</b> est le pointeur de la première chaîne. 
+	<b>s2</b> est le pointeur de la chaîne attachée à la fin de <b>s1</b>. <b>s3</b> est le pointer vers la chaîne
+	résultante allouée dynamiquement.</td><td>( s1 s2 -- s3 )</td></tr>
+	<tr><td>126</td><td>INSERT$</td><td>Voir la fonction BASIC. <b>s1</b> est le pointeur de la chaîne cible. <b>s2</b> est le pointeur
+	de la chaîne à insérer dans <b>s1</b> et <b>pos</b> est la position d'insertion. <b>s3</b> est le pointeur vers la chaîne résutante
+	allouée dynamiquement.</td><td>( s1 s2 pos -- s3  )</td></tr>
+	<tr><td>127</td><td>LEFT$</td><td>Voir la fonction BASIC. <b>s1</b> est la chaîne originale. <b>n</b> est le nombre de caractères
+	à conserver au début de <b>s1</b>. <b>s2</b> est la chaîne allouée dynamiquement correspondant aux n premiers caractères de
+	<b>s1</b></td><td>( s1 n -- s2 )</td></tr>
+	<tr><td>128</td><td>MID$</td><td>Voir la fonction BASIC. retourne les n1 caractères de s1 à partir de la position n1.</td><td>( s1 n1 n2 -- s2 )</td></tr>
+	<tr><td>129</td><td>PREPEND$</td><td>Voir la fonction BASIC. Attache s2 au début de s1.</td><td>( s1 s2 -- s3 )</td></tr>
+	<tr><td>130</td><td>RIGHT$</td><td>Voir la fonction BASIC. Retourne les n derniers caractères de s1.</td><td>( s1 n -- s2 )</td></tr>
+	<tr><td>131</td><td>SUBST$</td><td>Voir la fonction BASIC. Substitution de s2 dans s1 à la position n.</td><td>( s1 s2 n --  )</td></tr>
+	<tr><td>132</td><td>INSTR</td><td>Voir la fonction BASIC. Quel est la position de s2 dans s1?</td><td>( n1 s1 s2 -- n2 )</td></tr>
+	<tr><td>133</td><td>$CMP</td><td>Comparaison des chaînes <b>s1</b> et <b>s2</b>. Si s1&lt<s1 retourne -1.
+	Si <b>s1==s2</b> retourne 0. Si s1&gt;s2 retourne 1.</td><td>( s1 s2 -- -1|0|1 )</td></tr>
+	<tr><td>134</td><td>UCASE$</td><td>Voir la fonction BASIC. </td><td>( s1 -- s2 )</td></tr>
+	<tr><td>135</td><td>LCASE$</td><td>Voir la fonction BASIC. </td><td>( s1 -- s2 )</td></tr>
+	<tr><td>135</td><td>STR!</td><td>Assigne la chaîne <b>str</b> à la variable <b>var</b></td><td>( str var --  )</td></tr>
 
 	<tr><td></td><td></td><td></td><td>(  --  )</td></tr>
 	</table>
@@ -219,6 +253,16 @@
 	<div>
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/d6pzy2gW2A4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 	</div>
+</p>
+<p>
+	Les informations affichées sont les suivantes:
+	<ul>
+		<li><b>R(n )</b> <i>n</i> est le nombre d'éléments sur la pile <b>rstack</b>.</li>
+		<li><b>S(n) </b> <i>n</i> est le nombre d'éléments sur la pile <b>dstack</b>. Suit la liste des valeurs qui sont sur cette pile.</li>
+		<li><b>ip</b> est le pointeur d'instruction. Indique l'adresse dans l'espace programme du prochain <i>bytecode</i> à être exécuté.</li>
+		<li><b>dp</b> est le pointeur de la pile <b>dstack.</b>.</li>
+		<li><b>next opcode: NOM</b> indique le prochain opcode à être exécuté.</li>
+	</ul>
 </p>
 <hr width="50%" align="center">
 <h2>INDEX</h2>

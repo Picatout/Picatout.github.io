@@ -207,6 +207,7 @@ a
 		<li><a href="#else">ELSE</a></li>
 		<li><a href="#end">END</a></li>
 		<li><a href="#env$">ENV$</a></li>
+		<li><a href="#exist">EXIST</a></li>
 		<li><a href="#exit">EXIT</a></li>
 		<li><a href="#exp">EXP</a></li>
 		<li><a href="#fgetc">FGETC</a></li>
@@ -910,6 +911,26 @@ a
 
 	&gt;? env$("existe_pas")
 	 
+
+	&gt;_
+	</code></pre>
+	</div>	
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="exist"></a><b>EXIST(<i>fichier</i>)</b><br>
+	Fonction booléenne servant à vérifier l'existance d'un fichier. 
+	<ul>
+		<li><b>fichier</b>, est le nom du fichier dont on veut vérifier l'existance.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	&gt;? exist("test.bas")
+	0  
+
+	&gt;? exist("snake.bas")
+	1  
 
 	&gt;_
 	</code></pre>

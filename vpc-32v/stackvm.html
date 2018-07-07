@@ -62,7 +62,7 @@
 	La majorité des opcodes correspondent directement à des commandes ou fonctions BASIC je ne décrirais donc pas celle-ci car ce serait redonnant
 	avec la documentation du <a href="./BASIC.html">vpcBASIC.</a>
 	<table border="single">
-	<tr><th>opcode</th><th>mnémonique</th><th>description</th><th>état stacks</th></tr>
+	<tr><th>opcode</th><th><a name="mnemo"></a>mnémonique</th><th>description</th><th>état stacks</th></tr>
 	<tr><td>0</td><td>BYE</td><td>Termine l'exécution du programme et sortie de la machine virtuelle. La machine virtuelle retourne un 
 	code d'erreur ou 0 s'il n'y a pas d'erreur. Consulter les fichiers <b>basic.c</b> et <b>basic.h</b> pour plus d'information sur
 	ces codes d'erreurs. La commande BASIC <b>BYE</b> appelle cet opcode.</td><td>( -- )</td></tr>
@@ -93,7 +93,7 @@
 	<tr><td>24</td><td>&</td><td>Fonction binaire ET.</td><td>( n1 n2 -- n1&n2 )</td></tr>     
 	<tr><td>25</td><td>|</td><td>Fonction binaire OU inclusif.</td><td>( n1 n2 -- n1|n2 )</td></tr>
 	<tr><td>26</td><td>^</td><td>Fonction binaire OU exclusif.</td><td>( n1 n2 -- n1^n2 )</td></tr>
-	<tr><td>27</td><td>!</td><td>Remplace l'entier au sommet de la pile par son complément à 1</td><td>( n -- ~n )</td></tr>
+	<tr><td>27</td><td>~</td><td>Remplace l'entier au sommet de la pile par son complément à 1</td><td>( n -- ~n )</td></tr>
 	<tr><td>28</td><td>NOT</td><td>négation booléenne. Si f1 est faux alors f2=vrai sinon f2=faux.</td><td>( f1 -- f2 )</td></tr>
 	<tr><td>29</td><td>OR</td><td>OU booléen. Si f1 ou f2 est vrai alors f3=vrai sinon f3=faux.</td><td>( f1 f2 -- f3 )</td></tr>
 	<tr><td>30</td><td>AND</td><td>ET booléen. Si f1 et f2 sont vrai alors f3=vrai sinon T=faux.</td><td>( f1 f2 -- f3 )</td></tr>
@@ -170,72 +170,120 @@
 	de l'espace allouée</td><td>(  -- adr )</td></tr>
 	<tr><td>85</td><td>$ALLOC</td><td>Alloue une chaîne dynamique de longueur <b>n</b>. <i>adr</i> est l'adresse de l'espace alloué.</td><td>(  -- adr )</td></tr>
 	<tr><td>86</td><td>$FREE</td><td>Libère une chaîne allouée dynamiquement. <i>adr</i> est l'adresse retournée par $ALLOC</td><td>( adr --  )</td></tr>
-	<tr><td>87</td><td>$FREE</td><td></td><td>(  --  )</td></tr>
-	<tr><td>88</td><td>$FREENOTREF</td><td>Libère la chaîne <i>adr</i> seulement si elle n'est pas référencée. </td><td>( adr --  )</td></tr>
-	<tr><td>89</td><td>$CPY</td><td>Copie la chaîne <i>src</i> dans <i>dest</i>.</td><td>( src dest -- dest )</td></tr>
-	<tr><td>90</td><td>CURLINE</td><td>Retourne la ligne sur laquelle se trouve le curseur texte.</td><td>(  -- n )</td></tr>
-	<tr><td>91</td><td>CURCOL</td><td>Retourne la colonne sur laquelle se trouve le curseur texte.</td><td>(  -- n )</td></tr>
-	<tr><td>92</td><td>LOCATE</td><td>Posistion le curseur texte à <i>ligne</i>, <i>col</i>.</td><td>( ligne col --  )</td></tr>
-	<tr><td>93</td><td>BTEST</td><td>Retourne la valeur du bit <b>b</b> de l'entier <b>n</b></td><td>( n b -- 0|1 )</td></tr>
-	<tr><td>94</td><td>SETTMR</td><td>Initialize la minuterie à <b>u</b> millisecondes.</td><td>( u --  )</td></tr>
-	<tr><td>95</td><td>TIMEOUT</td><td>Vérifie si la minuterie est expirée.</td><td>(  -- f )</td></tr>
-	<tr><td>96</td><td>INVERTVID</td><td>Sélectionne le mode vidéo. <b>0</b> blanc/noir, <b>1</b> noir/blanc</td><td>( 0|1 --  )</td></tr>
-	<tr><td>97</td><td>SCRLDN</td><td>Glisse l'écran console d'une ligne texte vers le bas, laissant la ligne du haut vide.</td><td>(  --  )</td></tr>
-	<tr><td>98</td><td>SCRLUP</td><td>Glisse l'écan console d'une ligne vers le haut, laissant la ligne du bas vide.</td><td>(  --  )</td></tr>
-	<tr><td>99</td><td>INSERLN</td><td>Insère une ligne vide là où le curseur texte se trouve. Positionne le curseur au 
+	<tr><td>87</td><td>$FREENOTREF</td><td>Libère la chaîne <i>adr</i> seulement si elle n'est pas référencée. </td><td>( adr --  )</td></tr>
+	<tr><td>88</td><td>$CPY</td><td>Copie la chaîne <i>src</i> dans <i>dest</i>.</td><td>( src dest -- dest )</td></tr>
+	<tr><td>89</td><td>CURLINE</td><td>Retourne la ligne sur laquelle se trouve le curseur texte.</td><td>(  -- n )</td></tr>
+	<tr><td>90</td><td>CURCOL</td><td>Retourne la colonne sur laquelle se trouve le curseur texte.</td><td>(  -- n )</td></tr>
+	<tr><td>91</td><td>LOCATE</td><td>Posistion le curseur texte à <i>ligne</i>, <i>col</i>.</td><td>( ligne col --  )</td></tr>
+	<tr><td>92</td><td>BTEST</td><td>Retourne la valeur du bit <b>b</b> de l'entier <b>n</b></td><td>( n b -- 0|1 )</td></tr>
+	<tr><td>93</td><td>SETTMR</td><td>Initialize la minuterie à <b>u</b> millisecondes.</td><td>( u --  )</td></tr>
+	<tr><td>94</td><td>TIMEOUT</td><td>Vérifie si la minuterie est expirée.</td><td>(  -- f )</td></tr>
+	<tr><td>95</td><td>INVERTVID</td><td>Sélectionne le mode vidéo. <b>0</b> blanc/noir, <b>1</b> noir/blanc</td><td>( 0|1 --  )</td></tr>
+	<tr><td>96</td><td>SCRLDN</td><td>Glisse l'écran console d'une ligne texte vers le bas, laissant la ligne du haut vide.</td><td>(  --  )</td></tr>
+	<tr><td>97</td><td>SCRLUP</td><td>Glisse l'écan console d'une ligne vers le haut, laissant la ligne du bas vide.</td><td>(  --  )</td></tr>
+	<tr><td>98</td><td>INSERLN</td><td>Insère une ligne vide là où le curseur texte se trouve. Positionne le curseur au 
 	début de la ligne.</td><td>(  --  )</td></tr>
-	<tr><td>100</td><td>PGET</td><td>Obtient la valeur du pixel du moniteur VGA aux coordonnées {x,y}.</td><td>( x y -- 0|1 )</td></tr>
-	<tr><td>101</td><td>PSET</td><td>Fixe l'état du pixel du moniteur VGA aux coordonées {x,y} à l'état <i>p</i>.</td><td>( x y p --  )</td></tr>
-	<tr><td>102</td><td>PXOR</td><td>Inverse l'état du pixel du moniteur VGA aux coordonnées {x,y}.</td><td>( x y --  )</td></tr>
-	<tr><td>103</td><td>LINE</td><td>Trace une ligne entre les points <b>{x0,y0}</b> et <b>{x1,y1}</b>.</td><td>( x0 y0 x1 y1 --  )</td></tr>
-	<tr><td>104</td><td>RECT</td><td>Desssine un rectangle, <b>{x,y}</b> coin supérieur gauche. <b>w</b> largeur, <b>h</b> hauteur</td><td>( x y w h --  )</td></tr>
-	<tr><td>105</td><td>BOX</td><td>Dessine une boite, <b>{x,y}</b> coin supérieur gauche. <b>w</b> largeur, <b>h</b> hauteur</td><td>(  --  )</td></tr>
-	<tr><td>106</td><td>CIRCLE</td><td>Dessine un cercle de centre <b>{x,y}</b> et de rayon <b>r</b></td><td>( x y r --  )</td></tr>
-	<tr><td>107</td><td>ELLIPSE</td><td>Dessine une ellipse circonscrite dans le rectangle.</td><td>( x0 y0 x1 y1  --  )</td></tr>
-	<tr><td>108</td><td>POLYGON</td><td>Dessine un polygon. Voir la commande BASIC correspondante.</td><td>( adr n --  )</td></tr>
-	<tr><td>109</td><td>FILL</td><td>Remplie une figure fermée. Voir la commande BASIC correspondante.</td><td>( x y --  )</td></tr>
-	<tr><td>110</td><td>SPRITE</td><td>Dessine un sprite. Voir la commande BASIC correspondante.</td><td>( adr w h --  )</td></tr>
-	<tr><td>111</td><td>VGACLS</td><td>Vide l'écran du moniteur VGA.</td><td>(  --  )</td></tr>
-	<tr><td>112</td><td>SRCLEAR</td><td> Voir la commande BASIC correspondante.</td><td>( adr size --  )</td></tr>
-	<tr><td>113</td><td>SRREAD</td><td> Voir la commande BASIC correspondante.</td><td>( adr_ram adr_v size --  )</td></tr>
-	<tr><td>114</td><td>SRWRITE</td><td> Voir la commande BASIC correspondante.</td><td>( adr_ram adr_v size --  )</td></tr>
-	<tr><td>115</td><td>SAVESCR</td><td> Voir la commande BASIC correspondante.</td><td>( adr --  )</td></tr>
-	<tr><td>116</td><td>RESTSCR</td><td> Voir la commande BASIC correspondante.</td><td>( adr --  )</td></tr>
-	<tr><td>117</td><td>SRLOAD</td><td> Voir la commande BASIC correspondante.</td><td>( addr_ram char* -- size )</td></tr>
-	<tr><td>118</td><td>SRSAVE</td><td> Voir la commande BASIC correspondante.</td><td>( addr_ram char* size -- exit_code )</td></tr>
-	<tr><td>119</td><td>MDIV</td><td> Voir la commande BASIC correspondante.</td><td>( n1 n2 n3 -- n1*n2/n3 )</td></tr>
-	<tr><td>120</td><td>STR$</td><td>Correspond à la fonction BASIC du même nom. <b>n</b> est l'entier à représenter en chaîne.
+	<tr><td>99</td><td>PGET</td><td>Obtient la valeur du pixel du moniteur VGA aux coordonnées {x,y}.</td><td>( x y -- 0|1 )</td></tr>
+	<tr><td>100</td><td>PSET</td><td>Fixe l'état du pixel du moniteur VGA aux coordonées {x,y} à l'état <i>p</i>.</td><td>( x y p --  )</td></tr>
+	<tr><td>101</td><td>PXOR</td><td>Inverse l'état du pixel du moniteur VGA aux coordonnées {x,y}.</td><td>( x y --  )</td></tr>
+	<tr><td>102</td><td>LINE</td><td>Trace une ligne entre les points <b>{x0,y0}</b> et <b>{x1,y1}</b>.</td><td>( x0 y0 x1 y1 --  )</td></tr>
+	<tr><td>103</td><td>RECT</td><td>Desssine un rectangle, <b>{x,y}</b> coin supérieur gauche. <b>w</b> largeur, <b>h</b> hauteur</td><td>( x y w h --  )</td></tr>
+	<tr><td>104</td><td>BOX</td><td>Dessine une boite, <b>{x,y}</b> coin supérieur gauche. <b>w</b> largeur, <b>h</b> hauteur</td><td>(  --  )</td></tr>
+	<tr><td>105</td><td>CIRCLE</td><td>Dessine un cercle de centre <b>{x,y}</b> et de rayon <b>r</b></td><td>( x y r --  )</td></tr>
+	<tr><td>106</td><td>ELLIPSE</td><td>Dessine une ellipse circonscrite dans le rectangle.</td><td>( x0 y0 x1 y1  --  )</td></tr>
+	<tr><td>107</td><td>POLYGON</td><td>Dessine un polygon. Voir la commande BASIC correspondante.</td><td>( adr n --  )</td></tr>
+	<tr><td>108</td><td>FILL</td><td>Remplie une figure fermée. Voir la commande BASIC correspondante.</td><td>( x y --  )</td></tr>
+	<tr><td>109</td><td>SPRITE</td><td>Dessine un sprite. Voir la commande BASIC correspondante.</td><td>( adr w h --  )</td></tr>
+	<tr><td>110</td><td>VGACLS</td><td>Vide l'écran du moniteur VGA.</td><td>(  --  )</td></tr>
+	<tr><td>111</td><td>SRCLEAR</td><td> Voir la commande BASIC correspondante.</td><td>( adr size --  )</td></tr>
+	<tr><td>112</td><td>SRREAD</td><td> Voir la commande BASIC correspondante.</td><td>( adr_ram adr_v size --  )</td></tr>
+	<tr><td>113</td><td>SRWRITE</td><td> Voir la commande BASIC correspondante.</td><td>( adr_ram adr_v size --  )</td></tr>
+	<tr><td>114</td><td>SAVESCR</td><td> Voir la commande BASIC correspondante.</td><td>( adr --  )</td></tr>
+	<tr><td>115</td><td>RESTSCR</td><td> Voir la commande BASIC correspondante.</td><td>( adr --  )</td></tr>
+	<tr><td>116</td><td>SRLOAD</td><td> Voir la commande BASIC correspondante.</td><td>( addr_ram char* -- size )</td></tr>
+	<tr><td>117</td><td>SRSAVE</td><td> Voir la commande BASIC correspondante.</td><td>( addr_ram char* size -- exit_code )</td></tr>
+	<tr><td>118</td><td>MDIV</td><td> Voir la commande BASIC correspondante.</td><td>( n1 n2 n3 -- n1*n2/n3 )</td></tr>
+	<tr><td>119</td><td>STR$</td><td>Correspond à la fonction BASIC du même nom. <b>n</b> est l'entier à représenter en chaîne.
 	<b>pad</b> est un espace de travail fourni par le compilateur et <b>adr</b> est un pointeur sur la chaîne allouée 
 	dynamiquement qui contient la représentation texte de l'entier.</td><td>( n pad -- adr )</td></tr>
-	<tr><td>121</td><td>ASC</td><td>Correspond à la fonction BASIC du même nom. <b>adr</b> est un pointeur sur une chaîne
+	<tr><td>120</td><td>ASC</td><td>Correspond à la fonction BASIC du même nom. <b>adr</b> est un pointeur sur une chaîne
 	dont la valeur ASCII du premier caractère est retournée <b>n</b>.</td><td>( adr -- n )</td></tr>
-	<tr><td>122</td><td>CHR$</td><td>correspond à la commande BASIC du même nom. <b>n</b> est un entier dont les 8 bits
+	<tr><td>121</td><td>CHR$</td><td>correspond à la commande BASIC du même nom. <b>n</b> est un entier dont les 8 bits
 	les moins significatifs sont le caractère stocké dans la chaîne <b>adr</b> allouée dynamiquement.</td><td>( n -- adr )</td></tr>
-	<tr><td>123</td><td>DATE$</td><td>Voir la fonction BASIC. <b>adr</b> est le pointeur de la chaîne <i>date</i> 
+	<tr><td>122</td><td>DATE$</td><td>Voir la fonction BASIC. <b>adr</b> est le pointeur de la chaîne <i>date</i> 
 	allouée dynamiquement.</td><td>(  -- adr  )</td></tr>
-	<tr><td>124</td><td>TIME$</td><td>Voir la fonction BASIC. <b>adr</b> est le pointeur de la chaîne <i>heure</i> 
+	<tr><td>123</td><td>TIME$</td><td>Voir la fonction BASIC. <b>adr</b> est le pointeur de la chaîne <i>heure</i> 
 	allouée dynamiquement.</td><td>(  -- adr )</td></tr>
-	<tr><td>125</td><td>APPEND$</td><td>Voir la fonction BASIC. <b>s1</b> est le pointeur de la première chaîne. 
+	<tr><td>124</td><td>APPEND$</td><td>Voir la fonction BASIC. <b>s1</b> est le pointeur de la première chaîne. 
 	<b>s2</b> est le pointeur de la chaîne attachée à la fin de <b>s1</b>. <b>s3</b> est le pointer vers la chaîne
 	résultante allouée dynamiquement.</td><td>( s1 s2 -- s3 )</td></tr>
-	<tr><td>126</td><td>INSERT$</td><td>Voir la fonction BASIC. <b>s1</b> est le pointeur de la chaîne cible. <b>s2</b> est le pointeur
+	<tr><td>125</td><td>INSERT$</td><td>Voir la fonction BASIC. <b>s1</b> est le pointeur de la chaîne cible. <b>s2</b> est le pointeur
 	de la chaîne à insérer dans <b>s1</b> et <b>pos</b> est la position d'insertion. <b>s3</b> est le pointeur vers la chaîne résutante
 	allouée dynamiquement.</td><td>( s1 s2 pos -- s3  )</td></tr>
-	<tr><td>127</td><td>LEFT$</td><td>Voir la fonction BASIC. <b>s1</b> est la chaîne originale. <b>n</b> est le nombre de caractères
+	<tr><td>126</td><td>LEFT$</td><td>Voir la fonction BASIC. <b>s1</b> est la chaîne originale. <b>n</b> est le nombre de caractères
 	à conserver au début de <b>s1</b>. <b>s2</b> est la chaîne allouée dynamiquement correspondant aux n premiers caractères de
 	<b>s1</b></td><td>( s1 n -- s2 )</td></tr>
-	<tr><td>128</td><td>MID$</td><td>Voir la fonction BASIC. retourne les n1 caractères de s1 à partir de la position n1.</td><td>( s1 n1 n2 -- s2 )</td></tr>
-	<tr><td>129</td><td>PREPEND$</td><td>Voir la fonction BASIC. Attache s2 au début de s1.</td><td>( s1 s2 -- s3 )</td></tr>
-	<tr><td>130</td><td>RIGHT$</td><td>Voir la fonction BASIC. Retourne les n derniers caractères de s1.</td><td>( s1 n -- s2 )</td></tr>
-	<tr><td>131</td><td>SUBST$</td><td>Voir la fonction BASIC. Substitution de s2 dans s1 à la position n.</td><td>( s1 s2 n --  )</td></tr>
-	<tr><td>132</td><td>INSTR</td><td>Voir la fonction BASIC. Quel est la position de s2 dans s1?</td><td>( n1 s1 s2 -- n2 )</td></tr>
-	<tr><td>133</td><td>$CMP</td><td>Comparaison des chaînes <b>s1</b> et <b>s2</b>. Si s1&lt<s1 retourne -1.
+	<tr><td>127</td><td>MID$</td><td>Voir la fonction BASIC. retourne les n1 caractères de s1 à partir de la position n1.</td><td>( s1 n1 n2 -- s2 )</td></tr>
+	<tr><td>128</td><td>PREPEND$</td><td>Voir la fonction BASIC. Attache s2 au début de s1.</td><td>( s1 s2 -- s3 )</td></tr>
+	<tr><td>129</td><td>RIGHT$</td><td>Voir la fonction BASIC. Retourne les n derniers caractères de s1.</td><td>( s1 n -- s2 )</td></tr>
+	<tr><td>130</td><td>SUBST$</td><td>Voir la fonction BASIC. Substitution de s2 dans s1 à la position n.</td><td>( s1 s2 n --  )</td></tr>
+	<tr><td>131</td><td>INSTR</td><td>Voir la fonction BASIC. Quel est la position de s2 dans s1?</td><td>( n1 s1 s2 -- n2 )</td></tr>
+	<tr><td>132</td><td>$CMP</td><td>Comparaison des chaînes <b>s1</b> et <b>s2</b>. Si s1&lt<s1 retourne -1.
 	Si <b>s1==s2</b> retourne 0. Si s1&gt;s2 retourne 1.</td><td>( s1 s2 -- -1|0|1 )</td></tr>
-	<tr><td>134</td><td>UCASE$</td><td>Voir la fonction BASIC. </td><td>( s1 -- s2 )</td></tr>
-	<tr><td>135</td><td>LCASE$</td><td>Voir la fonction BASIC. </td><td>( s1 -- s2 )</td></tr>
+	<tr><td>133</td><td>UCASE$</td><td>Voir la fonction BASIC. </td><td>( s1 -- s2 )</td></tr>
+	<tr><td>134</td><td>LCASE$</td><td>Voir la fonction BASIC. </td><td>( s1 -- s2 )</td></tr>
 	<tr><td>135</td><td>STR!</td><td>Assigne la chaîne <b>str</b> à la variable <b>var</b></td><td>( str var --  )</td></tr>
-
-	<tr><td></td><td></td><td></td><td>(  --  )</td></tr>
+	<tr><td>136</td><td>HEX$</td><td>Voir la fonction BASIC. <b>n</b> est le nombre dont on veut obtenir la représentation 
+	hexadécimale. <b>pad</b> est un espace de travail fournie par le compilateur et <b>adr</b> est la chaîne allouée représentant
+	le nombre hexadécimal.</td><td>( n pad -- adr )</td></tr>
+	<tr><td>137</td><td>DP0</td><td>Empile la valeur du pointeur <b>dp</b> lorsque la pile est vide.</td><td>(  -- adr )</td></tr>
+	<tr><td>138</td><td>CLOSE</td><td>Voir la commande BASIC CLOSE(). <b>n</b> est le numéro du fichier à fermer.</td><td>( n --  )</td></tr>
+	<tr><td>139</td><td>CLOSEALL</td><td>Ferme tous les fichiers ouvert.</td><td>(  --  )</td></tr>
+	<tr><td>140</td><td>EOF</td><td>Voir commande BASIC. <b>n</b> est le numéro du fichier à vérifier.</td><td>( n --  )</td></tr>
+	<tr><td>141</td><td>OPEN</td><td>Voir commande BASIC. <b>s1</b> est le pointer vers le nom du fichier. <b>u1</b> est le mode
+	et <b>u2</b> est numéro à assigner à ce fichier.</td><td>( s1 u1 u2 --  )</td></tr>
+	<tr><td>142</td><td>EXIST</td><td>Voir commande BASIC. <b>s1</b> pointeur vers le nom du fichier. Retourne <b>0</b> si
+	le fichier n'existe pas et <b>1</b> s'il existe.</td><td>( s1 -- 0|1 )</td></tr>
+	<tr><td>143</td><td>SEEK</td><td>Voir commande BASIC. <b>u1</b> numéro du fichier. <b>n1</b> nouvelle position dans le fichier.
+	</td><td>( u1 n1 --  )</td></tr>
+	<tr><td>144</td><td>FGETC</td><td>Voir commande BASIC. <b>u1</b> numéro du fichier. <b>c</b> caractère lu.</td><td>(  u1 -- n1 )</td></tr>
+	<tr><td>145</td><td>FPUTC</td><td>Voir commande BASIC. <b>u1</b> numéro du fichier. <b>c</b> caractère à écrire.</td><td>( u1 c --  )</td></tr>
+	<tr><td>146</td><td>WRITE_FIELD</td><td>Écris une chaîne dans caractères dans un fichier. <b>u1</b> est le numéro du fichier déjà ouvert.
+	<b>s</b> est un pointeur vers la chaîne à écrire dans le fichier.</td><td>( u1 s --  )</td></tr>
+	<tr><td>147</td><td>READ_FIELD</td><td>Lit une chaîne de caractères d'un fichier. une chaîne se termine par une fin de ligne ou
+	une virgule si elle n'est pas entre guillemets.<b>u1</b> est le numéro d'un fichier déjà ouvert.
+	<b>s</b> est un pointeur vers la chaîne lue. L'espace pour cette chaîne est allouée dynamiquement.</td><td>( u1 -- s )</td></tr>
+	<tr><td>148</td><td>FP&gt;$</td><td>Convertie un nombre en virgule flottante en une chaîne le représentant. <b>fp</b> est le nombre
+	et <b>s</b> est un pointeur vers la chaîne créée. L'espace pour cette chaîne est allouvée dynamiquement.</td><td>( fp -- s )</td></tr>
+	<tr><td>149</td><td>$&gt;FP</td><td>Convertie une chaîne en valeur numérique. <b>s</b> est une pointeur vers la chaîne à convertir.
+	<b>fp</b> est le nombre résultant.</td><td>( s -- fp )</td></tr>
+	<tr><td>150</td><td>-FP</td><td></td><td>(  --  )</td></tr>
+	<tr><td>151</td><td>FP&gt;INT</td><td></td><td>(  --  )</td></tr>
+	<tr><td>152</td><td>INT&gt;FP</td><td></td><td>(  --  )</td></tr>
+	<tr><td>153</td><td>F+</td><td></td><td>(  --  )</td></tr>
+	<tr><td>154</td><td>F-</td><td></td><td>(  --  )</td></tr>
+	<tr><td>155</td><td>F*</td><td></td><td>(  --  )</td></tr>
+	<tr><td>156</td><td>F/</td><td></td><td>(  --  )</td></tr>
+	<tr><td>157</td><td>SINUS</td><td></td><td>(  --  )</td></tr>
+	<tr><td>158</td><td>COS</td><td></td><td>(  --  )</td></tr>
+	<tr><td>159</td><td>TAN</td><td></td><td>(  --  )</td></tr>
+	<tr><td>160</td><td>ATAN</td><td></td><td>(  --  )</td></tr>
+	<tr><td>161</td><td>ACOS</td><td></td><td>(  --  )</td></tr>
+	<tr><td>162</td><td>ASINE</td><td></td><td>(  --  )</td></tr>
+	<tr><td>163</td><td>SQRT</td><td></td><td>(  --  )</td></tr>
+	<tr><td>164</td><td>EXP</td><td></td><td>(  --  )</td></tr>
+	<tr><td>165</td><td>POWER</td><td></td><td>(  --  )</td></tr>
+	<tr><td>166</td><td>LOGN</td><td></td><td>(  --  )</td></tr>
+	<tr><td>167</td><td>LOG10</td><td></td><td>(  --  )</td></tr>
+	<tr><td>168</td><td>FABS</td><td></td><td>(  --  )</td></tr>
+	<tr><td>169</td><td>FLOOR</td><td></td><td>(  --  )</td></tr>
+	<tr><td>170</td><td>CEIL</td><td></td><td>(  --  )</td></tr>
+	<tr><td>171</td><td>FMOD</td><td></td><td>(  --  )</td></tr>
+	<tr><td>172</td><td>F.</td><td></td><td>(  --  )</td></tr>
+	<tr><td>173</td><td>FMIN</td><td></td><td>(  --  )</td></tr>
+	<tr><td>174</td><td>FMAX</td><td></td><td>(  --  )</td></tr>
+	<tr><td>175</td><td>CON</td><td></td><td>(  --  )</td></tr>
+	<tr><td>176</td><td>ENV</td><td></td><td>(  --  )</td></tr>
 	</table>
 </p>
 <h3><a name="trace"></a>Outil de débogage TRACE</h3>
@@ -261,7 +309,7 @@
 		<li><b>S(n) </b> <i>n</i> est le nombre d'éléments sur la pile <b>dstack</b>. Suit la liste des valeurs qui sont sur cette pile.</li>
 		<li><b>ip</b> est le pointeur d'instruction. Indique l'adresse dans l'espace programme du prochain <i>bytecode</i> à être exécuté.</li>
 		<li><b>dp</b> est le pointeur de la pile <b>dstack.</b>.</li>
-		<li><b>next opcode: NOM</b> indique le prochain opcode à être exécuté.</li>
+		<li><b>next opcode: NOM</b> indique le prochain opcode à être exécuté.<b>NOM</b> est le mnémonique indiqué dans la <a href="#mnemo">table ci-haut</a>.</li>
 	</ul>
 </p>
 <hr width="50%" align="center">

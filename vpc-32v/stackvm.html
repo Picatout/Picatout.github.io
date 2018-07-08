@@ -257,33 +257,37 @@
 	et <b>s</b> est un pointeur vers la chaîne créée. L'espace pour cette chaîne est allouvée dynamiquement.</td><td>( fp -- s )</td></tr>
 	<tr><td>149</td><td>$&gt;FP</td><td>Convertie une chaîne en valeur numérique. <b>s</b> est une pointeur vers la chaîne à convertir.
 	<b>fp</b> est le nombre résultant.</td><td>( s -- fp )</td></tr>
-	<tr><td>150</td><td>-FP</td><td></td><td>(  --  )</td></tr>
-	<tr><td>151</td><td>FP&gt;INT</td><td></td><td>(  --  )</td></tr>
-	<tr><td>152</td><td>INT&gt;FP</td><td></td><td>(  --  )</td></tr>
-	<tr><td>153</td><td>F+</td><td></td><td>(  --  )</td></tr>
-	<tr><td>154</td><td>F-</td><td></td><td>(  --  )</td></tr>
-	<tr><td>155</td><td>F*</td><td></td><td>(  --  )</td></tr>
-	<tr><td>156</td><td>F/</td><td></td><td>(  --  )</td></tr>
-	<tr><td>157</td><td>SINUS</td><td></td><td>(  --  )</td></tr>
-	<tr><td>158</td><td>COS</td><td></td><td>(  --  )</td></tr>
-	<tr><td>159</td><td>TAN</td><td></td><td>(  --  )</td></tr>
-	<tr><td>160</td><td>ATAN</td><td></td><td>(  --  )</td></tr>
-	<tr><td>161</td><td>ACOS</td><td></td><td>(  --  )</td></tr>
-	<tr><td>162</td><td>ASINE</td><td></td><td>(  --  )</td></tr>
-	<tr><td>163</td><td>SQRT</td><td></td><td>(  --  )</td></tr>
-	<tr><td>164</td><td>EXP</td><td></td><td>(  --  )</td></tr>
-	<tr><td>165</td><td>POWER</td><td></td><td>(  --  )</td></tr>
-	<tr><td>166</td><td>LOGN</td><td></td><td>(  --  )</td></tr>
-	<tr><td>167</td><td>LOG10</td><td></td><td>(  --  )</td></tr>
-	<tr><td>168</td><td>FABS</td><td></td><td>(  --  )</td></tr>
-	<tr><td>169</td><td>FLOOR</td><td></td><td>(  --  )</td></tr>
-	<tr><td>170</td><td>CEIL</td><td></td><td>(  --  )</td></tr>
-	<tr><td>171</td><td>FMOD</td><td></td><td>(  --  )</td></tr>
-	<tr><td>172</td><td>F.</td><td></td><td>(  --  )</td></tr>
-	<tr><td>173</td><td>FMIN</td><td></td><td>(  --  )</td></tr>
-	<tr><td>174</td><td>FMAX</td><td></td><td>(  --  )</td></tr>
-	<tr><td>175</td><td>CON</td><td></td><td>(  --  )</td></tr>
-	<tr><td>176</td><td>ENV</td><td></td><td>(  --  )</td></tr>
+	<tr><td>150</td><td>-FP</td><td>Négation arithmétique d'un nombre en virgule flottante. <b>n1</b> est le nombre à inverser.
+	<b>n2</b> est le résultat.</td><td>( n1 -- n2 )</td></tr>
+	<tr><td>151</td><td>FP&gt;INT</td><td>Conversion d'un nombre en virgule flottante en entier. <b>fp</b> est le nombre 
+	à convertir. <b>n</b> est le résultat.</td><td>( fp -- n )</td></tr>
+	<tr><td>152</td><td>INT&gt;FP</td><td>Conversion d'un entier en nombre à virgule flottante. <b>n</b> est l'entier à convertir.
+	<b>fp</b> et le résultat.</td><td>( n -- fp )</td></tr>
+	<tr><td>153</td><td>F+</td><td>Addition en virgule flottante. fp3=fp1+fp2.</td><td>( fp1 fp2 -- fp3 )</td></tr>
+	<tr><td>154</td><td>F-</td><td>Soustraction en virgule flottante. fp3=fp1-fp2.</td><td>( fp1 fp2 -- fp3 )</td></tr>
+	<tr><td>155</td><td>F*</td><td>Multiplication en virgule flottante. fp3=fp1*fp2</td><td>( fp1 fp2 -- fp3 )</td></tr>
+	<tr><td>156</td><td>F/</td><td>Division en virgule flottante. fp3=fp1/fp2.</td><td>( fp1 fp2 -- fp3 )</td></tr>
+	<tr><td>157</td><td>SINUS</td><td>Fonction trigonométrique sinus(<b>fp1</b>). <b>fp1</b> est l'angle en radian. <b>fp2 est le résultat.</b></td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>158</td><td>COS</td><td>Fonction trignonométrique fp2=cosinus(<b>fp1</b>). <b>fp1</b> est en radians.</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>159</td><td>TAN</td><td>Fonction trigonométrique fp2=tangeante(<b>fp1</b>).</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>160</td><td>ATAN</td><td>Fonction trigonométrique inverse fp2=arctageante(<b>fp1</b>). Le résultat est en radians.</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>161</td><td>ACOS</td><td>Fonction trigonométrique inverse fp2=arccosinus(<b>fp1</b>). Le résultat est en radians.</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>162</td><td>ASINE</td><td>Fonction trigonométrique inverse fp2=arcsinus(<b>fp1</b>). Le résultat est en radians.</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>163</td><td>SQRT</td><td>Fonction racine carrée. fp2=sqrt(fp2).</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>164</td><td>EXP</td><td>Fonction exponentielle. fp2=e^fp1</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>165</td><td>POWER</td><td>Fonction puissance. fp3=fp1^pf2.</td><td>( fp1 fp2 -- fp3 )</td></tr>
+	<tr><td>166</td><td>LOGN</td><td>Fonction logarithme naturel. fp2=ln(fp1).</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>167</td><td>LOG10</td><td>Fonction logarithme de base 10. fp2=log<sub>10</sub>(fp1)</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>168</td><td>FABS</td><td>Fonction valeur absolue d'un nombre en virgule flottante. fp2=abs(fp1).</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>169</td><td>FLOOR</td><td>Arrondi vers l'infini négatif d'un nombre en virgule flottante. fp2=floor(fp1)</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>170</td><td>CEIL</td><td>Arrondi vers l'infini positif d'un nombre en virgule flottante. fp2=ceil(fp1).</td><td>( fp1 -- fp2 )</td></tr>
+	<tr><td>171</td><td>FMOD</td><td>Fonction qui retourne le modulo de fp3=fp1%pf2</td><td>( fp1 fp2 -- fp3 )</td></tr>
+	<tr><td>172</td><td>F.</td><td>Imprime à l'écran de la console un nombre en virgule flottante.</td><td>( fp --  )</td></tr>
+	<tr><td>173</td><td>FMIN</td><td>Retourne le plus petit de 2 nombres en virgule flottante.</td><td>( fp1 fp2 -- fpmin )</td></tr>
+	<tr><td>174</td><td>FMAX</td><td>Retourne le plus grand de 2 nombres en virgule flottantes.</td><td>( fp1 pf2 -- fpmax )</td></tr>
+	<tr><td>175</td><td>CON</td><td>Change de console. Identifiant de la nouvelle console.</td><td>( n --  )</td></tr>
+	<tr><td>176</td><td>ENV</td><td>Retourne la valeur d'une variable d'environnement. <b>s1</b> est un pointeur vers le nom
+	de la variable. <b>s2</b> est un pointeur vers la valeur de la variable.</td><td>( s1 -- s2 )</td></tr>
 	</table>
 </p>
 <h3><a name="trace"></a>Outil de débogage TRACE</h3>

@@ -265,6 +265,7 @@ a
 		<li><a href="#scrlup">SCRLUP</a></li>
 		<li><a href="#seek">SEEK</a></li>
 		<li><a href="#select">SELECT</a></li>
+		<li><a href="#setenv">SETENV</a></li>
 		<li><a href="#settmr">SETTMR</a></li>
 		<li><a href="#shl">SHL</a></li>
 		<li><a href="#shr">SHR</a></li>
@@ -2152,6 +2153,70 @@ a
 	end select
 	wend
 	</code></pre></div>
+	<div><a href="#index">index</a></div>
+	</li>
+	<div class="item_div"></div>
+	<li><a name="setenv"></a><b>SETENV(<i>str_expr1,str_expr2</i>)</b><br>
+	Définie la valeur d'une variable d'environnement ou en cré une nouvelle. Il s'agit d'un moyen de communication entre un programme
+	BASIC et le shell de commande.
+	<ul>
+		<li><b>str_expr1</b>, est le nom de la variable à définir.</li>
+		<li><b>str_expr2</b>, est la valeur que doit prendre cette variable.</li>
+	</ul>
+	<br>exemple:
+	<div  style="background-color: black;color: white;">
+	<pre><code>
+	$set test=snake.bas
+	
+	$set
+	TEST=snake.bas 
+	NIL=
+	FALSE=F
+	TRUE=T
+	SHELL_VERSION=1.0
+
+	$basic
+
+	vpcBASIC v1.0
+	RAM available: 38048 bytes
+	strings space: 4096 bytes
+
+	&gt;setenv("test","bonjour")
+
+	&gt;? env$("test")
+	bonjour 
+
+	&gt;setenv("t2","hello")
+
+	&gt;? env$("t2")
+	hello 
+
+	&gt;bye
+	Exiting BASIC
+
+	$set
+	T2=hello
+	TEST=bonjour
+	NIL=
+	FALSE=F
+	TRUE=T
+	SHELL_VERSION=1.0
+
+	$echo $t2 $test
+	hello bonjour 
+	$set t2
+
+	$set test                                                                       
+																					
+	$set                                                                            
+	NIL=                                                                            
+	FALSE=F                                                                         
+	TRUE=T                                                                          
+	SHELL_VERSION=1.0                                                               
+																					
+	$
+	</code></pre>
+	</div>	
 	<div><a href="#index">index</a></div>
 	</li>
 	<div class="item_div"></div>
